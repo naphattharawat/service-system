@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card } from "@/components/Card";
+import { withBasePath } from "@/lib/base-path";
 
 export default function HelpPage() {
   return (
@@ -19,7 +20,7 @@ export default function HelpPage() {
             <div className="help-phone">
               <div style={{ textAlign: "center", marginBottom: 5 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo.png" alt="" style={{ width: 20, height: 20, borderRadius: 6, marginBottom: 3 }} />
+                <img src={withBasePath("/logo.png")} alt="" style={{ width: 20, height: 20, borderRadius: 6, marginBottom: 3 }} />
                 <div style={{ fontSize: 6, fontWeight: 600, color: "var(--t2)" }}>งานเวชนิทัศน์ฯ</div>
               </div>
               <div className="hp-btn hp-blue">ขอรับบริการออนไลน์</div>

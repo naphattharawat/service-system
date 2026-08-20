@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api-client";
 import { computeHomeGate, type HomeGateResult } from "@/lib/business-hours";
+import { withBasePath } from "@/lib/base-path";
 import { useDarkMode } from "@/hooks/useDarkMode";
 import { Card } from "@/components/Card";
 import { OffHoursClock } from "@/components/OffHoursClock";
@@ -84,7 +85,7 @@ function SplashScreen({ fadingOut }: { fadingOut: boolean }) {
       />
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/logo.png"
+        src={withBasePath("/logo.png")}
         alt="โลโก้"
         style={{
           width: 76, height: 76, objectFit: "contain", borderRadius: 22,
@@ -135,7 +136,7 @@ function HomeContent({ isDark, onToggleDark }: { isDark: boolean; onToggleDark: 
     <div id="home" className="page active">
       <div className="home-inner">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo.png" className="logo" alt="logo" />
+        <img src={withBasePath("/logo.png")} className="logo" alt="logo" />
         <div className="brand">ระบบขอรับบริการออนไลน์</div>
         <div className="brand">งานเวชนิทัศน์และโสตทัศนศึกษา</div>
         <span className="brand-sub">Smart Service System</span>
@@ -239,7 +240,7 @@ function OffHoursContent({
         <Card>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/logo.png"
+            src={withBasePath("/logo.png")}
             alt="โลโก้"
             style={{ width: 64, height: 64, objectFit: "contain", borderRadius: 16, margin: "0 auto 6px", display: "block", filter: "drop-shadow(0 4px 12px rgba(100,130,220,.2))" }}
           />

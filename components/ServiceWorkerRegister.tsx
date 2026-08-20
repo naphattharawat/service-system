@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { withBasePath } from "@/lib/base-path";
 
 export function ServiceWorkerRegister() {
   useEffect(() => {
@@ -10,7 +11,9 @@ export function ServiceWorkerRegister() {
     // this app hit with a stale-cached logo.png during local testing.
     if (process.env.NODE_ENV !== "production") return;
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch(() => {});
+      // Registering at the basePath (rather than "/") also scopes the worker
+      // to just this app, in case something else is deployed at the domain root.
+      navigator.serviceWorker.register(withBasePath("/sw.js"), { scope: withBasePath("/") }).catch(() => {});
     }
   }, []);
   return null;

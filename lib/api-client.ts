@@ -1,5 +1,6 @@
 "use client";
 
+import { withBasePath } from "./base-path";
 import type {
   AppUser,
   Job,
@@ -13,7 +14,7 @@ import type {
 } from "@/types";
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(url, {
+  const res = await fetch(withBasePath(url), {
     ...options,
     headers: { "Content-Type": "application/json", ...(options?.headers || {}) },
   });

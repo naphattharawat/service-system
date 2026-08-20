@@ -3,6 +3,7 @@ import { Kanit } from "next/font/google";
 import { DarkModeInit } from "@/components/DarkModeInit";
 import { OrbBackground } from "@/components/OrbBackground";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import { withBasePath } from "@/lib/base-path";
 import "./globals.css";
 
 const kanit = Kanit({
@@ -17,7 +18,6 @@ export const metadata: Metadata = {
   title: "เวชนิทัศน์และโสตทัศนศึกษา",
   description: "ระบบขอรับบริการออนไลน์ งานเวชนิทัศน์และโสตทัศนศึกษา โรงพยาบาลเจ้าพระยาอภัยภูเบศร",
   applicationName: "โสตฯ Service",
-  manifest: "/manifest.json",
   appleWebApp: {
     title: "โสตฯ Service",
     statusBarStyle: "black-translucent",
@@ -25,10 +25,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/icons/icon-192.png", sizes: "192x192" },
-      { url: "/icons/icon-512.png", sizes: "512x512" },
+      { url: withBasePath("/icons/icon-192.png"), sizes: "192x192" },
+      { url: withBasePath("/icons/icon-512.png"), sizes: "512x512" },
     ],
-    apple: "/icons/icon-192.png",
+    apple: withBasePath("/icons/icon-192.png"),
   },
   other: {
     "mobile-web-app-capable": "yes",
