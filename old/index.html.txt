@@ -1,0 +1,3508 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-title" content="โสตฯ Service">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#f0f4ff">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/abeltonyx/test-soat/refs/heads/main/iconnn.png">
+<meta name="application-name" content="โสตฯ Service">
+<link rel="icon" sizes="192x192" href="https://raw.githubusercontent.com/abeltonyx/test-soat/refs/heads/main/iconnn.png">
+<link rel="icon" sizes="512x512" href="https://raw.githubusercontent.com/abeltonyx/test-soat/refs/heads/main/iconnn.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/th.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,300,0,0"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<title>เวชนิทัศน์และโสตทัศนศึกษา</title>
+<style>
+
+/* ─────────────────────────────────────────────
+   TIMELESS LIQUID GLASS — DM Sans — Pastel
+   ───────────────────────────────────────────── */
+
+:root {
+  /* Pastel accent — soft periwinkle */
+  --p:      #7c9ef8;
+  --p2:     #5b7ef0;
+  --p-glow: rgba(124,158,248,.25);
+
+  /* Surface */
+  --bg:   #f0f4ff;
+  --bg2:  #e8eeff;
+
+  /* Text */
+  --t1:   #18243c;
+  --t2:   #56677e;
+  --t3:   #576069;
+
+  /* Glass */
+  --g-bg:   rgba(255,255,255,.60);
+  --g-bg2:  rgba(255,255,255,.35);
+  --g-b:    rgba(255,255,255,.80);
+  --g-b2:   rgba(200,215,255,.30);
+
+  /* Shadow */
+  --s1: 0 2px 12px rgba(100,130,220,.08), 0 1px 3px rgba(0,0,0,.04);
+  --s2: 0 8px 32px rgba(100,130,220,.12), 0 2px 8px rgba(0,0,0,.05);
+  --s3: 0 20px 60px rgba(100,130,220,.16), 0 4px 16px rgba(0,0,0,.07);
+
+  --r1: 12px; --r2: 18px; --r3: 24px; --r4: 32px;
+  --ease: cubic-bezier(.4,0,.2,1);
+  --d: .2s;
+}
+
+body.dark {
+  --bg:   #0c1222;
+  --bg2:  #101828;
+  --t1:   #f0f4ff;
+  --t2:   #d0e0f8;
+  --t3:   #9ab0d0;
+  --p:    #8aabfc;
+  --p2:   #a0bfff;
+  --p-glow: rgba(138,171,252,.20);
+  --g-bg:  rgba(16,28,50,.72);
+  --g-bg2: rgba(16,28,50,.45);
+  --g-b:   rgba(255,255,255,.10);
+  --g-b2:  rgba(100,150,220,.18);
+  --s1: 0 2px 12px rgba(0,0,0,.3);
+  --s2: 0 8px 32px rgba(0,0,0,.4);
+  --s3: 0 20px 60px rgba(0,0,0,.55);
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+input, textarea, select { -webkit-user-select: text; user-select: text; }
+p, span, div, h1, h2, h3, label { -webkit-user-select: none; user-select: none; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: 'Kanit', -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.65; font-weight: 400;
+  color: var(--t1); background: var(--bg);
+  min-height: 100dvh; overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  transition: background .3s var(--ease), color .3s var(--ease);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* ── Background ── */
+.bg {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden;
+  background: linear-gradient(145deg,
+    #e8f0ff 0%, #f0e8ff 28%,
+    #ffe8f8 55%, #f8f0ff 80%,
+    #e8e8ff 100%);
+}
+body.dark .bg {
+  background: linear-gradient(145deg,
+    #1e0e08 0%, #1e0810 30%,
+    #12081e 58%, #1e0810 78%, #0e081e 100%);
+}
+/* subtle noise */
+.bg::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  opacity: .022; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Orbs ── */
+.orb {
+  position: absolute; border-radius: 50%; -webkit-border-radius: 50%;
+  mix-blend-mode: multiply;
+  animation: orbDrift ease-in-out infinite alternate;
+  transform: translateZ(0); -webkit-transform: translateZ(0);
+}
+body.dark .orb { mix-blend-mode: screen; }
+
+.orb-1 {
+  width: 560px; height: 560px; top: -160px; left: -160px;
+  filter: blur(72px); opacity: .72;
+  animation-duration: 28s;
+  background: radial-gradient(circle at 40% 38%, #ffc8a0, #ffaac8);
+}
+.orb-2 {
+  width: 480px; height: 480px; bottom: -140px; right: -140px;
+  filter: blur(78px); opacity: .65;
+  animation-duration: 36s; animation-delay: -14s;
+  background: radial-gradient(circle at 55% 50%, #ddc8ff, #ffb8e0);
+}
+.orb-3 {
+  width: 400px; height: 400px; top: 38%; left: 42%;
+  filter: blur(82px); opacity: .55;
+  animation-duration: 44s; animation-delay: -22s;
+  background: radial-gradient(circle at 45% 45%, #ffd4b8, #e8c8ff);
+}
+
+body.dark .orb-1 { background: radial-gradient(circle at 40% 38%, #7a3010, #7a1040); }
+body.dark .orb-2 { background: radial-gradient(circle at 55% 50%, #4a1880, #7a1060); }
+body.dark .orb-3 { background: radial-gradient(circle at 45% 45%, #7a3820, #5a1870); }
+
+@keyframes orbDrift {
+  0%   { transform: translate(0,0)       scale(1.00); }
+  15%  { transform: translate(55px,-45px) scale(1.04); }
+  30%  { transform: translate(110px,25px) scale(.97); }
+  45%  { transform: translate(45px,85px)  scale(1.05); }
+  60%  { transform: translate(-50px,65px) scale(.98); }
+  75%  { transform: translate(-95px,-15px)scale(1.03); }
+  90%  { transform: translate(-45px,-70px)scale(.96); }
+  100% { transform: translate(0,0)        scale(1.00); }
+}
+
+@media (max-width: 600px) {
+  .orb { opacity: .55 !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .orb { animation: none !important; }
+}
+
+/* ── orb color shift (JS) ── */
+.orb { transition: background 3s ease; }
+
+/* ── Pages ── */
+.page { display: none; min-height: 100dvh; }
+.page.active { display: flex; flex-direction: column; animation: pageIn .28s cubic-bezier(.16,1,.3,1) both; }
+.page.exit { animation: pageOut .15s cubic-bezier(.4,0,1,1) both; }
+@keyframes pageIn {
+  from { opacity: 0; transform: scale(.96) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes pageOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(.96); }
+}
+
+/* ── Wrapper ── */
+.wrap {
+  width: 100%; max-width: 520px;
+  margin: 0 auto; padding: 0 16px;
+  position: relative; z-index: 10;
+  flex: 1; overflow-x: hidden;
+}
+.wrap { overflow-x: hidden; }
+#filterPillsRow::-webkit-scrollbar { display: none; }
+
+@media (min-width: 1024px) {
+  #filterPillsRow {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    overflow-x: visible !important;
+    padding-bottom: 0 !important;
+  }
+  #filterPillsRow .filter-btn { flex-shrink: unset !important; white-space: normal !important; text-align: center !important; }
+}
+
+/* ─────────────────────────────────────────────
+   HOME PAGE — full height, centered
+   ───────────────────────────────────────────── */
+#home {
+  justify-content: center; align-items: center;
+  text-align: center;
+  padding: calc(40px + env(safe-area-inset-top)) 0 calc(40px + env(safe-area-inset-bottom));
+}
+.home-inner {
+  width: 100%; max-width: 340px;
+  position: relative; z-index: 10;
+  padding: 0 16px;
+}
+
+.logo {
+  width: 80px; display: block; margin: 0 auto 20px;
+  filter: drop-shadow(0 4px 18px rgba(100,130,220,.22));
+}
+.brand {
+  font-size: clamp(22px, 5.5vw, 27px);
+  font-weight: 600; letter-spacing: -.025em;
+  line-height: 1.2; margin: 0 0 5px; color: var(--t1); opacity: .88;
+}
+.brand-sub {
+  font-size: 11px; font-weight: 500; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--p); opacity: .9;
+  margin-bottom: 36px; display: block;
+}
+
+/* home action buttons — full width, stacked */
+.home-btn {
+  width: 100%; padding: 16px 20px; margin-bottom: 10px;
+  border: none; border-radius: var(--r3);
+  font-family: 'Kanit', sans-serif;
+  font-size: 15px; font-weight: 500;
+  cursor: pointer; display: flex; align-items: center; gap: 10px;
+  transition: all var(--d) var(--ease);
+  position: relative; overflow: hidden;
+}
+.home-btn:active { transform: scale(.975); }
+.home-btn .material-symbols-rounded { margin: 0; font-size: 18px; flex-shrink: 0; }
+
+.home-btn-primary {
+  background: linear-gradient(145deg, #8aaafc, #5b7ef0);
+  color: #fff;
+  box-shadow: 0 6px 22px var(--p-glow), inset 0 1px 0 rgba(255,255,255,.28);
+}
+.home-btn-primary:hover { filter: brightness(1.06); }
+body.dark .home-btn-primary {
+  background: linear-gradient(145deg, #6a8ae8, #4060c8);
+}
+
+.home-btn-glass {
+  background: rgba(255,255,255,.10);
+  color: var(--t1);
+  border: 1px solid rgba(255,255,255,.55);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.80),
+    inset 1px 0 0 rgba(255,255,255,.35),
+    var(--s1);
+}
+body.dark .home-btn-glass {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.16);
+  color: var(--t1);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.14), var(--s1);
+}
+body.dark .home-btn-glass:hover { background: rgba(255,255,255,.13); }
+
+/* icon circle on home buttons */
+.home-btn-icon {
+  width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,.22);
+}
+.home-btn-primary .home-btn-icon { background: rgba(255,255,255,.22); }
+.home-btn-glass .home-btn-icon   { background: rgba(124,158,248,.12); }
+
+.home-btn-text { flex: 1; text-align: left; }
+.home-btn-text span { display: block; font-size: 11px; font-weight: 400; opacity: .7; margin-top: 1px; }
+
+/* divider */
+.divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 18px 0 14px; color: var(--g-b2);
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--g-b2), transparent);
+}
+.divider-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--p); opacity: .5; }
+
+/* notice */
+.home-notice {
+  margin-top: 18px; padding: 12px 14px;
+  border-radius: var(--r2);
+  background: rgba(255,230,180,.28);
+  border: 1px solid rgba(255,190,100,.28);
+  display: flex; gap: 8px; align-items: flex-start;
+  font-size: 13px; line-height: 1.55; color: var(--t2);
+  text-align: left;
+}
+.home-notice .material-symbols-rounded {
+  color: #d97706; font-size: 16px; margin: 2px 0 0; flex-shrink: 0;
+}
+body.dark .home-notice { background: rgba(180,130,40,.14); border-color: rgba(200,150,60,.25); color: var(--t1); }
+
+/* ─────────────────────────────────────────────
+   INNER PAGES
+   ───────────────────────────────────────────── */
+.inner-page {
+  padding-top: 0; padding-bottom: calc(60px + env(safe-area-inset-bottom));
+}
+
+/* top nav bar */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center;
+  padding: 12px 16px 10px;
+  padding-top: calc(12px + env(safe-area-inset-top));
+  background: rgba(240,244,255,.80);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,.6);
+}
+/* pull to refresh */
+.ptr-indicator {
+  position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+  z-index: 200; pointer-events: none;
+  display: flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--g-bg); border: 1px solid var(--g-b);
+  box-shadow: var(--s2); opacity: 0;
+  transition: opacity .2s, top .2s;
+}
+.ptr-indicator.visible { opacity: 1; }
+.ptr-indicator .material-symbols-rounded { font-size: 20px; color: var(--p); margin: 0; transition: transform .3s; }
+.ptr-indicator.ready .material-symbols-rounded { transform: rotate(360deg); }
+.ptr-indicator.loading .material-symbols-rounded { animation: spin 1s linear infinite; }
+
+body.dark .topbar {
+  background: rgba(12,18,34,.85);
+  border-color: rgba(255,255,255,.06);
+}
+.topbar-title {
+  flex: 1; font-size: 17px; font-weight: 600;
+  letter-spacing: -.015em; color: var(--t1);
+}
+.back-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--p); font-family: inherit; font-size: 14px;
+  font-weight: 500; display: flex; align-items: center; gap: 4px;
+  padding: 6px 10px 6px 0; transition: opacity var(--d);
+}
+.back-btn:hover { opacity: .7; }
+.back-btn .material-symbols-rounded { font-size: 18px; margin: 0; color: inherit; }
+
+/* ─────────────────────────────────────────────
+   GLASS CARD
+   ───────────────────────────────────────────── */
+.card {
+  position: relative; overflow: hidden;
+  border-radius: var(--r4); padding: 22px 20px; margin-bottom: 12px;
+  background: rgba(255,255,255,.38);
+  backdrop-filter: blur(48px) saturate(200%);
+  -webkit-backdrop-filter: blur(48px) saturate(200%);
+  border: 1px solid rgba(255,255,255,.82);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.95),
+    inset 0 -1px 0 rgba(180,200,255,.10),
+    0 8px 40px rgba(100,130,220,.06),
+    0 2px 8px rgba(0,0,0,.02);
+  isolation: isolate;
+  transition: box-shadow var(--d) var(--ease);
+}
+/* top-left specular highlight — subtle only */
+.card::before {
+  content: ''; position: absolute; inset: 0; border-radius: inherit;
+  pointer-events: none; z-index: 1;
+  background:
+    radial-gradient(ellipse 60% 30% at 12% 6%, rgba(255,255,255,.18) 0%, transparent 55%);
+}
+/* rim / refraction border */
+.card::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit;
+  padding: 1.5px; pointer-events: none; z-index: 1;
+  background: linear-gradient(145deg,
+    rgba(255,255,255,.95) 0%,
+    rgba(220,235,255,.30) 30%,
+    rgba(200,210,255,.08) 60%,
+    rgba(255,255,255,.60) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.card > * { position: relative; z-index: 2; }
+
+body.dark .card {
+  background: linear-gradient(145deg,
+    rgba(255,255,255,.10) 0%,
+    rgba(255,255,255,.05) 50%,
+    rgba(160,190,255,.04) 100%);
+  border-color: rgba(255,255,255,.14);
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.16),
+    inset 0 -1px 0 rgba(100,150,255,.08),
+    0 8px 40px rgba(0,0,0,.35),
+    0 2px 8px rgba(0,0,0,.20);
+}
+body.dark .card::before {
+  background:
+    radial-gradient(ellipse 70% 40% at 12% 6%, rgba(255,255,255,.18) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 85% 95%, rgba(100,150,255,.08) 0%, transparent 50%);
+}
+body.dark .card::after {
+  background: linear-gradient(145deg,
+    rgba(255,255,255,.22) 0%,
+    rgba(160,200,255,.06) 40%,
+    rgba(255,255,255,.14) 100%);
+}
+
+/* glass-card alias */
+.glass-card {
+  background: rgba(255,255,255,.06);
+  backdrop-filter: blur(40px) saturate(260%);
+  -webkit-backdrop-filter: blur(40px) saturate(260%);
+  border: 1px solid rgba(255,255,255,.50);
+  border-radius: var(--r3); padding: 16px 16px 13px; margin-bottom: 10px;
+  box-shadow: inset 0 1.5px 0 rgba(255,255,255,.75), var(--s1);
+  transition: box-shadow var(--d);
+}
+body.dark .glass-card {
+  background: rgba(255,255,255,.04);
+  border-color: rgba(255,255,255,.10);
+  color: var(--t1);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), var(--s1);
+}
+
+/* noise texture */
+.noise {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  opacity: .020; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ─────────────────────────────────────────────
+   TYPOGRAPHY
+   ───────────────────────────────────────────── */
+h2 {
+  font-size: 18px; font-weight: 600; letter-spacing: -.018em;
+  margin: 0 0 18px; display: flex; align-items: center; gap: 8px; color: var(--t1);
+}
+h2 .material-symbols-rounded { color: var(--p); margin: 0; font-size: 18px; }
+
+.section-label {
+  font-size: 13px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--t2); display: block; margin-bottom: 8px;
+  padding-left: 8px; border-left: 3px solid var(--p);
+}
+body.dark .section-label { color: var(--t2); border-color: var(--p); }
+
+.material-symbols-rounded {
+  font-size: 18px; vertical-align: middle; margin-right: 6px;
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  color: var(--t3); transition: color var(--d);
+}
+
+/* ─────────────────────────────────────────────
+   BUTTONS (inner pages)
+   ───────────────────────────────────────────── */
+.btn {
+  width: 100%; padding: 14px 18px; margin-bottom: 9px;
+  border: none; border-radius: var(--r3);
+  font-family: 'Kanit', sans-serif; font-size: 14px; font-weight: 500;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: all var(--d) var(--ease);
+}
+.btn:active { transform: scale(.978); }
+.btn .material-symbols-rounded { margin: 0; font-size: 16px; color: inherit; }
+
+.primary {
+  background: linear-gradient(145deg, #8aaafc, #5b7ef0);
+  color: #fff;
+  box-shadow: 0 6px 20px var(--p-glow), inset 0 1px 0 rgba(255,255,255,.28);
+}
+.primary:hover { filter: brightness(1.06); }
+body.dark .primary { background: linear-gradient(145deg, #6a8ae8, #4060c8); }
+
+.secondary {
+  background: rgba(255,255,255,.38); color: var(--p);
+  border: 1px solid rgba(255,255,255,.82);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), var(--s1);
+}
+.secondary:hover { background: rgba(255,255,255,.55); }
+body.dark .secondary { background: rgba(255,255,255,.08); color: var(--p); border-color: rgba(255,255,255,.14); }
+
+.neutral {
+  background: rgba(255,255,255,.32); color: var(--t2);
+  border: 1px solid rgba(255,255,255,.78);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), var(--s1);
+}
+.neutral:hover { background: rgba(255,255,255,.52); color: var(--t1); }
+body.dark .neutral { background: rgba(255,255,255,.06); color: var(--t2); border-color: rgba(255,255,255,.12); }
+
+.danger { background: rgba(255,238,238,.75); color: #c04040; border: 1px solid rgba(220,140,140,.24); }
+body.dark .danger { background: rgba(80,15,15,.45); color: #e07070; border-color: rgba(200,80,80,.18); }
+
+/* ─────────────────────────────────────────────
+   INPUTS
+   ───────────────────────────────────────────── */
+input, select, textarea {
+  width: 100%; padding: 12px 14px; margin-top: 9px;
+  border: 1px solid rgba(255,255,255,.75); border-radius: var(--r1);
+  background: rgba(255,255,255,.42); color: var(--t1);
+  font-family: 'Kanit', sans-serif; font-size: 14px;
+  transition: all var(--d) var(--ease);
+  -webkit-appearance: none; appearance: none;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), var(--s1);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+input::placeholder, textarea::placeholder { color: var(--t3); }
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: rgba(124,158,248,.50);
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 0 0 3px rgba(124,158,248,.14), inset 0 1px 0 #fff;
+}
+body.dark input, body.dark select, body.dark textarea {
+  background: rgba(255,255,255,.08); border-color: var(--g-b); color: var(--t1);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+body.dark input::placeholder, body.dark textarea::placeholder { color: var(--t2); opacity: .6; }
+body.dark input:focus, body.dark select:focus, body.dark textarea:focus {
+  background: rgba(255,255,255,.10); border-color: rgba(138,170,252,.45);
+  box-shadow: 0 0 0 3px rgba(138,170,252,.14);
+}
+body.dark select option { background: #101828; color: var(--t1); }
+#detailInput { min-height: 110px; max-height: 260px; resize: none; }
+
+/* ─────────────────────────────────────────────
+   FILTER PILLS
+   ───────────────────────────────────────────── */
+.filter-btn {
+  padding: 7px 14px; border-radius: 99px;
+  border: 1px solid var(--g-b2);
+  background: rgba(255,255,255,.48); color: var(--t2);
+  cursor: pointer; font-family: 'Kanit', sans-serif;
+  font-size: 12px; font-weight: 500; letter-spacing: .03em;
+  white-space: nowrap; transition: all var(--d) var(--ease);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.82), var(--s1);
+}
+.filter-btn.active {
+  background: var(--p); color: #fff; border-color: var(--p);
+  box-shadow: 0 3px 12px var(--p-glow);
+}
+body.dark .filter-btn { background: rgba(255,255,255,.06); color: var(--t2); border-color: var(--g-b); }
+body.dark .filter-btn.active { background: var(--p); border-color: var(--p); }
+
+/* ─────────────────────────────────────────────
+   STATUS BADGES
+   ───────────────────────────────────────────── */
+.badge {
+  display: inline-flex; align-items: center; padding: 3px 10px;
+  border-radius: 99px; font-size: 11px; font-weight: 500;
+  letter-spacing: .04em; text-transform: uppercase;
+}
+.badge-wait   { background: rgba(230,175,50,.11); color: #8a6418; border: 1px solid rgba(230,175,50,.22); }
+.badge-doing  { background: rgba(80,140,230,.10); color: #2a70b8; border: 1px solid rgba(80,140,230,.22); }
+.badge-done   { background: rgba(50,185,110,.10); color: #226844; border: 1px solid rgba(50,185,110,.20); }
+.badge-cancel { background: rgba(215,75,75,.08);  color: #a02828; border: 1px solid rgba(215,75,75,.16); }
+body.dark .badge-wait   { background: rgba(235,190,80,.14); color: #e0c060; border-color: rgba(235,190,80,.26); }
+body.dark .badge-doing  { background: rgba(100,170,240,.13); color: #90c8f0; border-color: rgba(100,170,240,.26); }
+body.dark .badge-done   { background: rgba(60,190,120,.13);  color: #70d8a0; border-color: rgba(60,190,120,.26); }
+body.dark .badge-cancel { background: rgba(225,85,85,.11);   color: #e08888; border-color: rgba(225,85,85,.22); }
+
+/* ─────────────────────────────────────────────
+   MODAL
+   ───────────────────────────────────────────── */
+#editModal, #changePwModal {
+  display: none; position: fixed; inset: 0;
+  background: rgba(8,14,26,.45);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  z-index: 9999; align-items: center; justify-content: center; padding: 16px;
+}
+#editModal > div, #changePwModal > div {
+  background: rgba(240,244,255,.95);
+  backdrop-filter: blur(36px); -webkit-backdrop-filter: blur(36px);
+  border: 1px solid rgba(255,255,255,.78);
+  border-radius: var(--r4); padding: 24px 20px;
+  width: 100%; max-width: 500px; max-height: 88vh; overflow-y: auto;
+  box-shadow: var(--s3);
+}
+body.dark #editModal > div, body.dark #changePwModal > div,
+body.dark #viewResModal > div, body.dark #resItemModal > div {
+  background: rgba(14,22,44,.88) !important;
+  border-color: rgba(255,255,255,.14) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1) !important;
+}
+
+body.dark #notifModal > div {
+  background: rgba(14,22,44,.88) !important;
+  border-color: rgba(255,255,255,.14) !important;
+}
+body.dark #notifModal > div > div:first-child {
+  background: rgba(255,255,255,.04) !important;
+  border-bottom-color: rgba(255,255,255,.08) !important;
+}
+
+/* light mode modal glass */
+#editModal > div, #changePwModal > div,
+#viewResModal > div, #resItemModal > div {
+  background: rgba(255,255,255,.42) !important;
+  backdrop-filter: blur(60px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(60px) saturate(180%) !important;
+  border: 1px solid rgba(255,255,255,.92) !important;
+  box-shadow: 0 12px 48px rgba(100,130,220,.1), 0 2px 8px rgba(0,0,0,.03), inset 0 1.5px 0 rgba(255,255,255,1), inset 0 0 0 0.5px rgba(255,255,255,.5) !important;
+}
+
+/* ─────────────────────────────────────────────
+   JOB CARDS
+   ───────────────────────────────────────────── */
+.jcard {
+  background: rgba(255,255,255,.55); border: 1px solid var(--g-b);
+  border-radius: var(--r3); padding: 16px 16px 13px; margin-bottom: 10px;
+  box-shadow: var(--s1); transition: box-shadow var(--d);
+}
+.jcard:hover { box-shadow: var(--s2); }
+body.dark .jcard { background: rgba(255,255,255,.05); border-color: var(--g-b); color: var(--t1); }
+
+/* ─────────────────────────────────────────────
+   MISC
+   ───────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--g-b2); border-radius: 99px; }
+
+.loading-svg { width: 30px; height: 30px; animation: spin 1s linear infinite; display: block; margin: 0 auto 10px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.success-svg { width: 68px; height: 68px; margin: 0 auto 14px; display: block; }
+.success-svg path { stroke-dasharray: 100; stroke-dashoffset: 100; animation: drawCheck .8s ease forwards; }
+@keyframes drawCheck { to { stroke-dashoffset: 0; } }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+.pg-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--g-b2); background: rgba(255,255,255,.55);
+  color: var(--t1); font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--s1); transition: all var(--d);
+}
+body.dark .pg-btn { background: rgba(255,255,255,.06); border-color: var(--g-b); }
+
+.file-wrap {
+  margin-top: 9px; padding: 12px 14px;
+  border: 1px dashed var(--g-b2); border-radius: var(--r2);
+  background: rgba(255,255,255,.38);
+}
+body.dark .file-wrap { background: rgba(255,255,255,.04); }
+
+#chartContainer { background: rgba(255,255,255,.45); border: 1px solid var(--g-b2); border-radius: var(--r3); }
+body.dark #chartContainer { background: rgba(255,255,255,.04); border-color: var(--g-b); }
+
+.res-group { background: rgba(255,255,255,.45); border: 1px solid var(--g-b2); border-radius: var(--r2); padding: 12px 14px; margin-top: 9px; }
+body.dark .res-group { background: rgba(255,255,255,.04); border-color: var(--g-b); }
+
+#darkToggleBtn {
+  width: auto !important; padding: 9px 20px !important;
+  border-radius: 99px !important; font-size: 11px !important;
+  letter-spacing: .07em !important; text-transform: uppercase !important;
+  display: inline-flex !important; margin: 0 auto !important; margin-bottom: 0 !important;
+}
+
+/* admin nav */
+.admin-nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px; margin-bottom: 7px;
+}
+.admin-nav-bottom {
+  grid-template-columns: repeat(2, 1fr) !important;
+  margin-bottom: 16px;
+}
+.admin-nav .btn {
+  margin: 0; padding: 10px 8px; flex: unset;
+  width: auto !important;
+  border-radius: var(--r2); font-size: 13px;
+  flex-direction: row; gap: 5px; justify-content: center;
+  line-height: 1.2; min-height: unset; white-space: nowrap;
+}
+.admin-nav .btn .material-symbols-rounded {
+  font-size: 16px !important; margin: 0; flex-shrink: 0;
+}
+@media (max-width: 500px) {
+  .admin-nav {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .admin-nav-bottom {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .admin-nav .btn {
+    padding: 11px 8px; font-size: 13px;
+  }
+}
+
+body.dark #darkFab { background: rgba(14,22,44,.7) !important; border-color: rgba(255,255,255,.15) !important; }
+
+/* admin topbar extra */
+.admin-user-badge {
+  font-size: 18px; font-weight: 600; color: var(--t1);
+  display: flex; align-items: center; gap: 5px;
+}
+.admin-user-badge .material-symbols-rounded { font-size: 20px; margin: 0; color: var(--p); }
+
+/* ── Safe area fallback (for Apps Script iframe) ── */
+/* env() won't work inside iframe — JS patches it below */
+
+@media (max-width: 600px) {
+  /* reduce heavy GPU effects */
+  .card, .topbar, #editModal > div, #changePwModal > div {
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+  }
+  .home-btn-glass, .glass-card {
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+  }
+  /* larger touch targets & text for elderly */
+  body { font-size: 17px !important; }
+  .btn { font-size: 16px !important; padding: 16px 18px !important; }
+  .home-btn { font-size: 16px !important; padding: 18px 20px !important; }
+  .home-btn-text span { font-size: 13px !important; }
+  input, select, textarea { font-size: 16px !important; padding: 14px !important; }
+  .filter-btn { font-size: 14px !important; padding: 9px 16px !important; }
+  .badge { font-size: 12px !important; padding: 4px 12px !important; }
+  h2 { font-size: 20px !important; }
+  .topbar-title { font-size: 19px !important; }
+  .back-btn { font-size: 16px !important; }
+  .section-label { font-size: 13px !important; }
+  .jcard { padding: 18px 16px 15px !important; }
+}
+
+/* ── Flatpickr fix — month/year dropdown not clipped ── */
+.flatpickr-current-month {
+  display: flex !important;
+  align-items: center !important;
+  padding: 4px 0 !important;
+  height: 34px !important;
+}
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+  font-family: 'Kanit', sans-serif !important;
+  font-size: 14px !important;
+  height: 28px !important;
+  padding: 0 4px !important;
+  -webkit-appearance: auto !important;
+  appearance: auto !important;
+}
+.flatpickr-current-month input.cur-year {
+  font-family: 'Kanit', sans-serif !important;
+  font-size: 14px !important;
+  height: 28px !important;
+}
+.flatpickr-months .flatpickr-month {
+  height: 42px !important;
+  overflow: visible !important;
+}
+
+@keyframes splashLogoIn { from{opacity:0;transform:scale(.6) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
+@keyframes splashTextIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+@keyframes splashDot { 0%,100%{opacity:.3;transform:scale(.7)} 50%{opacity:1;transform:scale(1.2)} }
+
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     HOME
+══════════════════════════════════════════ -->
+<!-- Splash Screen -->
+<div id="splashScreen" style="position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--bg-grad-a,#dce8ff) 0%,var(--bg-grad-b,#f0e0ff) 50%,var(--bg-grad-c,#ffe0e8) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;transition:opacity .6s ease;">
+  <div style="position:absolute;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,#c4b5fd,#93c5fd);top:-60px;left:-60px;filter:blur(60px);opacity:.55;animation:orbDrift 6s ease-in-out infinite alternate;"></div>
+  <div style="position:absolute;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,#fbcfe8,#f9a8d4);bottom:-40px;right:-40px;filter:blur(60px);opacity:.55;animation:orbDrift 8s ease-in-out infinite alternate-reverse;"></div>
+  <img src="https://raw.githubusercontent.com/abeltonyx/myimg/refs/heads/main/LogoHosOrangeWhite.png" style="width:76px;height:76px;object-fit:contain;border-radius:22px;box-shadow:0 8px 28px rgba(100,130,220,.22);animation:splashLogoIn .6s cubic-bezier(.16,1,.3,1) both;position:relative;z-index:1;">
+  <div style="font-size:16px;font-weight:600;color:var(--t1);text-align:center;line-height:1.5;animation:splashTextIn .6s .2s cubic-bezier(.16,1,.3,1) both;position:relative;z-index:1;">งานเวชนิทัศน์และ<br>โสตทัศนศึกษา</div>
+  <div style="font-size:11px;color:var(--p);letter-spacing:.18em;animation:splashTextIn .6s .35s cubic-bezier(.16,1,.3,1) both;position:relative;z-index:1;">Smart Service System</div>
+  <div style="display:flex;gap:6px;margin-top:6px;animation:splashTextIn .6s .5s cubic-bezier(.16,1,.3,1) both;position:relative;z-index:1;">
+    <span style="width:7px;height:7px;border-radius:50%;background:var(--p);animation:splashDot 1.2s ease-in-out infinite;"></span>
+    <span style="width:7px;height:7px;border-radius:50%;background:var(--p);animation:splashDot 1.2s .2s ease-in-out infinite;"></span>
+    <span style="width:7px;height:7px;border-radius:50%;background:var(--p);animation:splashDot 1.2s .4s ease-in-out infinite;"></span>
+  </div>
+</div>
+
+<!-- Off Hours Page -->
+<div id="offHours" class="page" style="display:none;justify-content:center;align-items:center;padding:40px 16px;min-height:100dvh;">
+  <div class="wrap" style="text-align:center;max-width:400px;">
+    <div class="card">
+      <div class="noise"></div>
+      <img src="https://raw.githubusercontent.com/abeltonyx/myimg/refs/heads/main/LogoHosOrangeWhite.png" style="width:64px;height:64px;object-fit:contain;border-radius:16px;margin:0 auto 6px;display:block;filter:drop-shadow(0 4px 12px rgba(100,130,220,.2));">
+      <div style="font-size:12px;color:var(--p);letter-spacing:.1em;margin-bottom:14px;">งานเวชนิทัศน์และโสตทัศนศึกษา</div>
+      <svg id="offHoursSvgClock" width="110" height="110" viewBox="0 0 140 140" style="display:block;margin:0 auto;filter:drop-shadow(0 4px 16px rgba(124,158,248,.25));">
+        <circle cx="70" cy="70" r="65" fill="rgba(255,255,255,.5)" stroke="rgba(255,255,255,.95)" stroke-width="2"/>
+        <circle cx="70" cy="70" r="60" fill="none" stroke="rgba(124,158,248,.15)" stroke-width="0.5"/>
+        <g stroke="rgba(124,158,248,.5)" stroke-width="2" stroke-linecap="round">
+          <line x1="70" y1="14" x2="70" y2="22" transform="rotate(0 70 70)"/>
+          <line x1="70" y1="14" x2="70" y2="22" transform="rotate(30 70 70)"/>
+          <line x1="70" y1="14" x2="70" y2="22" transform="rotate(60 70 70)"/>
+          <line x1="70" y1="14" x2="70" y2="22" transform="rotate(90 70 70)"/>
+          <line x1="70" y1="14" x2="70" y2="22" transform="rotate(120 70 70)"/>
+          <line x1="70" y1="14" x2="70" y2="22" transform="rotate(150 70 70)"/>
+          <line x1="70" y1="14" x2="70" y2="22" transform="rotate(180 70 70)"/>
+          <line x1="70" y1="14" x2="70" y2="22" transform="rotate(210 70 70)"/>
+          <line x1="70" y1="14" x2="70" y2="22" transform="rotate(240 70 70)"/>
+          <line x1="70" y1="14" x2="70" y2="22" transform="rotate(270 70 70)"/>
+          <line x1="70" y1="14" x2="70" y2="22" transform="rotate(300 70 70)"/>
+          <line x1="70" y1="14" x2="70" y2="22" transform="rotate(330 70 70)"/>
+        </g>
+        <line id="offHoursHH" x1="70" y1="70" x2="70" y2="36" stroke="#7c9ef8" stroke-width="4" stroke-linecap="round"/>
+        <line id="offHoursMH" x1="70" y1="70" x2="70" y2="24" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round"/>
+        <line id="offHoursSH" x1="70" y1="78" x2="70" y2="18" stroke="#f9a8d4" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="70" cy="70" r="4" fill="#7c9ef8"/>
+        <circle cx="70" cy="70" r="2" fill="white"/>
+      </svg>
+      <div id="offHoursClock" style="font-size:13px;color:rgba(20,30,50,.75);margin:8px 0 12px;"></div>
+
+      <!-- holiday badge -->
+      <div id="offHoursBadge" style="display:none;align-items:center;gap:6px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:99px;padding:5px 14px;font-size:12px;color:#c04040;margin-bottom:10px;">
+        <span class="material-symbols-rounded" style="font-size:15px;margin:0;color:#c04040;">event</span>
+        <span class="badge-text">วันหยุดราชการ</span>
+      </div>
+
+      <div class="brand" style="font-size:22px;margin-bottom:6px;">นอกเวลาทำการ</div>
+      <div style="width:36px;height:2px;background:var(--p);border-radius:99px;margin:0 auto 14px;"></div>
+      <div style="font-size:15px;color:var(--t2);line-height:1.9;margin-bottom:16px;">
+        ระบบให้บริการเฉพาะ<br>
+        <b style="color:var(--t1);font-weight:500;">วันจันทร์ – วันศุกร์</b><br>
+        เวลา <b style="color:var(--p);">08:30 – 16:30 น.</b><br>
+        <span style="font-size:13px;color:var(--t3);">(หยุดเสาร์ – อาทิตย์)</span>
+      </div>
+      <div style="width:100%;height:0.5px;background:var(--g-b2);margin-bottom:12px;"></div>
+      <button class="btn secondary" onclick="goSearch()" style="margin:0 0 12px;">
+        <span class="material-symbols-rounded">search</span> ติดตามสถานะงาน
+      </button>
+      <div style="width:100%;height:0.5px;background:var(--g-b2);margin-bottom:12px;"></div>
+      <button class="btn secondary" onclick="goLogin()" style="margin:0 0 14px;">
+        <span class="material-symbols-rounded">admin_panel_settings</span> เข้าสู่ระบบเจ้าหน้าที่
+      </button>
+      <div style="width:100%;height:0.5px;background:var(--g-b2);margin-bottom:12px;"></div>
+      <div style="font-size:11px;color:var(--t3);margin-bottom:6px;letter-spacing:.06em;">ติดต่อสอบถาม</div>
+      <div style="background:rgba(124,158,248,.06);border:1px solid rgba(124,158,248,.15);border-radius:12px;padding:10px 14px;">
+        <div style="font-size:15px;font-weight:500;color:var(--t1);display:flex;align-items:center;justify-content:center;gap:6px;">
+          <span class="material-symbols-rounded" style="font-size:16px;margin:0;color:var(--p);">phone_in_talk</span>
+          037-211-088 ต่อ 2516
+        </div>
+        <div style="font-size:12px;color:var(--t3);margin-top:3px;">วันจันทร์ – ศุกร์ เวลา 08:30 – 16:30 น.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="home" class="page active">
+  <div class="home-inner">
+    <img src="https://raw.githubusercontent.com/abeltonyx/myimg/refs/heads/main/LogoHosOrangeWhite.png" class="logo" alt="logo">
+    <div class="brand">ระบบขอรับบริการออนไลน์</div>
+    <div class="brand">งานเวชนิทัศน์และโสตทัศนศึกษา</div>
+    <span class="brand-sub">Smart Service System</span>
+
+    <button class="home-btn home-btn-primary" onclick="goService()">
+      <div class="home-btn-icon">
+        <span class="material-symbols-rounded" style="color:#fff;margin:0;font-size:17px;">edit_document</span>
+      </div>
+      <div class="home-btn-text">
+        ขอรับบริการออนไลน์
+        <span>กรอกฟอร์มส่งงานใหม่</span>
+      </div>
+      <span class="material-symbols-rounded" style="color:rgba(255,255,255,.55);margin:0;font-size:15px;">chevron_right</span>
+    </button>
+
+    <button class="home-btn home-btn-glass" onclick="goSearch()">
+      <div class="home-btn-icon">
+        <span class="material-symbols-rounded" style="color:var(--p);margin:0;font-size:17px;">search</span>
+      </div>
+      <div class="home-btn-text">
+        ติดตามสถานะงาน
+        <span>ค้นหาด้วยเลขงานหรือชื่อ</span>
+      </div>
+      <span class="material-symbols-rounded" style="color:var(--t3);margin:0;font-size:15px;">chevron_right</span>
+    </button>
+
+    <button class="home-btn home-btn-glass" onclick="goLogin()">
+      <div class="home-btn-icon">
+        <span class="material-symbols-rounded" style="color:var(--t2);margin:0;font-size:17px;">admin_panel_settings</span>
+      </div>
+      <div class="home-btn-text">
+        เข้าสู่ระบบเจ้าหน้าที่
+        <span>สำหรับ Staff และ Admin</span>
+      </div>
+      <span class="material-symbols-rounded" style="color:var(--t3);margin:0;font-size:15px;">chevron_right</span>
+    </button>
+
+    <button class="home-btn home-btn-glass" onclick="goHelp()">
+      <div class="home-btn-icon">
+        <span class="material-symbols-rounded" style="color:var(--t2);margin:0;font-size:17px;">help_outline</span>
+      </div>
+      <div class="home-btn-text">
+        วิธีใช้งาน
+        <span>คู่มือการใช้ระบบ</span>
+      </div>
+      <span class="material-symbols-rounded" style="color:var(--t3);margin:0;font-size:15px;">chevron_right</span>
+    </button>
+
+    <div class="divider"><div class="divider-dot"></div></div>
+
+    <button id="darkToggleBtn" class="btn neutral" onclick="toggleDark()">
+      <span class="material-symbols-rounded" id="darkIcon">dark_mode</span>
+      <span id="darkLabel">โหมดกลางคืน</span>
+    </button>
+
+    <div class="home-notice">
+      <span class="material-symbols-rounded">info</span>
+      กรุณาจดจำเลขลำดับงานไว้ทุกครั้งหลังส่งคำขอ
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SEARCH
+══════════════════════════════════════════ -->
+<div id="search" class="page">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHome()">
+      <span class="material-symbols-rounded">arrow_back</span>
+    </button>
+    <div class="topbar-title">ติดตามสถานะงาน</div>
+  </div>
+  <div class="wrap inner-page" style="padding-top:16px;">
+    <div class="card">
+      <div class="noise"></div>
+      <input id="searchInput" placeholder="เลขลำดับงาน หรือ ชื่อผู้สั่ง…" onkeydown="if(event.key==='Enter')doSearch()">
+      <button class="btn primary" style="margin-top:12px;" onclick="doSearch()">
+        <span class="material-symbols-rounded">search</span> ค้นหา
+      </button>
+    </div>
+    <div id="result" style="word-break:break-word;overflow-wrap:break-word;"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SERVICE FORM
+══════════════════════════════════════════ -->
+<div id="service" class="page">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHome()">
+      <span class="material-symbols-rounded">arrow_back</span>
+    </button>
+    <div class="topbar-title">ขอรับบริการใหม่</div>
+  </div>
+  <div class="wrap inner-page" style="padding-top:16px;">
+    <div class="card">
+      <div class="noise"></div>
+
+      <span class="section-label">ข้อมูลผู้ติดต่อ</span>
+      <select id="prefixInput">
+        <option value="">— คำนำหน้า —</option>
+        <option>นาย</option><option>นาง</option><option>นางสาว</option>
+      </select>
+      <div style="display:flex;gap:9px;">
+        <input id="nameInput" placeholder="ชื่อ" style="flex:1" oninput="this.value=this.value.replace(/[0-9]/g,'')">
+        <input id="lastnameInput" placeholder="นามสกุล" style="flex:1" oninput="this.value=this.value.replace(/[0-9]/g,'')">
+      </div>
+
+      <span class="section-label" style="margin-top:18px;display:block;">หน่วยงาน</span>
+      <select id="groupInput" onchange="updateDept()">
+        <option value="">— กลุ่มภารกิจ —</option>
+        <option>ภารกิจด้านอำนวยการ</option>
+        <option>ภารกิจด้านบริการปฐมภูมิ</option>
+        <option>ภารกิจด้านพัฒนาระบบบริการและสนับสนุนบริการสุขภาพ</option>
+        <option>ภารกิจด้านบริการทุติยภูมิและตติยภูมิ</option>
+        <option>ภารกิจด้านการพยาบาล</option>
+        <option>ภารกิจด้านผลิตบุคลากรทางการแพทย์</option>
+        <option>มูลนิธิโรงพยาบาลเจ้าพระยาอภัยภูเบศรฯ</option>
+      </select>
+      <select id="departmentInput"><option value="">— หน่วยงาน —</option></select>
+
+      <span class="section-label" style="margin-top:18px;display:block;">รายละเอียดงาน</span>
+      <select id="typeInput">
+        <option value="">— ประเภทงาน —</option>
+        <option>งานผลิตสื่อต่างๆ</option><option>ทำข่าวประชาสัมพันธ์</option>
+        <option>เกียรติบัตร / ใบประกาศ</option><option>ถ่ายภาพ / ทำข่าวประชาสัมพันธ์</option>
+        <option>งานป้าย</option><option>งานถ่ายภาพ</option><option>งานวีดีโอ</option>
+        <option>รับคณะ</option><option>ระบบ Zoom / Webex</option><option>ดูแลห้องประชุม</option>
+        <option>เครื่องเสียง</option><option>ยืม/ติดตั้ง อุปกรณ์</option>
+        <option>ปริ้นเอกสาร / ภาพ</option><option>บัตร / บัตรคิว</option><option>เคลือบพลาสติก</option>
+      </select>
+      <input type="text" id="orderDateInput" placeholder="วันที่สั่งงาน">
+      <textarea id="detailInput" placeholder="รายละเอียด (ขนาด จำนวน ฯลฯ)"></textarea>
+
+      <div class="file-wrap">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);display:flex;align-items:center;gap:5px;margin-bottom:8px;">
+          <span class="material-symbols-rounded" style="font-size:13px;margin:0;">attach_file</span> ไฟล์แนบ (ถ้ามี)
+        </div>
+        <input type="file" id="fileInput" multiple style="margin-top:0;border:none;padding:0;background:transparent;box-shadow:none;font-size:13px;" onchange="addFiles(this)">
+        <div id="fileListPreview" style="margin-top:6px;display:flex;flex-direction:column;gap:4px;"></div>
+        <div id="fileCount" style="font-size:11px;color:var(--t3);margin-top:4px;display:none;"></div>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px;">ไม่เกิน 25MB</div>
+      </div>
+
+      <input type="text" id="needDateInput" placeholder="วันที่ต้องการงาน">
+
+      <span class="section-label" style="margin-top:18px;display:block;">ข้อมูลติดต่อ</span>
+      <input id="phoneInput" placeholder="เบอร์ภายใน (4 หลัก)" maxlength="4" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+      <div style="font-size:11px;color:var(--t3);margin-top:4px;margin-left:2px;">เบอร์ภายในโรงพยาบาล 4 หลัก</div>
+
+      <button id="submitBtn" class="btn primary" style="margin-top:20px;" onclick="submitService()">
+        <span class="material-symbols-rounded">send</span> ส่งคำขอรับบริการ
+      </button>
+      <div id="serviceResult" style="color:#c04040;margin-top:10px;text-align:center;font-size:13px;font-weight:500;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SUCCESS
+══════════════════════════════════════════ -->
+<div id="success" class="page" style="justify-content:center;align-items:center;padding:40px 16px;">
+  <div style="width:100%;max-width:400px;z-index:10;position:relative;">
+    <div class="card" style="text-align:center;">
+      <div class="noise"></div>
+      <svg class="success-svg" viewBox="0 0 52 52">
+        <circle cx="26" cy="26" r="25" fill="none" stroke="var(--p)" stroke-width="1.5"/>
+        <path fill="none" stroke="var(--p)" stroke-width="2.5" stroke-linecap="round" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+      </svg>
+      <div class="brand" style="margin-bottom:3px;">ส่งคำขอสำเร็จ</div>
+      <span class="brand-sub" style="margin-bottom:18px;">Request Submitted</span>
+      <div id="successData" style="text-align:left;font-size:13px;line-height:1.85;color:var(--t2);word-break:break-word;overflow-wrap:break-word;"></div>
+      <button class="btn primary" style="margin-top:20px;" onclick="goHome()">
+        <span class="material-symbols-rounded">home</span> กลับหน้าหลัก
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LOGIN
+══════════════════════════════════════════ -->
+<div id="login" class="page" style="justify-content:center;align-items:center;padding:40px 16px;">
+  <div style="width:100%;max-width:380px;z-index:10;position:relative;">
+    <button class="back-btn" style="margin-bottom:8px;" onclick="goHome()">
+      <span class="material-symbols-rounded">arrow_back</span> ย้อนกลับ
+    </button>
+    <div class="card">
+      <div class="noise"></div>
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(145deg,rgba(124,158,248,.18),rgba(124,158,248,.08));border:1px solid rgba(124,158,248,.22);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+          <span class="material-symbols-rounded" style="font-size:26px;color:var(--p);margin:0;">lock</span>
+        </div>
+        <div style="font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--p);opacity:.85;">Staff Access</div>
+      </div>
+      <h2 style="justify-content:center;margin-bottom:20px;">เข้าสู่ระบบ</h2>
+      <input id="loginUser" placeholder="Username" onkeydown="if(event.key==='Enter')document.getElementById('loginPass').focus()">
+      <input id="loginPass" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')login()">
+      <button id="loginBtn" class="btn primary" style="margin-top:18px;" onclick="login()">
+        <span class="material-symbols-rounded">login</span> เข้าสู่ระบบ
+      </button>
+      <div id="loginMsg" style="color:#c04040;margin-top:10px;font-size:13px;font-weight:500;text-align:center;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ADMIN
+══════════════════════════════════════════ -->
+<div id="admin" class="page">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHome()">
+      <span class="material-symbols-rounded">logout</span>
+    </button>
+    <div class="topbar-title" id="adminPageTitle">Admin</div>
+    <button id="sysOverrideBtn" onclick="toggleSysOverride()" style="display:none;align-items:center;gap:4px;padding:5px 10px;border-radius:99px;border:none;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;background:rgba(200,210,230,.3);color:var(--t3);transition:all .2s;">
+      <span class="material-symbols-rounded" id="sysOverrideIcon" style="font-size:15px;margin:0;">power_settings_new</span>
+      <span id="sysOverrideLabel">ปิดอยู่</span>
+    </button>
+    <button id="bellBtn" onclick="openNotif()" style="position:relative;background:none;border:none;cursor:pointer;padding:6px;margin-right:6px;">
+      <span class="material-symbols-rounded" style="font-size:22px;color:var(--t2);margin:0;">notifications</span>
+      <span id="bellBadge" style="display:none;position:absolute;top:2px;right:2px;width:16px;height:16px;background:#ef4444;border-radius:50%;font-size:10px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;line-height:1;">0</span>
+    </button>
+    <div class="admin-user-badge">
+      <span class="material-symbols-rounded">account_circle</span>
+      <span id="adminName">—</span>
+    </div>
+  </div>
+
+  <div class="wrap inner-page" style="padding-top:14px;">
+    <div class="admin-nav" id="adminNavTop">
+      <button id="allJobBtn" class="btn secondary" onclick="showSection('job','all')">
+        <span class="material-symbols-rounded">list_alt</span>ทั้งหมด
+      </button>
+      <button class="btn secondary" onclick="showSection('job','my')">
+        <span class="material-symbols-rounded">person</span>งานของฉัน
+      </button>
+      <button id="resMenuBtn" class="btn secondary" onclick="showSection('resource','')" style="display:none;">
+        <span class="material-symbols-rounded">inventory_2</span>ทรัพยากร
+      </button>
+      <button id="staffAccountBtn" class="btn secondary" onclick="openChangePw()" style="display:none;">
+        <span class="material-symbols-rounded">key</span>บัญชีของฉัน
+      </button>
+    </div>
+    <div class="admin-nav admin-nav-bottom" id="adminNavBottom">
+      <button id="userMenuBtn" class="btn secondary" onclick="showSection('user','')">
+        <span class="material-symbols-rounded">manage_accounts</span>ผู้ใช้
+      </button>
+      <button class="btn secondary" onclick="openChangePw()">
+        <span class="material-symbols-rounded">key</span>บัญชีของฉัน
+      </button>
+    </div>
+
+    <div id="jobSection">
+      <!-- date filter -->
+      <div class="card" style="padding:14px 16px;margin-bottom:10px;">
+        <div class="noise"></div>
+        <span class="section-label">กรองตามวันที่</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <input type="text" id="filterStartDate" placeholder="ตั้งแต่วันที่" style="flex:1;margin:0;min-width:110px;">
+          <input type="text" id="filterEndDate" placeholder="ถึงวันที่" style="flex:1;margin:0;min-width:110px;">
+        </div>
+        <div style="display:flex;gap:7px;margin-top:8px;">
+          <button class="btn primary" style="margin:0;flex:1;padding:10px;" onclick="renderJobs()">ค้นหา</button>
+          <button class="btn neutral" style="margin:0;flex:1;padding:10px;" onclick="clearDateFilter()">ล้าง</button>
+        </div>
+      </div>
+
+      <!-- staff filter -->
+      <div id="adminStaffFilterDiv" class="card" style="display:none;padding:14px 16px;margin-bottom:10px;">
+        <div class="noise"></div>
+        <span class="section-label">ดูงานรายบุคคล</span>
+        <select id="adminStaffFilter" onchange="renderJobs()" style="margin-top:6px;"></select>
+      </div>
+
+      <!-- donut chart -->
+      <div id="chartContainer" class="card" style="padding:16px;margin-bottom:10px;display:none;">
+        <div class="noise"></div>
+        <span class="section-label">สรุปภาพรวม</span>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <div style="position:relative;width:100px;height:100px;flex-shrink:0;margin:0 auto;">
+            <svg width="100" height="100" viewBox="0 0 140 140">
+              <circle cx="70" cy="70" r="54" fill="none" stroke="var(--g-b2)" stroke-width="18"/>
+              <circle id="arc_wait"   cx="70" cy="70" r="54" fill="none" stroke="#e8c060" stroke-width="18" stroke-linecap="round" stroke-dasharray="0 340" transform="rotate(-90 70 70)" style="transition:stroke-dasharray .7s ease"/>
+              <circle id="arc_doing"  cx="70" cy="70" r="54" fill="none" stroke="var(--p)" stroke-width="18" stroke-linecap="round" stroke-dasharray="0 340" transform="rotate(-90 70 70)" style="transition:stroke-dasharray .7s ease"/>
+              <circle id="arc_done"   cx="70" cy="70" r="54" fill="none" stroke="#50c890" stroke-width="18" stroke-linecap="round" stroke-dasharray="0 340" transform="rotate(-90 70 70)" style="transition:stroke-dasharray .7s ease"/>
+              <circle id="arc_cancel" cx="70" cy="70" r="54" fill="none" stroke="#d07070" stroke-width="18" stroke-linecap="round" stroke-dasharray="0 340" transform="rotate(-90 70 70)" style="transition:stroke-dasharray .7s ease"/>
+            </svg>
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+              <div id="donutTotal" style="font-size:22px;font-weight:600;color:var(--p);line-height:1;">0</div>
+              <div style="font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-top:2px;">งาน</div>
+            </div>
+          </div>
+          <div id="donutLegend" style="flex:1;min-width:110px;display:flex;flex-direction:column;gap:7px;"></div>
+        </div>
+      </div>
+
+      <!-- id search -->
+      <div class="card" style="padding:14px 16px;margin-bottom:10px;">
+        <div class="noise"></div>
+        <span class="section-label">ค้นหาจากเลขงาน</span>
+        <div style="display:flex;gap:7px;">
+          <input type="text" id="adminSearchId" placeholder="เลขงาน" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" style="flex:1;margin:0;" onkeydown="if(event.key==='Enter')searchByIdAdmin()">
+          <button class="btn primary" style="margin:0;width:auto;padding:10px 14px;border-radius:var(--r1);" onclick="searchByIdAdmin()">
+            <span class="material-symbols-rounded" style="margin:0;">search</span>
+          </button>
+          <button class="btn neutral" style="margin:0;width:auto;padding:10px 12px;border-radius:var(--r1);" onclick="clearAdminSearch()">
+            <span class="material-symbols-rounded" style="margin:0;">close</span>
+          </button>
+        </div>
+        <div id="adminSearchResult" style="margin-top:9px;"></div>
+      </div>
+
+      <!-- filter pills -->
+      <div id="filterPillsRow" style="display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;">
+        <button id="btnFilterAll"    onclick="filterStatus('all')"    class="filter-btn active" style="white-space:nowrap;flex-shrink:0;">ทั้งหมด (0)</button>
+        <button id="btnFilterWait"   onclick="filterStatus('รอ')"     class="filter-btn" style="white-space:nowrap;flex-shrink:0;">รอจัดการ (0)</button>
+        <button id="btnFilterDoing"  onclick="filterStatus('กำลัง')"  class="filter-btn" style="white-space:nowrap;flex-shrink:0;">กำลังดำเนินการ (0)</button>
+        <button id="btnFilterDone"   onclick="filterStatus('เสร็จ')"  class="filter-btn" style="white-space:nowrap;flex-shrink:0;">เสร็จสิ้น (0)</button>
+        <button id="btnFilterCancel" onclick="filterStatus('ยกเลิก')" class="filter-btn" style="white-space:nowrap;flex-shrink:0;">ยกเลิก (0)</button>
+      </div>
+
+      <div id="paginationTop"></div>
+      <div id="adminList"></div>
+      <div id="paginationBottom"></div>
+    </div>
+
+    <div id="resourceSection" style="display:none;">
+      <!-- stat cards -->
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:10px;">
+        <div class="card" style="padding:11px 12px;margin:0;">
+          <div class="noise"></div>
+          <div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;">รายการงาน</div>
+          <div id="resStat1" style="font-size:20px;font-weight:500;color:var(--t1);">—</div>
+          <div style="font-size:12px;color:var(--t2);margin-top:1px;">ที่บันทึกวัสดุ</div>
+        </div>
+        <div class="card" style="padding:11px 12px;margin:0;">
+          <div class="noise"></div>
+          <div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;">ใช้บ่อยสุด</div>
+          <div id="resStat2" style="font-size:15px;font-weight:500;color:var(--t1);padding-top:3px;">—</div>
+          <div id="resStat3" style="font-size:13px;color:var(--t2);margin-top:1px;">—</div>
+        </div>
+      </div>
+
+      <!-- จัดการรายการวัสดุ -->
+      <div class="card" style="margin-bottom:10px;">
+        <div class="noise"></div>
+        <button class="btn secondary" style="margin:0;" onclick="openResItemModal()">
+          <span class="material-symbols-rounded">inventory_2</span> จัดการรายการวัสดุ
+        </button>
+      </div>
+
+      <!-- date filter -->
+      <div class="card" style="padding:14px 16px;margin-bottom:10px;">
+        <div class="noise"></div>
+        <span class="section-label">กรองตามวันที่เสร็จ</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <input type="text" id="resFilterStart" placeholder="ตั้งแต่วันที่" style="flex:1;margin:0;min-width:110px;">
+          <input type="text" id="resFilterEnd" placeholder="ถึงวันที่" style="flex:1;margin:0;min-width:110px;">
+        </div>
+        <div style="display:flex;gap:7px;margin-top:8px;">
+          <button class="btn primary" style="margin:0;flex:1;padding:10px;" onclick="applyResFilter()">ค้นหา</button>
+          <button class="btn neutral" style="margin:0;flex:1;padding:10px;" onclick="clearResFilter()">ล้าง</button>
+        </div>
+      </div>
+
+      <!-- วัสดุที่ใช้บ่อย -->
+      <div class="card" style="margin-bottom:10px;">
+        <div class="noise"></div>
+        <span class="section-label">วัสดุที่ใช้บ่อย</span>
+        <div style="display:flex;align-items:center;gap:8px;padding:4px 0 6px;border-bottom:0.5px solid var(--g-b2);margin-bottom:2px;">
+          <div style="flex:1;font-size:14px;color:var(--t3);letter-spacing:.05em;">วัสดุ</div>
+          <div style="width:60px;"></div>
+          <div style="min-width:36px;text-align:right;font-size:14px;color:var(--t3);">ครั้ง</div>
+          <div style="min-width:58px;text-align:right;font-size:14px;color:var(--t3);">จำนวน</div>
+        </div>
+        <div id="resSummaryRows"></div>
+        <div id="resExtraRows" style="display:none;"></div>
+        <button id="resMoreBtn" onclick="toggleResMore()" style="display:none;width:100%;padding:9px;border-radius:10px;border:0.5px solid var(--g-b2);background:transparent;font-family:inherit;font-size:12px;color:var(--p);cursor:pointer;margin-top:8px;align-items:center;justify-content:center;gap:4px;">
+          <span class="material-symbols-rounded" id="resMoreIcon" style="font-size:15px;margin:0;">expand_more</span>
+          <span id="resMoreTxt">ดูเพิ่มเติม</span>
+        </button>
+      </div>
+
+      <!-- รายการงาน -->
+      <div class="card" style="margin-bottom:10px;">
+        <div class="noise"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span class="section-label" style="margin:0;">รายการงาน</span>
+          <span id="resJobPageInfo" style="font-size:11px;color:var(--t3);"></span>
+        </div>
+        <div id="resJobPaginationTop"></div>
+        <div id="resJobList"></div>
+        <div id="resJobPaginationBottom"></div>
+      </div>
+    </div>
+
+    <div id="userSection" style="display:none;">
+      <div class="card" style="margin-bottom:10px;">
+        <div class="noise"></div>
+        <button id="toggleUserBtn" class="btn primary" style="margin:0;" onclick="toggleUserForm()">
+          <span class="material-symbols-rounded">person_add</span> เพิ่มผู้ใช้งานใหม่
+        </button>
+        <div id="userFormBox" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--g-b2);">
+          <input id="newUser" placeholder="Username">
+          <input id="newPass" placeholder="Password">
+          <input id="newName" placeholder="ชื่อ-นามสกุล">
+          <select id="newRole"><option value="staff">Staff</option><option value="admin">Admin</option></select>
+          <button class="btn primary" style="margin-top:12px;margin-bottom:0;" onclick="addUserFromForm()">
+            <span class="material-symbols-rounded">save</span> บันทึก
+          </button>
+        </div>
+      </div>
+      <div id="userList"></div>
+    </div>
+  </div>
+</div>
+
+  <!-- Dark mode FAB (mobile only) -->
+  <button id="darkFab" onclick="toggleDark()" style="
+    position:fixed;bottom:24px;right:20px;z-index:999;
+    width:48px;height:48px;border-radius:50%;
+    background:rgba(255,255,255,.45);
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.9);
+    box-shadow:0 4px 16px rgba(100,130,220,.15),inset 0 1px 0 rgba(255,255,255,1);
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:transform .15s;
+  " onmousedown="this.style.transform='scale(.9)'" onmouseup="this.style.transform=''" ontouchstart="this.style.transform='scale(.9)'" ontouchend="this.style.transform=''">
+    <span class="material-symbols-rounded" id="darkFabIcon" style="font-size:22px;margin:0;color:var(--t2);">dark_mode</span>
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     HELP
+══════════════════════════════════════════ -->
+<div id="help" class="page">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHome()">
+      <span class="material-symbols-rounded">arrow_back</span>
+    </button>
+    <div class="topbar-title">วิธีใช้งาน</div>
+  </div>
+  <div class="wrap inner-page" style="padding-top:16px;padding-bottom:4px;">
+    <div class="card">
+      <div class="noise"></div>
+      <style>
+        .help-step-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:20px;}
+        .help-num{width:28px;height:28px;border-radius:50%;background:var(--p);color:#fff;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+        .help-title{font-size:14px;font-weight:600;color:var(--t1);margin:0 0 3px;}
+        .help-desc{font-size:13px;color:var(--t2);margin:0;line-height:1.6;}
+        .help-phone{width:88px;flex-shrink:0;background:rgba(255,255,255,.55);border:1px solid rgba(200,215,255,.40);border-radius:14px;padding:7px 5px;}
+        body.dark .help-phone{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);}
+        .hp-bar{height:5px;background:rgba(124,158,248,.15);border-radius:3px;margin-bottom:5px;width:38%;}
+        .hp-btn{height:20px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:500;margin-bottom:4px;}
+        .hp-blue{background:var(--p);color:#fff;}
+        .hp-glass{background:rgba(255,255,255,.6);border:0.5px solid rgba(200,215,255,.5);color:var(--t2);}
+        body.dark .hp-glass{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12);}
+        .hp-input{height:16px;border-radius:5px;background:rgba(255,255,255,.7);border:0.5px solid rgba(200,215,255,.5);margin-bottom:4px;}
+        body.dark .hp-input{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12);}
+        .hp-row{display:flex;gap:3px;margin-bottom:4px;}
+        .hp-row .hp-input{flex:1;margin:0;}
+        .hp-label{font-size:6px;color:var(--t3);margin-bottom:2px;letter-spacing:.05em;text-transform:uppercase;}
+        .hp-card{background:rgba(255,255,255,.7);border:0.5px solid rgba(200,215,255,.5);border-radius:7px;padding:5px;margin-bottom:4px;}
+        body.dark .hp-card{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);}
+        .hp-num{font-size:10px;font-weight:700;color:var(--p);}
+        .hp-small{font-size:6px;color:var(--t2);}
+        .hp-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:4px;}
+        .hp-nav-btn{height:18px;background:rgba(255,255,255,.6);border:0.5px solid rgba(200,215,255,.4);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:6px;color:var(--t2);gap:2px;}
+        body.dark .hp-nav-btn{background:rgba(255,255,255,.07);}
+        .help-section-head{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--p);margin:4px 0 14px;display:flex;align-items:center;gap:8px;}
+        .help-section-head::after{content:'';flex:1;height:1px;background:var(--g-b2);}
+        .help-divider{height:1px;background:var(--g-b2);margin:16px 0;}
+        .hp-badge{display:inline-block;padding:1px 6px;border-radius:99px;font-size:6px;font-weight:500;}
+        .hp-wait{background:rgba(230,175,50,.15);color:#8a6418;}
+        .hp-do{background:rgba(80,140,230,.12);color:#2a70b8;}
+      </style>
+
+      <div class="help-section-head">สำหรับผู้ขอรับบริการ</div>
+
+      <div class="help-step-row">
+        <div class="help-num">1</div>
+        <div class="help-phone">
+          <div style="text-align:center;margin-bottom:5px;">
+            <img src="https://raw.githubusercontent.com/abeltonyx/myimg/refs/heads/main/LogoHosOrangeWhite.png" style="width:20px;height:20px;border-radius:6px;margin-bottom:3px;">
+            <div style="font-size:6px;font-weight:600;color:var(--t2);">งานเวชนิทัศน์ฯ</div>
+          </div>
+          <div class="hp-btn hp-blue">ขอรับบริการออนไลน์</div>
+          <div class="hp-btn hp-glass">ติดตามสถานะงาน</div>
+          <div class="hp-btn hp-glass">เข้าสู่ระบบเจ้าหน้าที่</div>
+        </div>
+        <div>
+          <p class="help-title">กดปุ่ม "ขอรับบริการออนไลน์"</p>
+          <p class="help-desc">กดปุ่มสีน้ำเงินด้านบนสุดจากหน้าหลัก</p>
+        </div>
+      </div>
+
+      <div class="help-step-row">
+        <div class="help-num">2</div>
+        <div class="help-phone">
+          <div class="hp-label">ข้อมูลผู้ติดต่อ</div>
+          <div class="hp-input"></div>
+          <div class="hp-row"><div class="hp-input"></div><div class="hp-input"></div></div>
+          <div class="hp-label">หน่วยงาน</div>
+          <div class="hp-input"></div>
+          <div class="hp-input"></div>
+          <div class="hp-label">รายละเอียดงาน</div>
+          <div class="hp-input"></div>
+          <div class="hp-input"></div>
+        </div>
+        <div>
+          <p class="help-title">กรอกข้อมูลให้ครบทุกช่อง</p>
+          <p class="help-desc">คำนำหน้า · ชื่อ-นามสกุล · กลุ่มภารกิจ · หน่วยงาน · ประเภทงาน · วันที่สั่ง · รายละเอียด · วันที่ต้องการ · เบอร์ภายใน 4 หลัก</p>
+        </div>
+      </div>
+
+      <div class="help-step-row">
+        <div class="help-num">3</div>
+        <div class="help-phone">
+          <div style="text-align:center;padding:6px 0;">
+            <div style="width:24px;height:24px;border-radius:50%;border:1.5px solid var(--p);margin:0 auto 4px;display:flex;align-items:center;justify-content:center;">
+              <span class="material-symbols-rounded" style="font-size:13px;color:var(--p);margin:0;">check</span>
+            </div>
+            <div style="font-size:7px;font-weight:600;color:var(--t1);">ส่งคำขอสำเร็จ</div>
+            <div style="font-size:6px;color:var(--t2);margin-top:1px;">รหัสอ้างอิง</div>
+            <div style="font-size:20px;font-weight:700;color:var(--p);line-height:1.2;">247</div>
+            <div style="font-size:6px;color:var(--t3);">แคปหน้าจอไว้ด้วยนะ</div>
+          </div>
+        </div>
+        <div>
+          <p class="help-title">บันทึกเลขงานไว้ให้ดี</p>
+          <p class="help-desc">หลังส่งสำเร็จจะได้เลขงาน — <strong>แคปหน้าจอทุกครั้ง</strong> เพื่อใช้ติดตามสถานะ</p>
+        </div>
+      </div>
+
+      <div class="help-step-row">
+        <div class="help-num">4</div>
+        <div class="help-phone">
+          <div class="hp-input" style="margin-bottom:4px;"></div>
+          <div class="hp-btn hp-blue" style="margin-bottom:6px;">ค้นหา</div>
+          <div class="hp-card" style="border-left:2px solid var(--p);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+              <div class="hp-num">#247</div>
+              <span class="hp-badge hp-do">กำลังทำ</span>
+            </div>
+            <div class="hp-small">งานป้าย · กลุ่มงานบริหาร</div>
+          </div>
+        </div>
+        <div>
+          <p class="help-title">ติดตามสถานะได้ตลอด</p>
+          <p class="help-desc">กลับมากด "ติดตามสถานะงาน" แล้วพิมพ์เลขงานหรือชื่อ</p>
+        </div>
+      </div>
+
+      <div class="help-divider"></div>
+      <div class="help-section-head">สำหรับเจ้าหน้าที่</div>
+
+      <div class="help-step-row">
+        <div class="help-num">1</div>
+        <div class="help-phone">
+          <div style="text-align:center;margin-bottom:5px;">
+            <div style="width:20px;height:20px;border-radius:6px;border:0.5px solid var(--p);margin:0 auto 3px;display:flex;align-items:center;justify-content:center;">
+              <span class="material-symbols-rounded" style="font-size:12px;color:var(--p);margin:0;">lock</span>
+            </div>
+            <div style="font-size:6px;color:var(--p);letter-spacing:.08em;">STAFF ACCESS</div>
+          </div>
+          <div class="hp-input"></div>
+          <div class="hp-input"></div>
+          <div class="hp-btn hp-blue" style="margin-top:4px;">เข้าสู่ระบบ</div>
+        </div>
+        <div>
+          <p class="help-title">ล็อกอินด้วย Username / Password</p>
+          <p class="help-desc">กด "เข้าสู่ระบบเจ้าหน้าที่" จากหน้าหลัก แล้วใส่ข้อมูล</p>
+        </div>
+      </div>
+
+      <div class="help-step-row">
+        <div class="help-num">2</div>
+        <div class="help-phone">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+            <div style="font-size:7px;font-weight:600;color:var(--t1);">Staff</div>
+            <div style="position:relative;display:inline-flex;">
+              <span class="material-symbols-rounded" style="font-size:14px;color:var(--t2);margin:0;">notifications</span>
+              <div style="position:absolute;top:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:#ef4444;font-size:5px;color:#fff;display:flex;align-items:center;justify-content:center;">2</div>
+            </div>
+          </div>
+          <div class="hp-grid">
+            <div class="hp-nav-btn"><span class="material-symbols-rounded" style="font-size:9px;margin:0;">list_alt</span>ทั้งหมด</div>
+            <div class="hp-nav-btn"><span class="material-symbols-rounded" style="font-size:9px;margin:0;">person</span>งานของฉัน</div>
+            <div class="hp-nav-btn"><span class="material-symbols-rounded" style="font-size:9px;margin:0;">manage_accounts</span>ผู้ใช้</div>
+            <div class="hp-nav-btn"><span class="material-symbols-rounded" style="font-size:9px;margin:0;">key</span>บัญชีของฉัน</div>
+          </div>
+          <div class="hp-card" style="border-left:2px solid #e8c060;">
+            <div class="hp-num" style="color:#e8c060;">#251</div>
+            <div class="hp-small">รอรับ · งานวีดีโอ</div>
+          </div>
+        </div>
+        <div>
+          <p class="help-title">ตรวจกล่องงาน (กระดิ่ง)</p>
+          <p class="help-desc">badge แดงที่กระดิ่งแสดงงานที่รอ — กดดูแล้วกด "รับงาน" เพื่อเริ่มดำเนินการ</p>
+        </div>
+      </div>
+
+      <div class="help-step-row">
+        <div class="help-num">3</div>
+        <div class="help-phone">
+          <div class="hp-card" style="border-left:2px solid #3b82f6;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+              <div class="hp-num">#247</div>
+              <span class="hp-badge hp-do">กำลังทำ</span>
+            </div>
+            <div class="hp-small">งานป้าย · กลุ่มงานบริหาร</div>
+            <div class="hp-small">ผู้รับผิดชอบ: สมชาย</div>
+          </div>
+          <div class="hp-btn hp-glass" style="font-size:7px;">
+            <span class="material-symbols-rounded" style="font-size:9px;margin:0;">settings</span> จัดการงาน
+          </div>
+        </div>
+        <div>
+          <p class="help-title">จัดการและอัปเดตสถานะ</p>
+          <p class="help-desc">กด "จัดการงาน" — เปลี่ยนสถานะ มอบหมาย และบันทึกทรัพยากรเมื่องานเสร็จ</p>
+        </div>
+      </div>
+
+      <div class="help-divider"></div>
+
+      <!-- ติดต่อ -->
+      <div style="background:rgba(124,158,248,.08);border:1px solid rgba(124,158,248,.2);border-radius:var(--r2);padding:14px 15px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:600;color:var(--p);margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+          <span class="material-symbols-rounded" style="font-size:16px;margin:0;">phone_in_talk</span> ติดต่องานเวชนิทัศน์ฯ
+        </div>
+        <div style="font-size:14px;color:var(--t1);font-weight:500;">037-211-088 ต่อ 2516</div>
+        <div style="font-size:12px;color:var(--t3);margin-top:3px;">วันจันทร์ – วันศุกร์ เวลา 08:30 – 16:30 น.</div>
+      </div>
+
+      <div class="help-divider"></div>
+      <div style="background:rgba(255,235,180,.28);border:1px solid rgba(255,190,80,.25);border-radius:var(--r2);padding:14px 15px;">
+        <div style="font-size:13px;font-weight:600;color:#92400e;margin-bottom:7px;display:flex;align-items:center;gap:6px;">
+          <span class="material-symbols-rounded" style="color:#d97706;font-size:16px;margin:0;">lightbulb</span> เคล็ดลับ
+        </div>
+        <div style="font-size:13px;line-height:1.8;color:var(--t2);">
+          • ติดตั้งเป็นแอป: iOS → Share → Add to Home Screen<br>
+          • Android → เมนู ⋮ → เพิ่มลงในหน้าจอหลัก<br>
+          • เบอร์ภายใน = เบอร์โรงพยาบาล 4 หลัก ไม่ใช่มือถือ
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;padding:8px 0 4px;">
+    <span style="font-size:11px;color:var(--t3);opacity:.5;letter-spacing:.04em;">Developed by Abel</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     EDIT MODAL
+══════════════════════════════════════════ -->
+<div id="editModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;background:rgba(8,14,26,.12);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)closeEditModal()">
+  <div>
+    <h3 style="margin:0 0 16px;font-size:17px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:7px;">
+      <span class="material-symbols-rounded" style="color:var(--p);margin:0;font-size:17px;">folder_open</span>
+      งาน <span style="color:var(--p);">#<span id="editJobId"></span></span>
+      <button onclick="closeEditModal()" style="margin-left:auto;background:rgba(0,0,0,.06);border:none;cursor:pointer;color:var(--t2);font-size:26px;line-height:1;padding:2px 6px;border-radius:8px;flex-shrink:0;">×</button>
+    </h3>
+    <div id="adminAssignPanel" style="display:none;">
+      <span class="section-label">มอบหมายให้</span>
+      <div id="ownerTags" style="display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 7px;min-height:28px;"></div>
+      <div style="display:flex;gap:7px;align-items:center;">
+        <select id="ownerSelect" style="flex:1;margin:0;">
+          <option value="">— เลือก Staff เพิ่ม —</option>
+        </select>
+        <button class="btn secondary" style="margin:0;width:auto;padding:10px 12px;" onclick="addOwnerTag()">
+          <span class="material-symbols-rounded" style="font-size:15px;margin:0;">add</span>
+        </button>
+      </div>
+    </div>
+    <span class="section-label" style="margin-top:14px;display:block;">สถานะ</span>
+    <select id="modalStatus" onchange="toggleDoneSection()" style="margin-top:4px;">
+      <option value="รอดำเนินการ">รอดำเนินการ</option>
+      <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+      <option value="เสร็จสิ้น">เสร็จสิ้น</option>
+      <option value="ยกเลิก">ยกเลิก</option>
+    </select>
+    <div id="modalDoneSection" style="display:none;">
+      <span class="section-label" style="margin-top:14px;display:block;">วันที่เสร็จสิ้น</span>
+      <input type="text" id="editDoneDate" placeholder="เลือกวันที่" style="margin-top:4px;">
+      <span class="section-label" style="margin-top:14px;display:flex;align-items:center;gap:5px;">
+        <span class="material-symbols-rounded" style="font-size:13px;margin:0;color:var(--p);">inventory_2</span> ทรัพยากรที่ใช้
+      </span>
+      <div id="resContainer"></div>
+    </div>
+    <span class="section-label" style="margin-top:14px;display:block;">หมายเหตุ</span>
+    <input id="editNote" placeholder="พิมพ์หมายเหตุ (ถ้ามี)" style="margin-top:4px;">
+    <div style="display:flex;gap:9px;margin-top:20px;">
+      <button class="btn neutral" style="flex:1;margin:0;" onclick="closeEditModal()">ยกเลิก</button>
+      <button id="btnSaveJob" class="btn primary" style="flex:1;margin:0;" onclick="saveEdit()">
+        <span class="material-symbols-rounded">save</span> บันทึก
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- View Resource Modal (done jobs) -->
+<div id="viewResModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;background:rgba(8,14,26,.12);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:rgba(240,244,255,.95);backdrop-filter:blur(36px);-webkit-backdrop-filter:blur(36px);border:1px solid rgba(255,255,255,.78);border-radius:var(--r4);padding:24px 20px;width:100%;max-width:500px;max-height:88vh;overflow-y:auto;box-shadow:var(--s3);">
+    <h3 style="margin:0 0 4px;font-size:17px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:7px;">
+      <span class="material-symbols-rounded" style="color:#10b981;margin:0;font-size:17px;">task_alt</span>
+      งาน <span style="color:var(--p);">#<span id="viewResJobId"></span></span>
+      <span style="font-size:12px;background:rgba(16,185,129,.12);color:#10b981;padding:3px 10px;border-radius:99px;font-weight:500;">เสร็จสิ้น</span>
+      <button onclick="document.getElementById('viewResModal').style.display='none'" style="margin-left:auto;background:rgba(0,0,0,.06);border:none;cursor:pointer;color:var(--t2);font-size:26px;line-height:1;padding:2px 6px;border-radius:8px;flex-shrink:0;">×</button>
+    </h3>
+    <div id="viewResDoneDate" style="font-size:13px;color:var(--t3);margin-bottom:16px;"></div>
+    <span class="section-label" style="display:flex;align-items:center;gap:5px;">
+      <span class="material-symbols-rounded" style="font-size:13px;margin:0;color:var(--p);">inventory_2</span> ทรัพยากรที่ใช้
+    </span>
+    <div id="viewResItems" style="margin-top:10px;"></div>
+    <div style="margin-top:18px;">
+      <span class="section-label">หมายเหตุ</span>
+      <div id="viewResNote" style="margin-top:8px;font-size:15px;color:var(--t2);background:rgba(255,255,255,.5);border:1px solid var(--g-b2);border-radius:var(--r1);padding:10px 14px;min-height:36px;"></div>
+    </div>
+    <button class="btn neutral" style="margin-top:20px;" onclick="document.getElementById('viewResModal').style.display='none'">ปิด</button>
+  </div>
+</div>
+
+<!-- Manage Resource Items Modal -->
+<div id="resItemModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;background:rgba(8,14,26,.12);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:rgba(240,244,255,.95);backdrop-filter:blur(36px);-webkit-backdrop-filter:blur(36px);border:1px solid rgba(255,255,255,.78);border-radius:var(--r4);padding:24px 20px;width:100%;max-width:500px;max-height:88vh;overflow-y:auto;box-shadow:var(--s3);">
+    <h3 style="margin:0 0 16px;font-size:17px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:7px;">
+      <span class="material-symbols-rounded" style="color:var(--p);margin:0;font-size:17px;">inventory_2</span> จัดการรายการวัสดุ
+      <button onclick="document.getElementById('resItemModal').style.display='none'" style="margin-left:auto;background:rgba(0,0,0,.06);border:none;cursor:pointer;color:var(--t2);font-size:26px;line-height:1;padding:2px 6px;border-radius:8px;flex-shrink:0;">×</button>
+    </h3>
+    <div style="display:flex;gap:8px;margin-bottom:6px;align-items:center;">
+      <input id="newResItemInput" placeholder="ชื่อวัสดุใหม่" style="flex:1;min-width:0;width:0;margin:0;padding:12px 14px;border-radius:14px;border:1px solid var(--g-b2);background:rgba(255,255,255,.6);font-family:inherit;font-size:15px;color:var(--t1);outline:none;">
+      <button class="btn primary" style="margin:0;padding:12px 16px;width:auto;flex-shrink:0;border-radius:14px;" onclick="addResItem()">
+        <span class="material-symbols-rounded" style="margin:0;font-size:20px;">add</span>
+      </button>
+    </div>
+    <div id="resItemMsg" style="font-size:13px;margin-bottom:8px;color:#ef4444;min-height:18px;"></div>
+    <div id="resItemList"></div>
+  </div>
+</div>
+
+<!-- Change Password Modal -->
+<div id="changePwModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:10000;background:rgba(8,14,26,.12);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)closeChangePw()">
+  <div>
+    <h3 style="margin:0 0 16px;font-size:17px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:7px;">
+      <span class="material-symbols-rounded" style="color:var(--p);margin:0;font-size:17px;">manage_accounts</span> ตั้งค่าบัญชี
+      <button onclick="closeChangePw()" style="margin-left:auto;background:rgba(0,0,0,.06);border:none;cursor:pointer;color:var(--t2);font-size:26px;line-height:1;padding:2px 6px;border-radius:8px;flex-shrink:0;">×</button>
+    </h3>
+    <div style="font-size:12px;color:var(--t3);margin-bottom:4px;">Username ปัจจุบัน</div>
+    <div id="pwCurrentUser" style="font-size:15px;font-weight:600;color:var(--p);margin-bottom:14px;">—</div>
+    <input id="pwNewUser" placeholder="Username ใหม่ (เว้นว่างถ้าไม่เปลี่ยน)" style="margin-top:0;">
+    <input id="pwOld" type="password" placeholder="รหัสผ่านปัจจุบัน" style="margin-top:9px;">
+    <input id="pwNew" type="password" placeholder="รหัสผ่านใหม่" style="margin-top:9px;">
+    <input id="pwConfirm" type="password" placeholder="ยืนยันรหัสผ่านใหม่" style="margin-top:9px;">
+    <div id="pwMsg" style="color:#c04040;margin-top:8px;font-size:13px;font-weight:500;min-height:18px;"></div>
+    <div style="display:flex;gap:9px;margin-top:18px;">
+      <button class="btn neutral" style="flex:1;margin:0;" onclick="closeChangePw()">ยกเลิก</button>
+      <button class="btn primary" style="flex:1;margin:0;" onclick="saveChangePw()">
+        <span class="material-symbols-rounded">save</span> บันทึก
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- PWA Banner -->
+<div id="pwaBanner" style="display:none;position:fixed;bottom:18px;left:14px;right:14px;z-index:9998;background:rgba(240,244,255,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.72);border-radius:var(--r3);padding:14px 15px;box-shadow:var(--s3);">
+  <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--p);margin-bottom:6px;">ติดตั้งแอป</div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+    <span id="pwaText" style="color:var(--t2);font-size:13px;line-height:1.6;flex:1;"></span>
+    <button onclick="document.getElementById('pwaBanner').style.display='none'" style="background:none;border:none;color:var(--t3);font-size:22px;padding:0 0 0 10px;cursor:pointer;line-height:1;flex-shrink:0;">×</button>
+  </div>
+  <div id="pwaOrDivider" style="display:none;align-items:center;gap:8px;margin:8px 0;font-size:11px;color:var(--t3);">
+    <div style="flex:1;height:1px;background:var(--g-b2);"></div>หรือ<div style="flex:1;height:1px;background:var(--g-b2);"></div>
+  </div>
+  <button id="pwaInstallBtn" style="display:none;width:100%;align-items:center;justify-content:center;gap:6px;margin-top:4px;background:var(--p);color:#fff;border:none;border-radius:99px;padding:10px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;" onclick="triggerInstall()">
+    <span class="material-symbols-rounded" style="font-size:15px;margin:0;color:#fff;">download</span> ติดตั้งเลย
+  </button>
+</div>
+
+
+<!-- Notification Modal -->
+<div id="notifModal" style="display:none;position:fixed;inset:0;background:rgba(8,14,26,.12);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:9999;align-items:flex-start;justify-content:flex-end;padding:70px 16px 0;" onclick="if(event.target===this)closeNotif()">
+  <div style="background:rgba(255,255,255,.42);backdrop-filter:blur(60px) saturate(180%);-webkit-backdrop-filter:blur(60px) saturate(180%);border:1px solid rgba(255,255,255,.92);border-radius:var(--r3);width:100%;max-width:380px;max-height:75vh;display:flex;flex-direction:column;box-shadow:0 12px 48px rgba(100,130,220,.1),0 2px 8px rgba(0,0,0,.03),inset 0 1.5px 0 rgba(255,255,255,1);">
+    <!-- sticky header -->
+    <div style="padding:16px 20px 12px;border-bottom:1px solid rgba(255,255,255,.6);flex-shrink:0;background:rgba(255,255,255,.2);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div style="font-size:16px;font-weight:700;color:var(--t1);display:flex;align-items:center;gap:7px;">
+          <span class="material-symbols-rounded" style="color:var(--p);margin:0;font-size:18px;">inbox</span>
+          กล่องงาน
+          <span id="notifStaffBadge" style="display:none;background:#ef4444;color:#fff;border-radius:99px;padding:1px 8px;font-size:12px;margin-left:2px;">0</span>
+        </div>
+        <button onclick="closeNotif()" style="background:var(--g-bg);border:1px solid var(--g-b);border-radius:99px;cursor:pointer;color:var(--t2);font-size:14px;font-weight:600;padding:6px 14px;display:flex;align-items:center;gap:4px;">
+          <span class="material-symbols-rounded" style="font-size:16px;margin:0;">close</span> ปิด
+        </button>
+      </div>
+      <!-- tabs (admin only) -->
+      <div id="notifTabs" style="display:none;gap:6px;">
+        <button id="tabMyJobs" class="filter-btn active" onclick="switchNotifTab('my')" style="flex:1;">งานของฉัน <span id="tabMyBadge" style="display:none;background:#ef4444;color:#fff;border-radius:99px;padding:1px 6px;font-size:11px;margin-left:3px;">0</span></button>
+        <button id="tabNewJobs" class="filter-btn" onclick="switchNotifTab('new')" style="flex:1;">งานใหม่ <span id="tabNewBadge" style="display:none;background:#ef4444;color:#fff;border-radius:99px;padding:1px 6px;font-size:11px;margin-left:3px;">0</span></button>
+      </div>
+    </div>
+    <!-- scrollable content -->
+    <div id="notifList" style="padding:14px 20px;overflow-y:auto;flex:1;"></div>
+  </div>
+</div>
+
+<div id="ptrIndicator" class="ptr-indicator">
+  <span class="material-symbols-rounded">cached</span>
+</div>
+
+<script>
+
+let CURRENT_PAGE = 1;
+const PAGE_SIZE = 5;
+
+// ── GAS API ──
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwBBAuKWj_eN0Umor8GYhPzF6k6BnQAElVMO4omiS4MiJnyqXtTwtljjvshh9QNtSH-HA/exec';
+
+async function gasCall(action, payload = {}) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30000);
+  try {
+    const res = await fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action, ...payload }),
+      signal: controller.signal
+    });
+    return res.json();
+  } catch(err) {
+    if (err.name === 'AbortError') throw new Error('การเชื่อมต่อหมดเวลา กรุณาลองใหม่');
+    throw new Error('ไม่สามารถเชื่อมต่อได้ กรุณาตรวจสอบอินเทอร์เน็ต');
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+// ── PWA Service Worker ──
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('https://raw.githubusercontent.com/cpamav/mav-smart-service/refs/heads/main/sw.js');
+  fetch('https://raw.githubusercontent.com/cpamav/mav-smart-service/refs/heads/main/sw.js').then(r => r.text()).then(t => {
+    const v = t.match(/CACHE\s*=\s*['"]([^'"]+)['"]/)?.[1];
+    if (v) console.log('%c🚀 ' + v, 'color:#7c9ef8;font-size:14px;font-weight:700;letter-spacing:.05em;');
+  });
+}
+
+const DEPT_MAP = {
+  "ภารกิจด้านอำนวยการ": [
+    "กลุ่มงานบริหารทั่วไป","งานสารบรรณ","งานเลขานุการ","งานประชาสัมพันธ์","งานสนาม",
+    "งานยานพาหนะ","งานแม่บ้าน","กลุ่มงานทรัพยากรบุคคล","กลุ่มงานการเงิน","กลุ่มงานบัญชี",
+    "สหกรณ์ รพ.","กลุ่มงานพัสดุ","กลุ่มงานโครงสร้างพื้นฐานและวิศวกรรมทางการแพทย์",
+    "งานโรงงาน","งานบำบัดน้ำเสีย","งานประปา","งานพัสดุการแพทย์"
+  ],
+
+  "ภารกิจด้านบริการปฐมภูมิ": [
+    "กลุ่มงานการแพทย์แผนไทยและการแพทย์ทางเลือก","กลุ่มงานสุขศึกษา","กลุ่มงานเวชกรรมสังคม",
+    "เวชปฏิบัติครอบครัวและชุมชนศูนย์สุขภาพชุมชนเมือง","กลุ่มงานการพยาบาลชุมชน",
+    "เจ้าหน้าที่ประจำสถานีอนามัย","กลุ่มงานอาชีวเวชกรรม"
+  ],
+
+  "ภารกิจด้านพัฒนาระบบบริการและสนับสนุนบริการสุขภาพ": [
+    "กลุ่มงานยุทธศาสตร์และแผนงานโครงการ","กลุ่มงานสารสนเทศทางการแพทย์","ศูนย์ไอ.ที",
+    "กลุ่มงานพัฒนาทรัพยากรบุคคล","เวชนิทัศน์และโสตทัศนศึกษา",
+    "ศูนย์พัฒนาคุณภาพ","กลุ่มงานประกันสุขภาพ"
+  ],
+
+  "ภารกิจด้านบริการทุติยภูมิและตติยภูมิ": [
+    "กลุ่มงานนิติเวช","กลุ่มงานโสต ศอ นาสิก","กลุ่มงานโภชนศาสตร์","กลุ่มงานพยาธิวิทยากายวิภาค",
+    "กลุ่มงานจิตเวช","กลุ่มงานทันตกรรม","กลุ่มงานรังสีวิทยา","กลุ่มงานพยาธิวิทยาคลีนิค",
+    "กลุ่มงานเวชกรรมฟื้นฟู","กลุ่มงานสังคมสงเคราะห์","กลุ่มงานเภสัชกรรม","องค์กรแพทย์"
+  ],
+
+  "ภารกิจด้านการพยาบาล": [
+    "กลุ่มการพยาบาล","งานติดเชื้อ","ศูนย์เครื่องมือแพทย์","วันเดย์","จ่ายกลาง","ซักฟอก-ตัดเย็บ",
+    "ศูนย์เปล","ผู้ป่วยนอก","อุบัติเหตุและฉุกเฉิน","เวชศาสตร์ฉุกเฉิน","ไอ.ซี.ยู.ศัลยกรรม",
+    "พิเศษรวมศัลยกรรม","ศัลยกรรมชาย","ศัลยกรรมหญิง","ศัลยกรรมกระดูก","ห้องเฝือก","ผ่าตัด",
+    "ผ่าตัดเล็ก","วิสัญญี","ประสาทวิทยา","อายุรกรรมชาย 1","อายุรกรรมชาย 2","อายุรกรรมหญิง 1",
+    "อายุรกรรมหญิง 2","ผู้ป่วยแยกโรค","วิกฤตทางเดินหายใจ ricu","วิกฤตหัวใจและหลอดเลือด ccu",
+    "เครื่องมือพิเศษ","ห้องปฏิบัติการสวนหัวใจ","ไตเทียม","ธเนศวร","สูติกรรมสามัญ",
+    "โอ.พี.ดี.นรีเวชฯ","สูติกรรมพิเศษ 1","สูติกรรมพิเศษ 2","หอผู้ป่วยแพทย์แผนไทย","ห้องคลอด",
+    "งานฝากครรภ์","เด็กสามัญ","เด็กพิเศษ","ไอ.ซี.ยู.เด็ก","NICU","PICU&SNB",
+    "ไอ.ซี.ยู.อายุรกรรม micu","ตา หู คอ จมูก","ตรวจรักษาพิเศษจักษุ","พิเศษสุวัทนา",
+    "พิเศษรวมอายุรกรรม","เคมีบำบัด","กึ่งวิกฤตศัลยกรรม"
+  ],
+
+  "ภารกิจด้านผลิตบุคลากรทางการแพทย์": [
+    "ศูนย์แพทยศาสตรชั้นคลินิก"
+  ],
+
+  "มูลนิธิโรงพยาบาลเจ้าพระยาอภัยภูเบศรฯ": [
+    "มูลนิธิฯ"
+  ]
+};
+
+let CURRENT_USER = null;
+let ALL_JOBS = [];
+let ALL_USERS = [];
+let ACTIVE_ID = null;
+let CURRENT_JOB_VIEW = 'all';
+let CURRENT_STATUS_FILTER = 'all';
+let fpStart, fpEnd;
+
+// Animated Loading SVG String
+const skeletonCard = `
+<div style="background:rgba(255,255,255,.08);backdrop-filter:blur(32px);border:1px solid rgba(255,255,255,.55);border-radius:24px;padding:20px;margin-bottom:10px;overflow:hidden;position:relative;">
+  <div style="background:linear-gradient(90deg,rgba(255,255,255,.06) 25%,rgba(255,255,255,.14) 50%,rgba(255,255,255,.06) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px;height:20px;width:40%;margin-bottom:10px;"></div>
+  <div style="background:linear-gradient(90deg,rgba(255,255,255,.06) 25%,rgba(255,255,255,.14) 50%,rgba(255,255,255,.06) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite .1s;border-radius:6px;height:14px;width:60%;margin-bottom:8px;"></div>
+  <div style="background:linear-gradient(90deg,rgba(255,255,255,.06) 25%,rgba(255,255,255,.14) 50%,rgba(255,255,255,.06) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite .2s;border-radius:6px;height:14px;width:80%;margin-bottom:8px;"></div>
+  <div style="background:linear-gradient(90deg,rgba(255,255,255,.06) 25%,rgba(255,255,255,.14) 50%,rgba(255,255,255,.06) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite .3s;border-radius:6px;height:14px;width:50%;"></div>
+</div>`;
+
+const loadingHTML = skeletonCard + skeletonCard + skeletonCard;
+
+function makeFp(sel) {
+  const fp = flatpickr(sel, { locale: "th", dateFormat: "d/m/Y", disableMobile: "true", clickOpens: false });
+  document.querySelector(sel).addEventListener('click', () => fp.isOpen ? fp.close() : fp.open());
+  return fp;
+}
+
+function isBusinessHours() {
+  const now = new Date();
+  const thai = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }));
+  const day = thai.getDay();
+  const mins = thai.getHours() * 60 + thai.getMinutes();
+  return day >= 1 && day <= 5 && mins >= 8*60+30 && mins < 16*60+30;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // ── check business hours + system override from GAS ──
+
+  function showOffHours(holiday, holidayName) {
+    document.getElementById('home').classList.remove('active');
+    document.getElementById('home').style.display = 'none';
+    const off = document.getElementById('offHours');
+    off.style.display = 'flex';
+    off.classList.add('active');
+
+    // ถ้าเป็นวันหยุดราชการ เปลี่ยนข้อความ
+    const titleEl = off.querySelector('.brand');
+    const badgeEl = document.getElementById('offHoursBadge');
+    if (holiday && holidayName) {
+      if (titleEl) titleEl.textContent = holidayName;
+      if (badgeEl) {
+        badgeEl.style.display = 'inline-flex';
+        badgeEl.querySelector('span.badge-text').textContent = 'วันหยุดราชการ';
+      }
+    } else {
+      if (titleEl) titleEl.textContent = 'นอกเวลาทำการ';
+      if (badgeEl) badgeEl.style.display = 'none';
+    }
+
+    const days = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+    function updateClock() {
+      const now = new Date();
+      const thai = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }));
+      const h = thai.getHours() % 12, m = thai.getMinutes(), s = thai.getSeconds();
+      const t = thai.toLocaleTimeString('th-TH', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+      document.getElementById('offHoursClock').textContent = t + ' น. (' + days[thai.getDay()] + ')';
+      const hh = document.getElementById('offHoursHH');
+      const mh = document.getElementById('offHoursMH');
+      const sh = document.getElementById('offHoursSH');
+      if(hh) hh.setAttribute('transform', `rotate(${h*30+m*0.5} 70 70)`);
+      if(mh) mh.setAttribute('transform', `rotate(${m*6} 70 70)`);
+      if(sh) sh.setAttribute('transform', `rotate(${s*6} 70 70)`);
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+  }
+
+  // เช็ค GAS system status ก่อน
+  function restoreSession() {
+    const saved = sessionStorage.getItem('mavUser');
+    if (!saved) return;
+    try {
+      const res = JSON.parse(saved);
+      CURRENT_USER = res;
+      document.getElementById('adminName').innerText = res.name;
+      document.getElementById('adminPageTitle').innerText = res.role === 'admin' ? 'Admin' : 'Staff';
+      if (res.role === 'admin') {
+        const btn = document.getElementById('sysOverrideBtn');
+        if (btn) btn.style.display = 'flex';
+        gasCall('getSystemStatus').then(s => updateSysOverrideBtn(s && s.open));
+      }
+      document.getElementById('allJobBtn').style.display = res.role === 'admin' ? 'block' : 'none';
+      document.getElementById('userMenuBtn').style.display = res.role === 'admin' ? 'block' : 'none';
+      document.getElementById('resMenuBtn').style.display = res.role === 'admin' ? 'block' : 'none';
+      document.getElementById('adminNavTop').style.gridTemplateColumns = res.role === 'admin' ? '' : 'repeat(2,1fr)';
+      document.getElementById('adminNavBottom').style.display = res.role === 'admin' ? 'grid' : 'none';
+      document.getElementById('staffAccountBtn').style.display = res.role === 'admin' ? 'none' : 'block';
+      showSection('job', res.role === 'admin' ? 'all' : 'my');
+      switchPage('admin');
+      loadAllData();
+      gasCall('getResourceList').then(list => { if(list) { RESOURCE_LIST = list; buildResContainer(list); } });
+    } catch(e) {
+      sessionStorage.removeItem('mavUser');
+    }
+  }
+
+  function hideSplash() {
+    const splash = document.getElementById('splashScreen');
+    if (!splash) return;
+    splash.style.opacity = '0';
+    setTimeout(() => splash.style.display = 'none', 600);
+  }
+
+  // เช็ค GAS system status ก่อน
+  gasCall('getSystemStatus').then(res => {
+    if (!res || !res.open) {
+      if (res && res.holiday) { hideSplash(); showOffHours(true, res.holidayName); return; }
+      if (!isBusinessHours()) { hideSplash(); showOffHours(false, ''); return; }
+    }
+    hideSplash();
+    restoreSession();
+  }).catch(() => {
+    if (!isBusinessHours()) { hideSplash(); showOffHours(false, ''); return; }
+    hideSplash();
+    restoreSession();
+  });
+  if(localStorage.getItem('dm')==='1'){
+    document.body.classList.add('dark');
+    const i=document.getElementById('darkIcon'),l=document.getElementById('darkLabel');
+    if(i) i.textContent='light_mode'; if(l) l.textContent='โหมดกลางวัน';
+    const fab=document.getElementById('darkFabIcon');
+    if(fab) fab.textContent='light_mode';
+  }
+  const fpOrder = makeFp("#orderDateInput");
+  const fpNeed  = makeFp("#needDateInput");
+  const fpDone  = makeFp("#editDoneDate");
+  fpStart = makeFp("#filterStartDate");
+  fpEnd   = makeFp("#filterEndDate");
+  
+  buildResContainer([
+    'อิงค์เจ็ท A4','อิงค์เจ็ท A3','กระดาษ A4','กระดาษ A3','กระดาษ A5',
+    'กระดาษโฟโต้ A4','กระดาษโฟโต้','กระดาษการ์ดขาว 180 แกรม','กระดาษการ์ด',
+    'กระดาษโรเนียว A4','กระดาษโรเนียว','กระดาษ','สติ๊กเกอร์','กระดาษสติ๊กเกอร์ A4',
+    'พลาสติกเคลือบ A3','พลาสติกเคลือบ A4','พลาสติกเคลือบ A5','พลาสติกเคลือบ',
+    'อะคริลิค','ฟิวเจอร์บอร์ด','ใบประกาศ'
+  ]); // default — จะถูกแทนด้วยข้อมูลจาก GAS ตอน login
+  
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches && localStorage.getItem('dm') === null) {
+    document.body.classList.add('dark');
+    const i=document.getElementById('darkIcon'),l=document.getElementById('darkLabel');
+    if(i) i.textContent='light_mode'; if(l) l.textContent='โหมดกลางวัน';
+  }
+  // แสดงคำแนะนำการติดตั้งหลังจากโหลดหน้า 2 วินาที
+  setTimeout(showPwaPrompt, 2000);
+});
+
+function goHome() { 
+  CURRENT_USER = null;
+  sessionStorage.removeItem('mavUser');
+  clearForm(); 
+
+  // 2. ล้างตัวกรองวันที่ในหน้าแอดมิน (ใช้ตัวแปร fpStart, fpEnd ตามที่คุณมี)
+  if (typeof fpStart !== 'undefined' && fpStart) fpStart.clear();
+  if (typeof fpEnd !== 'undefined' && fpEnd) fpEnd.clear();
+
+  // 3. ล้างช่องล็อคอิน และ ฟอร์มเพิ่มผู้ใช้ใหม่ (หน้าแอดมิน)
+  const extraIds = ['loginUser', 'loginPass', 'newUser', 'newPass', 'newName'];
+  extraIds.forEach(id => {
+    var el = document.getElementById(id); 
+    if(el) el.value = '';
+  });
+
+  // 4. รีเซ็ตตัวกรองพนักงาน (ถ้ามี)
+  var staffFilter = document.getElementById('adminStaffFilter');
+  if(staffFilter) staffFilter.value = 'all'; // หรือ staffFilter.options[0].value
+
+  // clear search
+  clearSearch();
+  // 5. reload กลับไปหน้าแรก (splash จะจัดการเอง)
+  window.location.reload();
+}
+function goService() { clearForm();switchPage('service'); }
+function goSearch() { clearSearch(); switchPage('search'); }
+function goLogin() {
+  document.getElementById('loginMsg').innerText = '';
+  switchPage('login');
+}
+function goHelp() { switchPage('help'); }
+function clearSearch() {
+  var si = document.getElementById('searchInput'); if(si) si.value='';
+  var res = document.getElementById('result'); if(res) res.innerHTML='';
+}
+function switchPage(id) {
+  const current = document.querySelector('.page.active');
+  const next = document.getElementById(id);
+  if (current === next) return;
+  if (current) {
+    current.classList.add('exit');
+    setTimeout(() => {
+      current.classList.remove('active', 'exit');
+      current.style.display = '';
+      next.classList.add('active');
+      window.scrollTo(0, 0);
+    }, 150);
+  } else {
+    next.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+}
+
+function toggleSysOverride() {
+  const label = document.getElementById('sysOverrideLabel');
+  if (!label) return;
+  const isOn = label.textContent.trim() === 'เปิดอยู่';
+  const msg = isOn ? 'ต้องการปิดระบบกลับเป็นปกติ?' : 'ต้องการเปิดระบบนอกเวลาทำการ?\n(ทุกคนจะเข้าใช้งานได้ทันที)';
+  if (!confirm(msg)) return;
+  const newState = !isOn;
+  // update UI ทันทีก่อน รอ GAS
+  updateSysOverrideBtn(newState);
+  gasCall('setSystemStatus', { open: newState }).catch(() => {
+    // ถ้า error rollback
+    updateSysOverrideBtn(isOn);
+    alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
+  });
+}
+
+function updateSysOverrideBtn(isOn) {
+  const btn = document.getElementById('sysOverrideBtn');
+  const icon = document.getElementById('sysOverrideIcon');
+  const label = document.getElementById('sysOverrideLabel');
+  if (!btn || !icon || !label) return;
+  if (isOn) {
+    btn.style.background = 'rgba(16,185,129,.12)';
+    btn.style.color = '#10b981';
+    btn.style.border = '1px solid rgba(16,185,129,.25)';
+    icon.textContent = 'power_settings_new';
+    label.textContent = 'เปิดอยู่';
+  } else {
+    btn.style.background = 'rgba(200,210,230,.3)';
+    btn.style.color = 'var(--t3)';
+    btn.style.border = 'none';
+    icon.textContent = 'power_settings_new';
+    label.textContent = 'ปิดอยู่';
+  }
+}
+
+// accumulated file list
+let _files = [];
+
+function addFiles(input) {
+  Array.from(input.files).forEach(f => {
+    if (!_files.find(x => x.name === f.name && x.size === f.size)) {
+      _files.push(f);
+    }
+  });
+  input.value = '';
+  renderFileList();
+}
+
+function removeFile(idx) {
+  _files.splice(idx, 1);
+  renderFileList();
+}
+
+function openLightbox(url) {
+  let lb = document.getElementById('imgLightbox');
+  if (!lb) {
+    lb = document.createElement('div');
+    lb.id = 'imgLightbox';
+    lb.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(8,14,26,.7);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;';
+    lb.onclick = (e) => { if(e.target === lb) closeLightbox(); };
+    document.body.appendChild(lb);
+  }
+  lb.innerHTML = `
+    <div style="position:relative;max-width:100%;max-height:90dvh;">
+      <img src="${url}" style="max-width:100%;max-height:85dvh;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.4);display:block;">
+      <button onclick="closeLightbox()" style="position:absolute;top:-12px;right:-12px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.9);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2);">
+        <span class="material-symbols-rounded" style="font-size:16px;margin:0;color:#18243c;">close</span>
+      </button>
+    </div>`;
+  lb.style.display = 'flex';
+}
+
+function closeLightbox() {
+  const lb = document.getElementById('imgLightbox');
+  if (lb) lb.style.display = 'none';
+}
+
+function renderFileList() {
+  const preview = document.getElementById('fileListPreview');
+  const count = document.getElementById('fileCount');
+  if (!preview) return;
+  preview.innerHTML = '';
+  _files.forEach((f, i) => {
+    const isImg = f.type.startsWith('image/');
+    const item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.85);border-radius:10px;padding:6px 10px;';
+    if (isImg) {
+      const url = URL.createObjectURL(f);
+      item.innerHTML = `
+        <img src="${url}" style="width:34px;height:34px;border-radius:6px;object-fit:cover;flex-shrink:0;cursor:pointer;" onclick="openLightbox('${url}')">
+        <div style="flex:1;min-width:0;"><div style="font-size:12px;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${f.name}</div><div style="font-size:10px;color:var(--t3);">${(f.size/1024).toFixed(0)} KB</div></div>
+        <button onclick="removeFile(${i})" style="width:22px;height:22px;border-radius:50%;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;">
+          <span class="material-symbols-rounded" style="font-size:13px;margin:0;color:#ef4444;">close</span>
+        </button>`;
+    } else {
+      const icons = {'pdf':'picture_as_pdf','doc':'description','docx':'description','xls':'table_chart','xlsx':'table_chart','ppt':'slideshow','pptx':'slideshow'};
+      const ext = f.name.split('.').pop().toLowerCase();
+      const icon = icons[ext] || 'attach_file';
+      item.innerHTML = `
+        <div style="width:34px;height:34px;border-radius:6px;background:rgba(124,158,248,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <span class="material-symbols-rounded" style="font-size:18px;margin:0;color:var(--p);">${icon}</span>
+        </div>
+        <div style="flex:1;min-width:0;"><div style="font-size:12px;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${f.name}</div><div style="font-size:10px;color:var(--t3);">${(f.size/1024).toFixed(0)} KB</div></div>
+        <button onclick="removeFile(${i})" style="width:22px;height:22px;border-radius:50%;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;">
+          <span class="material-symbols-rounded" style="font-size:13px;margin:0;color:#ef4444;">close</span>
+        </button>`;
+    }
+    preview.appendChild(item);
+  });
+  if (count) {
+    count.style.display = _files.length > 0 ? 'block' : 'none';
+    count.textContent = _files.length + ' ไฟล์เลือกแล้ว';
+  }
+}
+
+function toggleDark(){
+  const d=document.body.classList.toggle('dark');
+  const i=document.getElementById('darkIcon'), l=document.getElementById('darkLabel');
+  if(i) i.textContent=d?'light_mode':'dark_mode';
+  if(l) l.textContent=d?'โหมดกลางวัน':'โหมดกลางคืน';
+  const fab=document.getElementById('darkFabIcon');
+  if(fab) fab.textContent=d?'light_mode':'dark_mode';
+  localStorage.setItem('dm',d?'1':'0');
+}
+
+function updateDept() {
+  const g = document.getElementById('groupInput').value;
+  const depts = DEPT_MAP[g] || [];
+  document.getElementById('departmentInput').innerHTML = '<option value="">-- หน่วยงาน --</option>' + depts.map(d => `<option value="${d}">${d}</option>`).join('');
+}
+
+function setLoading(btn, loading, originalHTML) {
+  if (loading) {
+    btn._originalHTML = btn.innerHTML;
+    btn.innerHTML = `<span class="material-symbols-rounded" style="animation:spin 1s linear infinite;margin:0;font-size:16px;">cached</span>`;
+    btn.disabled = true;
+  } else {
+    btn.innerHTML = originalHTML || btn._originalHTML || btn.innerHTML;
+    btn.disabled = false;
+  }
+}
+
+function submitService() {
+  const d = {
+    prefix: document.getElementById('prefixInput').value,
+    name: document.getElementById('nameInput').value,
+    lastname: document.getElementById('lastnameInput').value,
+    group: document.getElementById('groupInput').value,
+    department: document.getElementById('departmentInput').value,
+    type: document.getElementById('typeInput').value,
+    orderDate: document.getElementById('orderDateInput').value,
+    needDate: document.getElementById('needDateInput').value,
+    phone: document.getElementById('phoneInput').value,
+    detail: document.getElementById('detailInput').value
+  };
+
+  const missing = [];
+  if(!d.prefix)     missing.push('คำนำหน้า');
+  if(!d.name)       missing.push('ชื่อ');
+  if(!d.lastname)   missing.push('นามสกุล');
+  if(!d.group)      missing.push('กลุ่มภารกิจ');
+  if(!d.department) missing.push('หน่วยงาน');
+  if(!d.type)       missing.push('ประเภทงาน');
+  if(!d.orderDate)  missing.push('วันที่สั่งงาน');
+  if(!d.detail)     missing.push('รายละเอียดงาน');
+  if(!d.needDate)   missing.push('วันที่ต้องการ');
+  if(!d.phone)      missing.push('เบอร์ภายใน');
+  if(missing.length > 0) {
+    document.getElementById('serviceResult').innerText = 'กรุณากรอก: ' + missing.join(', ');
+    return;
+  }
+  if(!/^[0-9]{4}$/.test(d.phone)) {
+    document.getElementById('serviceResult').innerText = "กรุณากรอกเบอร์ภายใน 4 หลัก"; return;
+  }
+
+  const files = _files.length > 0 ? _files : Array.from(document.getElementById('fileInput').files);
+
+  // เช็คขนาดไฟล์ทุกอัน ไม่เกิน 25MB ต่อไฟล์
+  const maxSize = 25 * 1024 * 1024;
+  for (let i = 0; i < files.length; i++) {
+    if (files[i].size > maxSize) {
+      document.getElementById('serviceResult').innerText = `ไฟล์ "${files[i].name}" ขนาดเกิน 25MB`;
+      return;
+    }
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.innerHTML = `<span class="material-symbols-rounded" style="animation: spin 1s linear infinite;">cached</span> กำลังประมวลผล...`;
+  btn.disabled = true;
+
+  if (files.length > 0) {
+    const readers = [];
+    for (let i = 0; i < files.length; i++) {
+      readers.push(new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = () => resolve({ data: reader.result.split(',')[1], name: files[i].name, type: files[i].type });
+        reader.readAsDataURL(files[i]);
+      }));
+    }
+    Promise.all(readers).then(fileList => {
+      d.files = fileList;
+      executeSubmit(d, btn);
+    });
+  } else {
+    executeSubmit(d, btn);
+  }
+}
+
+function executeSubmit(payload, btn) {
+  gasCall('submitService', { payload }).then(res => {
+    btn.innerHTML = "ส่งคำขอรับบริการ"; btn.disabled = false;
+    document.getElementById('successData').innerHTML = `
+      <div style="background:rgba(52, 211, 153, 0.1); padding:16px; border-radius:16px; border:1px solid rgba(52, 211, 153, 0.3); margin-bottom:16px; font-size:14px;">
+        <span class="material-symbols-rounded" style="color:#10b981;">check_circle</span> กรุณาแคปหน้าจอ หรือบันทึกรหัสอ้างอิงไว้
+      </div>
+      <div style="font-size:15px;">
+        <div style="color:var(--t2); font-weight:600; margin-top:12px;">รหัสอ้างอิง</div>
+        <div style="font-size:32px; color:var(--p); font-weight:800; margin-bottom:16px;">${res.id}</div>
+        <b>ผู้ติดต่อ:</b> ${payload.prefix} ${payload.name} ${payload.lastname}<br>
+        <b>กลุ่มภารกิจ:</b> ${payload.group}<br>
+        <b>หน่วยงาน:</b> ${payload.department}<br>
+        <b>ประเภทงาน:</b> ${payload.type}<br>
+        <b>รายละเอียด:</b> ${payload.detail}<br>
+        <b>วันที่สั่งงาน:</b> ${payload.orderDate}<br>
+        <b>วันที่ต้องการ:</b> ${payload.needDate}<br>
+        <b>เบอร์ติดต่อ:</b> ${payload.phone}
+      </div>
+    `;
+    switchPage('success');
+    document.getElementById('nameInput').value = '';
+    document.getElementById('lastnameInput').value = '';
+    document.getElementById('detailInput').value = '';
+  }).catch(err => {
+    btn.innerHTML = "ส่งคำขอรับบริการ"; btn.disabled = false;
+    document.getElementById('serviceResult').innerText = "เกิดข้อผิดพลาด: " + err.message;
+  });
+}
+
+function doSearch() {
+  const val = document.getElementById('searchInput').value;
+  document.getElementById('result').innerHTML = loadingHTML;
+  gasCall('searchData', { val }).then(d => {
+    if(!d) { document.getElementById('result').innerHTML = "<div class='glass-card' style='text-align:center;'>ไม่พบข้อมูลในระบบ</div>"; return; }
+    let sc="#f59e0b", sb="rgba(245, 158, 11, 0.15)";
+    if (d.status.includes("เสร็จ")) { sc="#10b981"; sb="rgba(16, 185, 129, 0.15)"; }
+    else if (d.status.includes("กำลัง")) { sc="#3b82f6"; sb="rgba(59, 130, 246, 0.15)"; }
+    else if (d.status.includes("ยกเลิก")) { sc="#ef4444"; sb="rgba(239, 68, 68, 0.15)"; }
+    document.getElementById('result').innerHTML = `
+      <div class="glass-card" style="border-left:5px solid ${sc}; margin-top:16px;">
+      <div class="noise"></div>
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+          <div>
+            <div style="font-size:26px; font-weight:800; color:var(--p);">#${d.id}</div>
+            <div style="font-size:14px; font-weight:600; color:var(--t2);">${d.name}</div>
+          </div>
+          <span style="background:${sb}; color:${sc}; padding:5px 12px; border-radius:99px; font-size:13px; font-weight:700;">${d.status.replace(/[\u1000-\uFFFF⏳🔄✅❌]/g,'').trim()}</span>
+        </div>
+        <div style="font-size:14px; line-height:1.85;">
+          <b>หน่วยงาน:</b> ${d.department || "-"}<br>
+          <b>ประเภทงาน:</b> ${d.type || "-"}<br>
+          <b>วันที่สั่ง:</b> ${d.orderDate || "-"} &nbsp;|&nbsp; <b>ต้องการ:</b> ${d.needDate || "-"}<br>
+          <b>รายละเอียด:</b> ${d.detail || "-"}<br>
+          <div style="margin-top:10px; padding-top:10px; border-top:1px solid rgba(0,0,0,0.05);">
+            <b>ผู้รับผิดชอบ:</b> ${d.owner || "-"}<br>
+            <b>หมายเหตุ:</b> ${d.note || "-"}
+          </div>
+        </div>
+      </div>
+    `;
+  }).catch(() => {
+    document.getElementById('result').innerHTML = "<div class='glass-card' style='text-align:center;'>เกิดข้อผิดพลาด กรุณาลองใหม่</div>";
+  });
+}
+
+function login() {
+  const u = document.getElementById('loginUser').value;
+  const p = document.getElementById('loginPass').value;
+  const btn = document.getElementById('loginBtn');
+  btn.innerHTML = `<span class="material-symbols-rounded" style="animation: spin 1s linear infinite;">cached</span> รอสักครู่...`;
+  btn.disabled = true;
+  gasCall('checkLogin', { u, p }).then(res => {
+    btn.innerHTML = "เข้าสู่ระบบ"; btn.disabled = false;
+    if(res.success) {
+      CURRENT_USER = res;
+      sessionStorage.setItem('mavUser', JSON.stringify(res));
+      document.getElementById('adminName').innerText = res.name;
+      document.getElementById('adminPageTitle').innerText = res.role === 'admin' ? 'Admin' : 'Staff';
+      if (res.role === 'admin') {
+        const btn = document.getElementById('sysOverrideBtn');
+        if (btn) btn.style.display = 'flex';
+        gasCall('getSystemStatus').then(s => updateSysOverrideBtn(s && s.open));
+      }
+      document.getElementById('allJobBtn').style.display = res.role === 'admin' ? 'block' : 'none';
+      document.getElementById('userMenuBtn').style.display = res.role === 'admin' ? 'block' : 'none';
+      document.getElementById('resMenuBtn').style.display = res.role === 'admin' ? 'block' : 'none';
+      document.getElementById('adminNavTop').style.gridTemplateColumns = res.role === 'admin' ? '' : 'repeat(2,1fr)';
+      document.getElementById('adminNavBottom').style.display = res.role === 'admin' ? 'grid' : 'none';
+      // staff — ย้ายปุ่มบัญชีของฉันไปแถวบน
+      document.getElementById('staffAccountBtn').style.display = res.role === 'admin' ? 'none' : 'block';
+      showSection('job', res.role === 'admin' ? 'all' : 'my');
+      switchPage('admin');
+      loadAllData();
+      gasCall('getResourceList').then(list => { if(list) { RESOURCE_LIST = list; buildResContainer(list); } });
+    } else { document.getElementById('loginMsg').innerText = "รหัสผ่านผิด หรือบัญชีถูกระงับ"; }
+  }).catch(() => {
+    btn.innerHTML = "เข้าสู่ระบบ"; btn.disabled = false;
+    document.getElementById('loginMsg').innerText = "เกิดข้อผิดพลาด กรุณาลองใหม่";
+  });
+}
+
+function showSection(sec, jobViewType) {
+  document.getElementById('jobSection').style.display = sec === 'job' ? 'block' : 'none';
+  document.getElementById('userSection').style.display = sec === 'user' ? 'block' : 'none';
+  document.getElementById('resourceSection').style.display = sec === 'resource' ? 'block' : 'none';
+  if (sec !== 'resource') resetResMore();
+
+  if(sec === 'job' && jobViewType) { 
+    CURRENT_JOB_VIEW = jobViewType; 
+    if(CURRENT_JOB_VIEW === 'all' && CURRENT_USER.role === 'admin') {
+      document.getElementById('adminStaffFilterDiv').style.display = 'block';
+    } else {
+      document.getElementById('adminStaffFilterDiv').style.display = 'none';
+    }
+    filterStatus('all'); 
+  }
+  if(sec === 'resource') { loadResources(); }
+}
+
+function loadAllData() {
+  document.getElementById('adminList').innerHTML = loadingHTML;
+  gasCall('getUsers').then(users => { ALL_USERS = users; updateAssignDropdown(); renderUsers(); }).catch(() => {});
+  return gasCall('getAllData').then(data => { ALL_JOBS = data; checkNewJobs(data); renderJobs(); }).catch(() => {
+    document.getElementById('adminList').innerHTML = "<div class='glass-card' style='text-align:center;'>โหลดข้อมูลไม่สำเร็จ กรุณาดึงรีเฟรช</div>";
+  });
+}
+
+function updateAssignDropdown() {
+  let opts = '<option value="">— เลือก Staff เพิ่ม —</option>';
+  let filterOpts = '<option value="all">-- ดูงานทุกคน --</option><option value="__none__">งานที่ยังไม่ได้มอบหมาย</option>';
+  ALL_USERS.filter(u => String(u.active).toUpperCase() === 'TRUE').forEach(u => {
+    opts += `<option value="${u.name}">${u.name}</option>`;
+    filterOpts += `<option value="${u.name}">${u.name}</option>`;
+  });
+  document.getElementById('ownerSelect').innerHTML = opts;
+  document.getElementById('adminStaffFilter').innerHTML = filterOpts;
+}
+
+function filterStatus(statusStr) { 
+  CURRENT_STATUS_FILTER = statusStr;
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  
+  if(statusStr === 'all') document.getElementById('btnFilterAll').classList.add('active');
+  if(statusStr === 'รอ') document.getElementById('btnFilterWait').classList.add('active');
+  if(statusStr === 'กำลัง') document.getElementById('btnFilterDoing').classList.add('active');
+  if(statusStr === 'เสร็จ') document.getElementById('btnFilterDone').classList.add('active');
+  if(statusStr === 'ยกเลิก') document.getElementById('btnFilterCancel').classList.add('active');
+  
+  renderJobs(); 
+}
+
+function clearDateFilter() {
+  fpStart.clear(); fpEnd.clear();
+  renderJobs();
+}
+
+function renderJobs() {
+  if(!ALL_JOBS.length) return;
+  const list = document.getElementById('adminList');
+  let baseJobs = ALL_JOBS;
+
+  let sdVal = document.getElementById('filterStartDate').value;
+  let edVal = document.getElementById('filterEndDate').value;
+  if(sdVal && edVal) {
+    let sArr = sdVal.split('/'); let eArr = edVal.split('/');
+    let sDate = new Date(sArr[2], sArr[1]-1, sArr[0], 0, 0, 0).getTime();
+    let eDate = new Date(eArr[2], eArr[1]-1, eArr[0], 23, 59, 59).getTime();
+    baseJobs = baseJobs.filter(j => j.timestamp >= sDate && j.timestamp <= eDate);
+  }
+
+  if(CURRENT_JOB_VIEW === 'my') {
+    baseJobs = baseJobs.filter(j => (j.owner || '').includes(CURRENT_USER.name.trim()));
+  } else if(CURRENT_JOB_VIEW === 'all' && CURRENT_USER.role === 'admin') {
+    const staffFilter = document.getElementById('adminStaffFilter').value;
+    if(staffFilter === '__none__') {
+      baseJobs = baseJobs.filter(j => 
+        (!j.owner || j.owner.trim() === '-' || j.owner.trim() === '') &&
+        j.status.includes('รอ')
+      );
+    } else if(staffFilter === '__multi__') {
+      baseJobs = baseJobs.filter(j => (j.owner || '').split(',').map(s=>s.trim()).filter(Boolean).length >= 2);
+    } else if(staffFilter !== 'all') {
+      baseJobs = baseJobs.filter(j => (j.owner || '').includes(staffFilter.trim()));
+    }
+  }
+
+  const countAll = baseJobs.length;
+  const countWait = baseJobs.filter(j => j.status.includes('รอ')).length;
+  const countDoing = baseJobs.filter(j => j.status.includes('กำลัง')).length;
+  const countDone = baseJobs.filter(j => j.status.includes('เสร็จ')).length;
+  const countCancel = baseJobs.filter(j => j.status.includes('ยกเลิก')).length;
+
+  document.getElementById('btnFilterAll').innerText = `ทั้งหมด (${countAll})`;
+  document.getElementById('btnFilterWait').innerText = `รอจัดการ (${countWait})`;
+  document.getElementById('btnFilterDoing').innerText = `กำลังดำเนินการ (${countDoing})`;
+  document.getElementById('btnFilterDone').innerText = `เสร็จสิ้น (${countDone})`;
+  document.getElementById('btnFilterCancel').innerText = `ยกเลิก (${countCancel})`;
+  
+  // ==========================================
+  // 📍 เพิ่มคำสั่งเรียกกราฟตรงนี้!!
+  // ส่ง baseJobs ไปวาดกราฟเพื่อให้เห็นภาพรวมทั้งหมดของการค้นหา
+  if (typeof drawAdminChart === "function") {
+    drawAdminChart(baseJobs); 
+  }
+  // ==========================================
+
+  let filtered = baseJobs;
+  if(CURRENT_STATUS_FILTER !== 'all') {
+    filtered = filtered.filter(j => j.status.includes(CURRENT_STATUS_FILTER));
+  }
+
+// ✅ reset page เมื่อ filter เปลี่ยน
+  CURRENT_PAGE = 1;
+  renderPage(filtered);
+}
+
+function renderPage(filtered) {
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const start = (CURRENT_PAGE - 1) * PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+  // ✅ pagination HTML แยกออกมา
+  const paginationHTML = totalPages > 1 ? `
+    <div style="display:flex; align-items:center; justify-content:center; gap:12px; padding:12px 16px;">
+      <button class="pg-btn" onclick="changePage(-1)" style="${CURRENT_PAGE<=1?'opacity:.3;pointer-events:none;':''}">‹</button>
+      <span style="font-size:13px;color:var(--t2);">หน้า ${CURRENT_PAGE}/${totalPages} <span style="opacity:.6;">(${filtered.length})</span></span>
+      <button class="pg-btn" onclick="changePage(1)" style="${CURRENT_PAGE>=totalPages?'opacity:.3;pointer-events:none;':''}">›</button>
+    </div>` : '';
+
+  // ✅ ใส่ pagination บน-ล่าง แยกจาก adminList
+  document.getElementById('paginationTop').innerHTML = paginationHTML;
+  document.getElementById('paginationBottom').innerHTML = paginationHTML;
+
+  // ✅ render เฉพาะ card
+  let html = '';
+  pageItems.forEach(d => {
+    let sc="#f59e0b", sb="rgba(245, 158, 11, 0.15)";
+    if (d.status.includes("เสร็จ"))  { sc="#10b981"; sb="rgba(16, 185, 129, 0.15)"; }
+    if (d.status.includes("กำลัง"))  { sc="#3b82f6"; sb="rgba(59, 130, 246, 0.15)"; }
+    if (d.status.includes("ยกเลิก")) { sc="#ef4444"; sb="rgba(239, 68, 68, 0.15)"; }
+
+    let fileBtn = '';
+    if (d.fileUrl) {
+      const urls = d.fileUrl.split(', ').filter(Boolean);
+      fileBtn = urls.map((url, i) => `<a href="${url}" target="_blank" style="color:var(--p); text-decoration:none; font-weight:700; display:inline-flex; align-items:center; margin-top:8px; background:rgba(37,99,235,0.1); padding:6px 12px; border-radius:99px;"><span class="material-symbols-rounded" style="font-size:16px;">attachment</span> ไฟล์แนบ${urls.length > 1 ? ' '+(i+1) : ''}</a><br>`).join('');
+    }
+
+    html += `
+      <div class="glass-card" style="border-left:6px solid ${sc};padding:0;overflow:hidden;">
+        <div style="padding:14px 16px 0;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+            <span style="font-size:22px;font-weight:800;color:var(--p);line-height:1.2;flex-shrink:0;">#${d.id}</span>
+            <div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;">
+              ${cdBadge(d.needDate, d.status)}
+              <span style="background:${sb};color:${sc};padding:6px 12px;border-radius:99px;font-size:13px;font-weight:700;">${d.status.replace(/[\u1000-\uFFFF⏳🔄✅❌]/g,'').trim()}</span>
+            </div>
+          </div>
+          <div style="font-size:17px;font-weight:600;color:var(--t2);line-height:1.4;margin-top:2px;word-break:break-word;overflow-wrap:break-word;">${d.fullName}</div>
+          <div style="font-size:17px;color:var(--t2);margin-top:0;word-break:break-word;overflow-wrap:break-word;">· ${d.jobType||'-'}</div>
+        </div>
+        <div style="padding:6px 16px 6px;font-size:16px;line-height:1.8;word-break:break-word;overflow-wrap:break-word;">
+          <b>กลุ่มภารกิจ:</b> ${d.group||'-'}<br>
+          <b>หน่วยงาน:</b> ${d.department||'-'}<br>
+          <b>เบอร์ติดต่อ:</b> ${d.phone||'-'}
+        </div>
+        <div style="padding:8px 16px;font-size:16px;line-height:1.8;word-break:break-word;overflow-wrap:break-word;border-top:1px solid rgba(255,255,255,.12);">
+            <b>วันที่สั่ง:</b> ${d.orderDate||'-'}<br>
+            <b>วันที่ต้องการ:</b> ${d.needDate||'-'}<br>
+            <b>รายละเอียด:</b> ${d.detail||'-'}<br>
+            ${fileBtn}
+          </div>
+        <div style="height:0.5px;background:rgba(255,255,255,.14);margin:0 16px;"></div>
+        <div style="padding:8px 16px 14px;font-size:16px;line-height:1.8;word-break:break-word;overflow-wrap:break-word;">
+          <b>ผู้รับผิดชอบ:</b> ${d.owner||'-'}<br>
+          <b>หมายเหตุ:</b> ${d.note||'-'}
+          <button class="btn secondary" style="margin-top:10px;margin-bottom:0;padding:12px;border-radius:14px;" onclick="openEditModal('${d.id}')">
+            <span class="material-symbols-rounded">settings</span> จัดการงาน
+          </button>
+        </div>
+      </div>`;
+  });
+
+  document.getElementById('adminList').innerHTML = html || "<div class='glass-card' style='text-align:center;'>ไม่มีข้อมูลงานที่ตรงเงื่อนไข</div>";
+  window._filteredJobs = filtered;
+}
+
+function cdBadge(needDate, status) {
+  if (!needDate || needDate === '-') return '';
+  if (status && (status.includes('เสร็จ') || status.includes('ยกเลิก'))) return '';
+  const p = needDate.split('/');
+  if (p.length < 3) return '';
+  const need = new Date(p[2], p[1]-1, p[0]);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const days = Math.round((need - today) / 86400000);
+  if (days < 0) return `<span style="background:rgba(127,0,0,.20);color:#600;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;">เกิน ${Math.abs(days)} วัน</span>`;
+  if (days === 0) return `<span style="background:rgba(239,68,68,.15);color:#991b1b;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;">วันนี้!</span>`;
+  if (days === 1) return `<span style="background:rgba(239,68,68,.15);color:#991b1b;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;">เหลือ 1 วัน</span>`;
+  if (days <= 3) return `<span style="background:rgba(249,115,22,.15);color:#9a3412;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;">เหลือ ${days} วัน</span>`;
+  return `<span style="background:rgba(99,102,241,.12);color:#3730a3;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;">เหลือ ${days} วัน</span>`;
+}
+
+function toggleJobDetail(row) {
+  const body = row.nextElementSibling;
+  const chev = row.querySelector('span:last-child');
+  const label = row.querySelector('span:first-child');
+  const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+  body.style.maxHeight = isOpen ? '0px' : '400px';
+  chev.style.transform = isOpen ? '' : 'rotate(180deg)';
+  label.textContent = isOpen ? 'ดูรายละเอียดเพิ่ม' : 'ย่อ';
+}
+
+function changePage(dir) {
+  const totalPages = Math.ceil((window._filteredJobs||[]).length / PAGE_SIZE);
+  CURRENT_PAGE = Math.max(1, Math.min(totalPages, CURRENT_PAGE + dir));
+  renderPage(window._filteredJobs);
+}
+
+let _resData = [];
+let _resFiltered = [];
+let _resJobPage = 1;
+const RES_JOB_PAGE_SIZE = 10;
+let _resExpanded = false;
+let fpResStart, fpResEnd;
+
+function openResItemModal() {
+  document.getElementById('resItemModal').style.display = 'flex';
+  document.getElementById('newResItemInput').value = '';
+  document.getElementById('resItemMsg').textContent = '';
+  loadResItemList();
+}
+
+function buildResContainer(list) {
+  if (!Array.isArray(list)) list = [];
+  let html = '';
+  const opts = list.map(n => `<option>${n}</option>`).join('');
+  for (let i = 1; i <= 3; i++) {
+    html += `<div class="res-group">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:8px;">ชิ้นที่ ${i}</div>
+      <select id="res${i}name" style="margin-top:0;margin-bottom:10px;">
+        <option value="">-- เลือกทรัพยากร --</option>${opts}
+      </select>
+      <div style="display:flex;gap:10px;">
+        <input id="res${i}qty" placeholder="จำนวน" style="flex:1;margin-top:0;">
+        <input id="res${i}color" placeholder="สี" style="flex:1;margin-top:0;">
+        <input id="res${i}size" placeholder="ขนาด" style="flex:1;margin-top:0;">
+      </div>
+    </div>`;
+  }
+  document.getElementById('resContainer').innerHTML = html;
+}
+
+let RESOURCE_LIST = [];
+
+function loadResItemList() {
+  const el = document.getElementById('resItemList');
+  if (!el) return;
+  el.innerHTML = '<div style="font-size:13px;color:var(--t3);">กำลังโหลด...</div>';
+  gasCall('getResourceList').then(list => {
+    RESOURCE_LIST = list || [];
+    buildResContainer(RESOURCE_LIST);
+    renderResItemList();
+  });
+}
+
+function renderResItemList() {
+  const el = document.getElementById('resItemList');
+  if (!el) return;
+  if (!RESOURCE_LIST.length) { el.innerHTML = '<div style="font-size:13px;color:var(--t3);padding:8px 0;">ไม่มีรายการ</div>'; return; }
+  el.innerHTML = RESOURCE_LIST.map(name => `
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;margin-bottom:5px;background:rgba(255,255,255,.5);border:0.5px solid var(--g-b2);border-radius:10px;">
+      <span class="material-symbols-rounded" style="font-size:15px;color:var(--p);margin:0;flex-shrink:0;">inventory_2</span>
+      <span style="flex:1;font-size:14px;color:var(--t1);">${name}</span>
+      <button onclick="deleteResItem('${name.replace(/'/g,"\\'")}')\" style="background:rgba(239,68,68,.1);border:none;border-radius:8px;padding:4px 8px;cursor:pointer;color:#ef4444;font-size:12px;font-family:inherit;display:flex;align-items:center;gap:3px;">
+        <span class="material-symbols-rounded" style="font-size:14px;margin:0;">delete</span>
+      </button>
+    </div>`).join('');
+}
+
+function addResItem() {
+  const input = document.getElementById('newResItemInput');
+  const msg = document.getElementById('resItemMsg');
+  const name = input.value.trim();
+  if (!name) { msg.textContent = 'กรุณากรอกชื่อวัสดุ'; return; }
+  msg.textContent = '';
+  gasCall('addResourceItem', { name }).then(() => {
+    input.value = '';
+    loadResItemList();
+  }).catch(e => { msg.textContent = e.message || 'เกิดข้อผิดพลาด'; });
+}
+
+function deleteResItem(name) {
+  if (!confirm(`ลบ "${name}" ออกจากรายการ?`)) return;
+  gasCall('deleteResourceItem', { name }).then(() => {
+    loadResItemList();
+  }).catch(e => { alert(e.message || 'เกิดข้อผิดพลาด'); });
+}
+
+function loadResources() {
+  document.getElementById('resSummaryRows').innerHTML = loadingHTML;
+  document.getElementById('resJobList').innerHTML = '';
+
+  if (!fpResStart) {
+    fpResStart = makeFp("#resFilterStart");
+    fpResEnd   = makeFp("#resFilterEnd");
+  }
+
+  gasCall('getResources', { owner: CURRENT_USER.name, role: CURRENT_USER.role }).then(data => {
+    _resData = data || [];
+    _resFiltered = _resData;
+    _resJobPage = 1;
+    _resExpanded = false;
+    renderResources();
+  }).catch(() => {
+    document.getElementById('resSummaryRows').innerHTML = '<div style="color:#ef4444;font-size:13px;">เกิดข้อผิดพลาด</div>';
+  });
+}
+
+function applyResFilter() {
+  const sdVal = document.getElementById('resFilterStart').value;
+  const edVal = document.getElementById('resFilterEnd').value;
+  if (!sdVal || !edVal) { _resFiltered = _resData; }
+  else {
+    const sArr = sdVal.split('/'), eArr = edVal.split('/');
+    const sDate = new Date(sArr[2], sArr[1]-1, sArr[0], 0, 0, 0).getTime();
+    const eDate = new Date(eArr[2], eArr[1]-1, eArr[0], 23, 59, 59).getTime();
+    // filter by doneDate
+    const jobMap = {};
+    _resData.forEach(r => {
+      if (!jobMap[r.jobId]) jobMap[r.jobId] = { doneDate: r.doneDate };
+    });
+    const validJobs = new Set();
+    Object.entries(jobMap).forEach(([id, j]) => {
+      if (!j.doneDate) return;
+      const parts = j.doneDate.split('/');
+      if (parts.length < 3) return;
+      const t = new Date(parts[2], parts[1]-1, parts[0]).getTime();
+      if (t >= sDate && t <= eDate) validJobs.add(id);
+    });
+    _resFiltered = _resData.filter(r => validJobs.has(r.jobId));
+  }
+  _resJobPage = 1;
+  renderResources();
+}
+
+function clearResFilter() {
+  if (fpResStart) fpResStart.clear();
+  if (fpResEnd) fpResEnd.clear();
+  _resFiltered = _resData;
+  _resJobPage = 1;
+  renderResources();
+}
+
+function toggleResMore() {
+  _resExpanded = !_resExpanded;
+  document.getElementById('resExtraRows').style.display = _resExpanded ? 'block' : 'none';
+  document.getElementById('resMoreIcon').textContent = _resExpanded ? 'expand_less' : 'expand_more';
+  document.getElementById('resMoreTxt').textContent = _resExpanded ? 'ย่อ' : `ดูเพิ่มเติม`;
+}
+
+function resetResMore() {
+  _resExpanded = false;
+  const extra = document.getElementById('resExtraRows');
+  const icon = document.getElementById('resMoreIcon');
+  const txt = document.getElementById('resMoreTxt');
+  if (extra) extra.style.display = 'none';
+  if (icon) icon.textContent = 'expand_more';
+  if (txt && txt.textContent === 'ย่อ') txt.textContent = 'ดูเพิ่มเติม';
+}
+
+function renderResources() {
+  const data = _resFiltered;
+  if (!data.length) {
+    document.getElementById('resStat1').textContent = '0';
+    document.getElementById('resStat2').textContent = '—';
+    document.getElementById('resStat3').textContent = '—';
+    document.getElementById('resSummaryRows').innerHTML = '<div style="text-align:center;color:var(--t2);padding:20px 0;">ยังไม่มีข้อมูลทรัพยากร</div>';
+    document.getElementById('resJobList').innerHTML = '';
+    document.getElementById('resJobPaginationTop').innerHTML = '';
+    document.getElementById('resJobPaginationBottom').innerHTML = '';
+    document.getElementById('resJobPageInfo').textContent = '';
+    return;
+  }
+
+  // group by jobId
+  const jobMap = {};
+  data.forEach(r => {
+    if (!jobMap[r.jobId]) jobMap[r.jobId] = { jobId: r.jobId, doneDate: r.doneDate, items: [] };
+    jobMap[r.jobId].items.push(r);
+  });
+  const jobs = Object.values(jobMap).sort((a, b) => Number(b.jobId) - Number(a.jobId));
+
+  document.getElementById('resStat1').textContent = jobs.length;
+
+  // count & sum qty by name
+  const countMap = {}, qtyMap = {};
+  data.forEach(r => {
+    countMap[r.name] = (countMap[r.name] || 0) + 1;
+    const q = parseFloat(r.qty) || 0;
+    qtyMap[r.name] = (qtyMap[r.name] || 0) + q;
+  });
+  const sorted = Object.entries(countMap).sort((a, b) => b[1] - a[1]);
+  const max = sorted[0]?.[1] || 1;
+
+  document.getElementById('resStat2').textContent = sorted[0]?.[0] || '—';
+  document.getElementById('resStat3').textContent = sorted[0] ? `${sorted[0][1]} ครั้ง · ${Math.round(sorted[0][1]/data.length*100)}%` : '—';
+
+  const colors = ['#7c9ef8','#a0c4ff','#c0b8ff','#ffc0e0','#ffd4b8','#a7f3d0','#c4b5fd','#fed7aa'];
+  const rowHtml = (name, count, i) => `
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:0.5px solid var(--g-b2);">
+      <div style="flex:1;font-size:16px;color:var(--t1);">${name}</div>
+      <div style="width:60px;height:6px;background:var(--g-b2);border-radius:3px;overflow:hidden;flex-shrink:0;">
+        <div style="height:100%;width:${Math.round(count/max*100)}%;background:${colors[i%colors.length]};border-radius:3px;"></div>
+      </div>
+      <div style="min-width:32px;text-align:right;font-size:16px;font-weight:500;color:var(--t1);">${count}</div>
+      <div style="min-width:54px;text-align:right;font-size:13px;color:var(--t3);">${qtyMap[name] > 0 ? qtyMap[name] : '—'}</div>
+    </div>`;
+
+  document.getElementById('resSummaryRows').innerHTML = sorted.slice(0, 5).map((e, i) => rowHtml(e[0], e[1], i)).join('');
+  const extra = sorted.slice(5);
+  if (extra.length) {
+    document.getElementById('resExtraRows').innerHTML = extra.map((e, i) => rowHtml(e[0], e[1], i + 5)).join('');
+    document.getElementById('resMoreBtn').style.display = 'flex';
+    document.getElementById('resMoreTxt').textContent = `ดูเพิ่มเติม (${extra.length} รายการ)`;
+  } else {
+    document.getElementById('resMoreBtn').style.display = 'none';
+  }
+
+  window._resJobs = jobs;
+  renderResJobPage(jobs);
+}
+
+function renderResJobPage(jobs) {
+  const total = jobs.length;
+  const totalPages = Math.ceil(total / RES_JOB_PAGE_SIZE);
+  const start = (_resJobPage - 1) * RES_JOB_PAGE_SIZE;
+  const pageJobs = jobs.slice(start, start + RES_JOB_PAGE_SIZE);
+
+  document.getElementById('resJobPageInfo').textContent = `${total} รายการ`;
+
+  const pgHtml = totalPages > 1 ? `
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px;padding:8px 0;">
+      <button class="pg-btn" onclick="resChangePage(-1)" style="${_resJobPage<=1?'opacity:.3;pointer-events:none;':''}">‹</button>
+      <span style="font-size:12px;color:var(--t2);">หน้า ${_resJobPage}/${totalPages} <span style="opacity:.6;">(${total})</span></span>
+      <button class="pg-btn" onclick="resChangePage(1)" style="${_resJobPage>=totalPages?'opacity:.3;pointer-events:none;':''}">›</button>
+    </div>` : '';
+
+  document.getElementById('resJobPaginationTop').innerHTML = pgHtml;
+  document.getElementById('resJobPaginationBottom').innerHTML = pgHtml;
+
+  document.getElementById('resJobList').innerHTML = pageJobs.map(j => {
+    const tags = j.items.map(r => {
+      const detail = [r.qty, r.color, r.size].filter(Boolean).join(' ');
+      return `<span style="padding:3px 8px;border-radius:99px;font-size:14px;background:rgba(255,255,255,.5);border:0.5px solid var(--g-b2);color:var(--t2);">${r.name}${detail ? ' · ' + detail : ''}</span>`;
+    }).join('');
+    return `
+      <div style="background:rgba(255,255,255,.35);border:0.5px solid var(--g-b2);border-radius:12px;padding:10px 12px;margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div style="font-size:17px;font-weight:500;color:var(--p);">#${j.jobId}</div>
+          <div style="font-size:14px;color:var(--t3);">${j.doneDate || ''}</div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;">${tags}</div>
+      </div>`;
+  }).join('') || '<div style="text-align:center;color:var(--t2);padding:12px;">ไม่มีรายการ</div>';
+}
+
+function resChangePage(dir) {
+  const total = (window._resJobs || []).length;
+  const totalPages = Math.ceil(total / RES_JOB_PAGE_SIZE);
+  _resJobPage = Math.max(1, Math.min(totalPages, _resJobPage + dir));
+  renderResJobPage(window._resJobs);
+}
+
+function renderUsers() {
+  let html = '';
+  ALL_USERS.forEach(u => {
+    const isActive = String(u.active).toUpperCase() === 'TRUE';
+    html += `
+      <div class="jcard" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:nowrap;">
+        <div style="min-width:0;flex:1;">
+          <div style="font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${u.name}</div>
+          <div style="font-size:13px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">ID: ${u.user} | Role: <span style="text-transform:uppercase;">${u.role}</span></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0;">
+          <button class="btn ${isActive ? 'neutral' : 'primary'}" style="margin:0;padding:8px 14px;width:auto;font-size:14px;" onclick="toggleUser('${u.user}', ${isActive})">
+            ${isActive ? 'ระงับสิทธิ์' : 'เปิดใช้งาน'}
+          </button>
+          <button class="btn danger" style="margin:0;padding:8px 10px;width:auto;" onclick="deleteUser('${u.user}')" title="ลบผู้ใช้">
+            <span class="material-symbols-rounded" style="margin:0;">delete</span>
+          </button>
+        </div>
+      </div>
+    `;
+  });
+  document.getElementById('userList').innerHTML = html;
+}
+
+function toggleUserForm() {
+  const formBox = document.getElementById('userFormBox');
+  const toggleBtn = document.getElementById('toggleUserBtn');
+  
+  if (formBox.style.display === 'none' || formBox.style.display === '') {
+    formBox.style.display = 'block';
+    toggleBtn.innerHTML = '<span class="material-symbols-rounded">close</span> ยกเลิกการเพิ่ม';
+    toggleBtn.classList.replace('primary', 'secondary');
+  } else {
+    formBox.style.display = 'none';
+    toggleBtn.innerHTML = '<span class="material-symbols-rounded">person_add</span> เพิ่มผู้ใช้งานใหม่';
+    toggleBtn.classList.replace('secondary', 'primary');
+    document.getElementById('newUser').value = '';
+    document.getElementById('newPass').value = '';
+    document.getElementById('newName').value = '';
+  }
+}
+
+function addUserFromForm() {
+  const u = document.getElementById('newUser').value;
+  const p = document.getElementById('newPass').value;
+  const n = document.getElementById('newName').value;
+  const r = document.getElementById('newRole').value;
+  if(!u || !p || !n) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+  const btn = document.querySelector('#userFormBox .btn.primary');
+  setLoading(btn, true);
+  gasCall('addUser', { u, p, r, n }).then(() => {
+    setLoading(btn, false);
+    alert("บันทึกผู้ใช้สำเร็จ");
+    toggleUserForm();
+    loadAllData();
+  }).catch(e => { setLoading(btn, false); alert(e.message); });
+}
+
+function toggleUser(user, currentStatus) {
+  gasCall('toggleUserStatus', { user, currentStatus }).then(() => loadAllData()).catch(e => alert(e.message));
+}
+
+function deleteUser(user) {
+  if(confirm("ยืนยันการลบผู้ใช้ '" + user + "' ออกจากระบบอย่างถาวร?")) {
+    document.getElementById('userList').innerHTML = loadingHTML;
+    gasCall('deleteUser', { user }).then(() => {
+      loadAllData();
+    }).catch(e => {
+      alert("เกิดข้อผิดพลาด: " + e.message);
+      loadAllData();
+    });
+  }
+}
+
+function openViewResModal(jobId) {
+  const job = ALL_JOBS.find(j => j.id === String(jobId));
+  if (!job) return;
+  document.getElementById('viewResJobId').textContent = job.id;
+  document.getElementById('viewResNote').textContent = job.note || '-';
+  document.getElementById('viewResDoneDate').textContent = '';
+  document.getElementById('viewResItems').innerHTML = '<div style="font-size:13px;color:var(--t3);">กำลังโหลด...</div>';
+  document.getElementById('viewResModal').style.display = 'flex';
+
+  gasCall('getResources', { owner: CURRENT_USER.name, role: CURRENT_USER.role }).then(data => {
+    const items = (data || []).filter(r => String(r.jobId) === String(jobId));
+    if (items.length) {
+      document.getElementById('viewResDoneDate').textContent = items[0].doneDate ? 'วันที่เสร็จ: ' + items[0].doneDate : '';
+      document.getElementById('viewResItems').innerHTML = items.map(r => {
+        const detail = [r.qty ? 'จำนวน ' + r.qty : '', r.color, r.size].filter(Boolean).join(' · ');
+        return `<div style="display:flex;align-items:center;gap:10px;padding:9px 12px;margin-bottom:7px;background:rgba(255,255,255,.5);border:0.5px solid var(--g-b2);border-radius:12px;">
+          <span class="material-symbols-rounded" style="font-size:16px;color:var(--p);margin:0;flex-shrink:0;">inventory_2</span>
+          <div>
+            <div style="font-size:15px;font-weight:600;color:var(--t1);">${r.name}</div>
+            ${detail ? `<div style="font-size:13px;color:var(--t3);">${detail}</div>` : ''}
+          </div>
+        </div>`;
+      }).join('');
+    } else {
+      document.getElementById('viewResItems').innerHTML = '<div style="text-align:center;color:var(--t3);padding:16px 0;font-size:14px;">ไม่มีข้อมูลทรัพยากร</div>';
+    }
+  }).catch(() => {
+    document.getElementById('viewResItems').innerHTML = '<div style="color:#ef4444;font-size:13px;">โหลดไม่สำเร็จ</div>';
+  });
+}
+
+function openEditModal(jobId) {
+  ACTIVE_ID = String(jobId);
+  const job = ALL_JOBS.find(j => j.id === ACTIVE_ID);
+  if(!job) return;
+
+  if (job.status.includes('เสร็จ')) { openViewResModal(jobId); return; }
+
+  document.getElementById('editJobId').innerText = job.id;
+  document.getElementById('modalStatus').value = job.status.includes('รอ') ? 'รอดำเนินการ' : job.status.includes('กำลัง') ? 'กำลังดำเนินการ' : job.status.includes('เสร็จ') ? 'เสร็จสิ้น' : job.status.includes('ยกเลิก') ? 'ยกเลิก' : 'รอดำเนินการ';
+  document.getElementById('editNote').value = job.note;
+
+  if(CURRENT_USER.role === 'admin') {
+    document.getElementById('adminAssignPanel').style.display = 'block';
+    const tagsEl = document.getElementById('ownerTags');
+    tagsEl.innerHTML = '';
+    const owners = (job.owner || '').split(',').map(s => s.trim()).filter(Boolean);
+    owners.forEach(name => addOwnerTagWithName(name));
+  } else {
+    document.getElementById('adminAssignPanel').style.display = 'none';
+  }
+
+  for(let i=1; i<=3; i++){
+    document.getElementById(`res${i}name`).value = '';
+    document.getElementById(`res${i}qty`).value = '';
+    document.getElementById(`res${i}color`).value = '';
+    document.getElementById(`res${i}size`).value = '';
+  }
+
+  toggleDoneSection();
+  document.getElementById('editModal').style.display = 'flex';
+}
+
+function toggleDoneSection() {
+  const s = document.getElementById('modalStatus').value;
+  document.getElementById('modalDoneSection').style.display = s.includes('เสร็จ') ? 'block' : 'none';
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').style.display = 'none';
+  ACTIVE_ID = null;
+  document.getElementById('editNote').value = '';
+  document.getElementById('editDoneDate').value = '';
+  document.getElementById('modalDoneSection').style.display = 'none';
+  document.getElementById('ownerTags').innerHTML = '';
+  for(let i=1;i<=3;i++){
+    ['name','qty','color','size'].forEach(f => { const el = document.getElementById(`res${i}${f}`); if(el) el.value=''; });
+  }
+}
+
+function saveEdit() {
+  if(!ACTIVE_ID) return;
+  const btn = document.getElementById('btnSaveJob');
+  setLoading(btn, true);
+
+  const payload = {
+    id: ACTIVE_ID,
+    status: document.getElementById('modalStatus').value,
+    note: document.getElementById('editNote').value,
+    owner: (() => {
+      if (CURRENT_USER.role !== 'admin') {
+        const job = ALL_JOBS.find(j => String(j.id) === String(ACTIVE_ID));
+        return job ? job.owner : CURRENT_USER.name;
+      }
+      const tags = document.getElementById('ownerTags');
+      const names = tags ? Array.from(tags.querySelectorAll('[data-name]')).map(t => t.dataset.name).filter(n => n && n !== '-') : [];
+      return names.length ? names.join(', ') : '-';
+    })(),
+    doneDate: document.getElementById('editDoneDate').value,
+    resources: []
+  };
+
+  if(payload.status.includes('เสร็จ')) {
+    for(let i=1; i<=3; i++){
+      payload.resources.push({
+        name: document.getElementById(`res${i}name`).value,
+        qty: document.getElementById(`res${i}qty`).value,
+        color: document.getElementById(`res${i}color`).value,
+        size: document.getElementById(`res${i}size`).value
+      });
+    }
+  }
+  gasCall('updateJob', { payload }).then(() => {
+    setLoading(btn, false);
+    closeEditModal();
+    loadAllData();
+  }).catch(err => {
+    setLoading(btn, false);
+    alert("เกิดข้อผิดพลาด: " + err.message);
+  });
+}
+function clearForm() {
+  ['prefixInput','groupInput','departmentInput','typeInput'].forEach(id => {
+    var el = document.getElementById(id); if(el) el.value = '';
+  });
+  ['nameInput','lastnameInput','detailInput','phoneInput'].forEach(id => {
+    var el = document.getElementById(id); if(el) el.value = '';
+  });
+  // ล้าง flatpickr
+  var op = document.querySelector('#orderDateInput')?._flatpickr;
+  var np = document.querySelector('#needDateInput')?._flatpickr;
+  if(op) op.clear();
+  if(np) np.clear();
+  // ล้างไฟล์และ error
+  var fi = document.getElementById('fileInput'); if(fi) fi.value = '';
+  var fp = document.getElementById('fileListPreview'); if(fp) fp.innerHTML = '';
+  var fc = document.getElementById('fileCount'); if(fc) fc.style.display = 'none';
+  _files = [];
+  var sr = document.getElementById('serviceResult'); if(sr) sr.innerText = '';
+}
+// ── PWA Install Prompt (Android) ──
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
+
+function triggerInstall() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(() => {
+    deferredPrompt = null;
+    document.getElementById('pwaBanner').style.display = 'none';
+  });
+}
+
+function showPwaPrompt() {
+  // ตรวจสอบว่าเปิดผ่านไอคอนหน้าจอไปแล้วหรือยัง
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  if (isStandalone) return; 
+
+  const pwaBanner = document.getElementById('pwaBanner');
+  const pwaText = document.getElementById('pwaText');
+  const userAgent = window.navigator.userAgent.toLowerCase();
+
+  if (/iphone|ipad|ipod/.test(userAgent)) {
+    // สำหรับ iOS
+    pwaText.innerHTML = "แตะไอคอน <b>Share</b> ด้านล่าง<br>แล้วเลือก <b>Add to Home Screen</b>";
+    pwaBanner.style.display = 'block';
+  } else if (/android/.test(userAgent)) {
+    pwaText.innerHTML = "แตะเมนู <b>⋮</b> มุมขวาบน<br>แล้วเลือก <b>เพิ่มลงในหน้าจอหลัก</b>";
+    if (deferredPrompt) {
+      document.getElementById('pwaOrDivider').style.display = 'flex';
+      document.getElementById('pwaInstallBtn').style.display = 'flex';
+    }
+    pwaBanner.style.display = 'block';
+  }
+}
+
+function searchByIdAdmin() {
+  const val = document.getElementById('adminSearchId').value.trim();
+  if (!val) return;
+  
+  const job = ALL_JOBS.find(j => String(j.id) === val);
+  const resultEl = document.getElementById('adminSearchResult');
+  
+  if (!job) {
+    resultEl.innerHTML = `<div style="color:#ef4444; font-size:14px; font-weight:600;">ไม่พบงานเลขที่ ${val}</div>`;
+    return;
+  }
+
+  let sc="#f59e0b", sb="rgba(245,158,11,0.15)";
+  if (job.status.includes("เสร็จ"))  { sc="#10b981"; sb="rgba(16,185,129,0.15)"; }
+  if (job.status.includes("กำลัง"))  { sc="#3b82f6"; sb="rgba(59,130,246,0.15)"; }
+  if (job.status.includes("ยกเลิก")) { sc="#ef4444"; sb="rgba(239,68,68,0.15)"; }
+
+  resultEl.innerHTML = `
+    <div class="jcard" style="border-left:3px solid ${sc};">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+        <div>
+          <div style="font-size:18px; font-weight:800; color:var(--p);">#${job.id}</div>
+          <div style="font-size:13px; color:var(--t2);">${job.fullName}</div>
+        </div>
+        <span style="background:${sb};color:${sc};padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;border:1px solid ${sc}44;">${job.status.replace(/[\u1000-\uFFFF⏳🔄✅❌]/g,'').trim()}</span>
+      </div>
+      <div style="font-size:13px; line-height:1.8;">
+        <b>หน่วยงาน:</b> ${job.department||"-"}<br>
+        <b>ประเภทงาน:</b> ${job.jobType||"-"}<br>
+        <b>ผู้รับผิดชอบ:</b> ${job.owner||"-"}<br>
+        <b>วันที่ต้องการ:</b> ${job.needDate||"-"}
+      </div>
+      <button class="btn secondary" style="margin-top:12px; margin-bottom:0; padding:10px; border-radius:12px; font-size:13px;"
+        onclick="openEditModal('${job.id}')">
+        <span class="material-symbols-rounded">settings</span> จัดการงาน
+      </button>
+    </div>`;
+}
+
+function clearAdminSearch() {
+  document.getElementById('adminSearchId').value = '';
+  document.getElementById('adminSearchResult').innerHTML = '';
+}
+
+function openChangePw() {
+  if(!CURRENT_USER) return;
+  document.getElementById('pwCurrentUser').textContent = CURRENT_USER.user + ' (' + CURRENT_USER.name + ')';
+  document.getElementById('pwNewUser').value = '';
+  document.getElementById('pwOld').value = '';
+  document.getElementById('pwNew').value = '';
+  document.getElementById('pwConfirm').value = '';
+  document.getElementById('pwMsg').textContent = '';
+  document.getElementById('changePwModal').style.display = 'flex';
+}
+function closeChangePw() {
+  document.getElementById('changePwModal').style.display = 'none';
+  document.getElementById('pwNewUser').value = '';
+  document.getElementById('pwOld').value = '';
+  document.getElementById('pwNew').value = '';
+  document.getElementById('pwConfirm').value = '';
+  document.getElementById('pwMsg').textContent = '';
+}
+function saveChangePw() {
+  const newUser = document.getElementById('pwNewUser').value.trim();
+  const oldPw   = document.getElementById('pwOld').value;
+  const newPw   = document.getElementById('pwNew').value;
+  const confirm = document.getElementById('pwConfirm').value;
+  const msgEl   = document.getElementById('pwMsg');
+
+  if(!oldPw) { msgEl.textContent = 'กรุณากรอกรหัสผ่านปัจจุบัน'; return; }
+  if(newPw && newPw !== confirm) { msgEl.textContent = 'รหัสผ่านใหม่ไม่ตรงกัน'; return; }
+  if(!newPw && !newUser) { msgEl.textContent = 'ไม่มีข้อมูลที่จะเปลี่ยน'; return; }
+
+  msgEl.textContent = '';
+  const btn = document.querySelector('#changePwModal .btn.primary');
+  setLoading(btn, true);
+  gasCall('changeUserProfile', { user: CURRENT_USER.user, oldPw, newPw: newPw||null, newUser: newUser||null })
+    .then(res => {
+      setLoading(btn, false);
+      if(res.success) {
+        if(newUser) CURRENT_USER.user = newUser;
+        document.getElementById('pwCurrentUser').textContent = CURRENT_USER.user;
+        closeChangePw();
+        alert('บันทึกสำเร็จ');
+      } else {
+        msgEl.textContent = res.msg || 'เกิดข้อผิดพลาด';
+      }
+    })
+    .catch(e => { setLoading(btn, false); msgEl.textContent = 'ผิดพลาด: ' + e.message; });
+}
+
+function checkNewJobs(jobs) {
+  if (!CURRENT_USER) return;
+
+  // งานของฉันที่รอดำเนินการ
+  const myWaiting = jobs.filter(j =>
+    j.owner && j.owner.includes(CURRENT_USER.name.trim()) &&
+    j.status.includes('รอ')
+  );
+
+  // งานใหม่ที่ยังไม่มีคนรับ และสถานะรอเท่านั้น (admin only)
+  const unassigned = CURRENT_USER.role === 'admin'
+    ? jobs.filter(j =>
+        j.status.includes('รอ') &&
+        (!j.owner || j.owner.trim() === '' || j.owner.trim() === '-')
+      )
+    : [];
+
+  const total = myWaiting.length + unassigned.length;
+  const badge = document.getElementById('bellBadge');
+  if (total > 0) {
+    badge.textContent = total > 9 ? '9+' : total;
+    badge.style.display = 'flex';
+  } else {
+    badge.style.display = 'none';
+  }
+
+  window._myWaitingJobs = myWaiting;
+  window._unassignedJobs = unassigned;
+}
+
+let _notifTab = 'my';
+
+function switchNotifTab(tab) {
+  _notifTab = tab;
+  document.getElementById('tabMyJobs').classList.toggle('active', tab === 'my');
+  document.getElementById('tabNewJobs').classList.toggle('active', tab === 'new');
+  renderNotifList();
+}
+
+function renderNotifList() {
+  const list = document.getElementById('notifList');
+  const jobs = _notifTab === 'my' ? (window._myWaitingJobs || []) : (window._unassignedJobs || []);
+
+  if (jobs.length === 0) {
+    list.innerHTML = `<div style="text-align:center;color:var(--t2);padding:24px 0;font-size:15px;">${_notifTab === 'my' ? 'ไม่มีงานที่รอดำเนินการ' : 'ไม่มีงานใหม่ที่รอผู้รับผิดชอบ'}</div>`;
+    return;
+  }
+
+  // staff options สำหรับ dropdown
+  const staffOpts = (ALL_USERS || [])
+    .filter(u => String(u.active).toUpperCase() === 'TRUE')
+    .map(u => `<option value="${u.name}">${u.name}</option>`)
+    .join('');
+
+  list.innerHTML = jobs.map(j => `
+    <div class="jcard" style="margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+        <div style="font-size:20px;font-weight:800;color:var(--p);">#${j.id}</div>
+        <span style="font-size:12px;color:var(--t3);">${j.needDate ? 'ต้องการ: '+j.needDate : ''}</span>
+      </div>
+      <div style="font-size:14px;font-weight:600;color:var(--t1);">${j.jobType || '-'}</div>
+      <div style="font-size:13px;color:var(--t2);margin-bottom:4px;">${j.department || '-'} • ${j.fullName || '-'}</div>
+      ${j.owner && j.owner !== '-' ? `<div style="font-size:13px;color:var(--t3);margin-bottom:10px;">ผู้รับผิดชอบ: ${j.owner}</div>` : '<div style="margin-bottom:10px;"></div>'}
+      ${_notifTab === 'my'
+        ? `<button class="btn primary" style="margin:0;padding:10px;font-size:14px;" onclick="acceptJob('${j.id}')">
+             <span class="material-symbols-rounded" style="font-size:16px;">play_arrow</span> รับงาน / เริ่มดำเนินการ
+           </button>`
+        : `<div>
+             <div id="tags_${j.id}" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px;min-height:28px;"></div>
+             <div style="display:flex;gap:7px;align-items:center;">
+               <select id="assignSel_${j.id}" style="flex:1;margin:0;font-size:13px;padding:9px 10px;">
+                 <option value="">— เลือก Staff เพิ่ม —</option>
+                 ${staffOpts}
+               </select>
+               <button class="btn secondary" style="margin:0;width:auto;padding:10px 12px;font-size:13px;flex-shrink:0;" onclick="addAssignTag('${j.id}')">
+                 <span class="material-symbols-rounded" style="font-size:15px;margin:0;">add</span>
+               </button>
+             </div>
+             <button class="btn primary" style="margin:8px 0 0;padding:10px;font-size:14px;" onclick="claimJob('${j.id}')">
+               <span class="material-symbols-rounded" style="font-size:16px;">person_add</span> มอบหมาย
+             </button>
+           </div>`
+      }
+    </div>
+  `).join('');
+}
+
+function openNotif() {
+  const notifList = document.getElementById('notifList');
+  if (notifList) notifList.innerHTML = '<div style="text-align:center;padding:20px;color:var(--t3);font-size:13px;">กำลังโหลด...</div>';
+  document.getElementById('notifModal').style.display = 'flex';
+
+  // ดึงเฉพาะข้อมูลงาน ไม่ re-render หน้าหลัก
+  gasCall('getAllData').then(data => {
+    ALL_JOBS = data;
+    checkNewJobs(data);
+    renderNotif();
+  }).catch(() => {
+    renderNotif(); // fallback ใช้ข้อมูลเก่า
+  });
+}
+
+function renderNotif() {
+  const isAdmin = CURRENT_USER && CURRENT_USER.role === 'admin';
+  const tabs = document.getElementById('notifTabs');
+  tabs.style.display = isAdmin ? 'flex' : 'none';
+
+  // update new jobs badge in tab
+  const unassigned = window._unassignedJobs || [];
+  const myWaiting = window._myWaitingJobs || [];
+  const tabBadge = document.getElementById('tabNewBadge');
+  const tabMyBadge = document.getElementById('tabMyBadge');
+  const staffBadge = document.getElementById('notifStaffBadge');
+
+  if (unassigned.length > 0) {
+    tabBadge.textContent = unassigned.length;
+    tabBadge.style.display = 'inline';
+  } else {
+    tabBadge.style.display = 'none';
+  }
+  if (tabMyBadge) {
+    if (myWaiting.length > 0) {
+      tabMyBadge.textContent = myWaiting.length;
+      tabMyBadge.style.display = 'inline';
+    } else {
+      tabMyBadge.style.display = 'none';
+    }
+  }
+  if (staffBadge) {
+    if (!isAdmin && myWaiting.length > 0) {
+      staffBadge.textContent = myWaiting.length;
+      staffBadge.style.display = 'inline';
+    } else {
+      staffBadge.style.display = 'none';
+    }
+  }
+
+  _notifTab = 'my';
+  document.getElementById('tabMyJobs').classList.add('active');
+  document.getElementById('tabNewJobs').classList.remove('active');
+  renderNotifList();
+}
+
+function closeNotif() {
+  document.getElementById('notifModal').style.display = 'none';
+}
+
+function acceptJob(jobId) {
+  const btn = document.querySelector(`[onclick="acceptJob('${jobId}')"]`);
+  if (btn) setLoading(btn, true);
+  const job = ALL_JOBS.find(j => String(j.id) === String(jobId));
+  const payload = {
+    id: String(jobId), status: 'กำลังดำเนินการ',
+    owner: job ? job.owner : CURRENT_USER.name, note: '', doneDate: '', resources: []
+  };
+  gasCall('updateJob', { payload }).then(() => {
+    gasCall('getAllData').then(data => {
+      ALL_JOBS = data; checkNewJobs(data); renderNotifList(); renderJobs();
+    }).catch(() => {});
+  }).catch(e => { if (btn) setLoading(btn, false); alert(e.message); });
+}
+
+function addOwnerTagWithName(name) {
+  if (!name || name === '-') return;
+  const tagsEl = document.getElementById('ownerTags');
+  if (!tagsEl) return;
+  if (tagsEl.querySelector(`[data-name="${name}"]`)) return;
+  const tag = document.createElement('span');
+  tag.dataset.name = name;
+  tag.style.cssText = 'padding:4px 10px;border-radius:99px;font-size:12px;background:rgba(124,158,248,.15);color:var(--p);border:0.5px solid rgba(124,158,248,.3);display:inline-flex;align-items:center;gap:5px;';
+  tag.innerHTML = `${name} <span onclick="this.parentElement.remove()" style="font-size:14px;line-height:1;opacity:.6;cursor:pointer;">×</span>`;
+  tagsEl.appendChild(tag);
+}
+
+function addOwnerTag() {
+  const sel = document.getElementById('ownerSelect');
+  if (!sel || !sel.value) return;
+  addOwnerTagWithName(sel.value);
+  sel.value = '';
+}
+
+function addAssignTag(jobId) {
+  const sel = document.getElementById('assignSel_' + jobId);
+  const name = sel.value;
+  if (!name) return;
+  const tagsEl = document.getElementById('tags_' + jobId);
+  // ไม่เพิ่มซ้ำ
+  if (tagsEl.querySelector(`[data-name="${name}"]`)) return;
+  const tag = document.createElement('span');
+  tag.dataset.name = name;
+  tag.style.cssText = 'padding:4px 10px;border-radius:99px;font-size:12px;background:rgba(124,158,248,.15);color:var(--p);border:0.5px solid rgba(124,158,248,.3);display:inline-flex;align-items:center;gap:5px;cursor:pointer;';
+  tag.innerHTML = `${name} <span onclick="this.parentElement.remove()" style="font-size:14px;line-height:1;opacity:.6;">×</span>`;
+  tagsEl.appendChild(tag);
+  sel.value = '';
+}
+
+function claimJob(jobId) {
+  const tagsEl = document.getElementById('tags_' + jobId);
+  const names = tagsEl ? Array.from(tagsEl.querySelectorAll('[data-name]')).map(t => t.dataset.name) : [];
+  if (!names.length) {
+    const sel = document.getElementById('assignSel_' + jobId);
+    if (sel && sel.value) names.push(sel.value);
+  }
+  if (!names.length) { alert('กรุณาเลือก Staff ก่อน'); return; }
+  const btn = document.querySelector(`[onclick="claimJob('${jobId}')"]`);
+  if (btn) setLoading(btn, true);
+  const owner = names.join(', ');
+  const payload = {
+    id: String(jobId), status: 'รอดำเนินการ',
+    owner, note: '', doneDate: '', resources: []
+  };
+  gasCall('updateJob', { payload }).then(() => {
+    gasCall('getAllData').then(data => {
+      ALL_JOBS = data; checkNewJobs(data); renderNotifList(); renderJobs();
+    }).catch(() => {});
+  }).catch(e => { if (btn) setLoading(btn, false); alert(e.message); });
+}
+
+function drawAdminChart(filteredJobs) {
+  if (!filteredJobs || filteredJobs.length === 0) {
+    document.getElementById('chartContainer').style.display = 'none';
+    return;
+  }
+
+  const counts = { wait: 0, doing: 0, done: 0, cancel: 0 };
+  filteredJobs.forEach(j => {
+    const s = j.status || '';
+    if (s.includes('รอ'))         counts.wait++;
+    else if (s.includes('กำลัง')) counts.doing++;
+    else if (s.includes('เสร็จ')) counts.done++;
+    else if (s.includes('ยกเลิก'))counts.cancel++;
+  });
+
+  const total = filteredJobs.length;
+  const C = 2 * Math.PI * 54;
+
+  const slices = [
+    { id:'arc_wait',   count:counts.wait,   color:'#e8c060', label:'รอจัดการ' },
+    { id:'arc_doing',  count:counts.doing,  color:'var(--p)', label:'กำลังดำเนินการ' },
+    { id:'arc_done',   count:counts.done,   color:'#50c890', label:'เสร็จสิ้น' },
+    { id:'arc_cancel', count:counts.cancel, color:'#d07070', label:'ยกเลิก' },
+  ];
+
+  let offset = 0;
+  slices.forEach(sl => {
+    const arc = (sl.count / total) * C;
+    const gap = total > 1 && sl.count > 0 ? 3 : 0;
+    const el = document.getElementById(sl.id);
+    el.style.strokeDasharray  = `${Math.max(arc - gap, 0)} ${C - Math.max(arc - gap, 0)}`;
+    el.style.strokeDashoffset = -offset;
+    el.setAttribute('stroke-dashoffset', -offset);
+    offset += arc;
+  });
+
+  document.getElementById('donutTotal').innerText = total;
+  document.getElementById('chartContainer').style.display = 'block';
+
+  const isDark = document.body.classList.contains('dark');
+  const textColor = 'var(--t1)';
+  const subColor  = 'var(--t2)';
+
+  document.getElementById('donutLegend').innerHTML = slices.map(sl => `
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div style="width:12px; height:12px; border-radius:4px; background:${sl.color}; flex-shrink:0;
+        box-shadow:0 2px 6px ${sl.color}55;"></div>
+      <div style="flex:1;">
+        <span style="font-size:13px; font-weight:600; color:${textColor};">${sl.label}</span>
+      </div>
+      <div style="text-align:right;">
+        <span style="font-size:16px; font-weight:800; color:${sl.color};">${sl.count}</span>
+        <span style="font-size:11px; color:${subColor}; margin-left:3px;">${total > 0 ? Math.round(sl.count/total*100) : 0}%</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ═══════════════════════════════════════
+   ORB COLOR SHIFT — pastel liquid glass
+   CSS handles movement, JS handles color
+   ═══════════════════════════════════════ */
+
+const ORB_PALETTES = [
+  // ม่วง/ฟ้า
+  ['#c4b5fd','#93c5fd'], ['#a5b4fc','#7dd3fc'], ['#bae6fd','#7dd3fc'],
+  // ชมพู/มาเจนต้า
+  ['#fbcfe8','#f9a8d4'], ['#fda4af','#f9a8d4'], ['#f0abfc','#e879f9'],
+  // เขียว
+  ['#a7f3d0','#6ee7b7'], ['#bbf7d0','#86efac'],
+  // เหลือง/ส้ม
+  ['#fde68a','#fcd34d'], ['#fed7aa','#fdba74'],
+  // ชมพูอ่อน/พีช
+  ['#fecdd3','#fda4af'], ['#e9d5ff','#c4b5fd'],
+  ['#ffc8a0','#ffaac8'], ['#ddc8ff','#ffb8e0'], ['#ffd4b8','#e8c8ff'],
+  ['#ffb8c8','#d8b8ff'], ['#ffc0b0','#ffb0d0'], ['#e0b8ff','#ffc0e0'],
+  ['#ffd0a8','#ffb0c8'], ['#d8c0ff','#ffc8e8'],
+  // teal/cyan
+  ['#99f6e4','#67e8f9'], ['#6ee7b7','#67e8f9'], ['#a5f3fc','#5eead4'],
+  ['#7fffd4','#a0e9e0'], ['#b2f5ea','#81e6d9'],
+  // coral/red-orange
+  ['#fca5a5','#fb923c'], ['#fdba74','#f87171'], ['#ffb347','#ff8c69'],
+  ['#ffc3a0','#ffafbd'], ['#ff9a9e','#fecfef'],
+  // lime/yellow-green
+  ['#d9f99d','#bef264'], ['#ecfccb','#d9f99d'], ['#c6f135','#a3e635'],
+  ['#b8f57a','#d4fc79'],
+  // sky/indigo
+  ['#bfdbfe','#a5b4fc'], ['#c7d2fe','#818cf8'], ['#a0c4ff','#b8d8ff'],
+  ['#93c5fd','#6366f1'],
+  // amber/gold
+  ['#fef08a','#fde047'], ['#fcd34d','#f59e0b'], ['#fef3c7','#fde68a'],
+  // rose/fuchsia
+  ['#fda4af','#e879f9'], ['#f9a8d4','#c084fc'], ['#fbcfe8','#e9d5ff'],
+  ['#ff9de2','#d4a5f5'],
+  // mint/sage
+  ['#bbf7d0','#a7f3d0'], ['#6ee7b7','#a7f3d0'], ['#d1fae5','#a7f3d0'],
+];
+
+
+function _lerp(a, b, t) {
+  const ah=parseInt(a.slice(1),16), bh=parseInt(b.slice(1),16);
+  const r=Math.round(((ah>>16)&0xff)*(1-t)+((bh>>16)&0xff)*t);
+  const g=Math.round(((ah>>8) &0xff)*(1-t)+((bh>>8) &0xff)*t);
+  const bl=Math.round((ah&0xff)*(1-t)+(bh&0xff)*t);
+  return '#'+[r,g,bl].map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+
+const _orbState = Array.from(document.querySelectorAll('.orb')).map((el,i) => ({
+  el,
+  pal:  ORB_PALETTES[i % ORB_PALETTES.length],
+  next: ORB_PALETTES[(i+4) % ORB_PALETTES.length],
+  t:    i * 0.33,
+  speed: 0.0006 + i * 0.0002,
+}));
+
+// set initial color — random palette
+_orbState.forEach(o => {
+  o.pal  = ORB_PALETTES[Math.floor(Math.random() * ORB_PALETTES.length)];
+  o.next = ORB_PALETTES[Math.floor(Math.random() * ORB_PALETTES.length)];
+  o.el.style.background = `radial-gradient(circle at 38% 38%,${o.pal[0]},${o.pal[1]})`;
+});
+
+// ── Pull to Refresh ──
+(function initPTR() {
+  let startY = 0, currentY = 0, pulling = false;
+  const THRESHOLD = 80;
+  const ind = document.getElementById('ptrIndicator');
+
+  function getActivePage() {
+    if (document.getElementById('admin').classList.contains('active')) return 'admin';
+    if (document.getElementById('search').classList.contains('active')) return 'search';
+    return null;
+  }
+
+  document.addEventListener('touchstart', e => {
+    if (!getActivePage()) return;
+    if (window.scrollY > 0) return;
+    startY = e.touches[0].clientY;
+    pulling = true;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', e => {
+    if (!pulling) return;
+    currentY = e.touches[0].clientY;
+    const diff = currentY - startY;
+    if (diff <= 0) return;
+    ind.style.top = (Math.min(diff * 0.4, 60)) + 'px';
+    ind.classList.add('visible');
+    if (diff >= THRESHOLD) ind.classList.add('ready');
+    else ind.classList.remove('ready');
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => {
+    if (!pulling) return;
+    pulling = false;
+    const diff = currentY - startY;
+    const page = getActivePage();
+    if (diff >= THRESHOLD && page) {
+      ind.classList.remove('ready');
+      ind.classList.add('loading');
+      if (page === 'admin') loadAllData();
+      else if (page === 'search') { clearSearch(); }
+      else if (page === 'resource') { resetResMore(); loadResources(); }
+      setTimeout(() => {
+        ind.classList.remove('visible', 'loading');
+        ind.style.top = '0px';
+      }, 1200);
+    } else {
+      ind.classList.remove('visible', 'ready');
+      ind.style.top = '0px';
+    }
+    startY = 0; currentY = 0;
+  });
+})();
+
+setInterval(() => {
+  _orbState.forEach(o => {
+    o.t += o.speed * 6;
+    if (o.t >= 1) {
+      o.t = 0;
+      o.pal  = o.next;
+      o.next = ORB_PALETTES[Math.floor(Math.random() * ORB_PALETTES.length)];
+    }
+    const c1 = _lerp(o.pal[0], o.next[0], o.t);
+    const c2 = _lerp(o.pal[1], o.next[1], o.t);
+    o.el.style.background = `radial-gradient(circle at 38% 38%,${c1},${c2})`;
+  });
+}, 100);
+</script>
+</body>
+</html>

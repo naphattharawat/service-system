@@ -1,0 +1,1 @@
+https://github.com/cpamav/mav-smart-service/blob/main/sw.js

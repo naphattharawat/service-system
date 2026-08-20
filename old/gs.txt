@@ -1,0 +1,583 @@
+const CONFIG = {
+  SHEET1_ID: "10Z9H15ca5gmaVcR9y-B_niYhtYxZiU_x7uzXGZEGwOc",
+  SHEET2_ID: "1PkmAXQinWaM1zAlFN4kAy39jJNu31tFb2sDM9mYz0zk",
+  SHEET1_NAME: "การตอบแบบฟอร์ม 1",
+  SHEET2_NAME: "การตอบแบบฟอร์ม 1",
+  USERS_NAME: "users",
+  LOG_NAME: "LoginLog",
+  FOLDER_ID: "1pKkFnghu8Fq3l8lPa0aq3pNDRsrbT-uSQnt7Zgbaqfpgcv00A5kkR_xb8_dXRlgb8Kfs30OM"
+};
+
+function doGet() {
+  return HtmlService.createTemplateFromFile('index')
+    .evaluate()
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+    .addMetaTag('viewport', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
+    .setTitle('งานเวชนิทัศน์และโสตฯ');
+}
+
+// ── doPost router สำหรับ GitHub Pages fetch ──
+function doPost(e) {
+  const body = JSON.parse(e.postData.contents);
+  const action = body.action;
+  let result;
+
+  try {
+    if      (action === 'submitService')      result = submitService(body.payload);
+    else if (action === 'searchData')         result = searchData(body.val);
+    else if (action === 'checkLogin')         result = checkLogin(body.u, body.p);
+    else if (action === 'getAllData')          result = getAllData();
+    else if (action === 'getUsers')           result = getUsers();
+    else if (action === 'updateJob')          result = updateJob(body.payload);
+    else if (action === 'addUser')            result = addUser(body.u, body.p, body.r, body.n);
+    else if (action === 'toggleUserStatus')   result = toggleUserStatus(body.user, body.currentStatus);
+    else if (action === 'deleteUser')         result = deleteUser(body.user);
+    else if (action === 'changeUserProfile')  result = changeUserProfile(body);
+    else if (action === 'getResources')       result = getResources(body.owner, body.role);
+    else if (action === 'getResourceList')    result = getResourceList();
+    else if (action === 'addResourceItem')    result = addResourceItem(body.name);
+    else if (action === 'deleteResourceItem') result = deleteResourceItem(body.name);
+    else if (action === 'getSystemStatus')    result = getSystemStatus();
+    else if (action === 'setSystemStatus')    result = setSystemStatus(body.open);
+    else result = { error: 'unknown action' };
+  } catch(err) {
+    result = { error: err.message };
+  }
+
+  return ContentService
+    .createTextOutput(JSON.stringify(result))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function formatDate(val) {
+  if (!val) return "";
+  if (val instanceof Date) {
+    const d = val.getDate().toString().padStart(2, '0');
+    const m = (val.getMonth() + 1).toString().padStart(2, '0');
+    const y = val.getFullYear();
+    return d + "/" + m + "/" + y;
+  }
+  return val.toString();
+}
+
+// ─── ระบบค้นหางานฝั่งผู้ใช้ ──────────────────────────────────────────
+function searchData(input) {
+  if (!input) return null;
+  const sheet = SpreadsheetApp.openById(CONFIG.SHEET1_ID).getSheetByName(CONFIG.SHEET1_NAME);
+  const data = sheet.getDataRange().getValues();
+  input = input.toString().trim().toLowerCase();
+
+  const buildResult = (row) => {
+    let st = String(row[1] || "").trim();
+    if (st === "" || st === "#N/A" || st === "#REF!") st = "รอดำเนินการ";
+
+    return {
+      id: row[0],
+      name: `${row[4] || ""} ${row[5] || ""} ${row[6] || ""}`.trim(),
+      group: (row[7] || "").toString(),
+      department: (row[8] || "").toString(),
+      type: (row[15] || "").toString(),
+      orderDate: formatDate(row[16]),
+      detail: (row[17] || "").toString(),
+      fileUrl: (row[18] || "").toString(),
+      needDate: formatDate(row[19]),
+      phone: (row[20] || "").toString(),
+      status: st,
+      owner: (row[21] || "-").toString(),
+      note: (row[22] || "").toString()
+    };
+  };
+
+  if (!isNaN(input) && input !== "") {
+    const id = parseInt(input, 10);
+    for (let i = 1; i < data.length; i++) {
+      if (parseInt(data[i][0], 10) === id) return buildResult(data[i]);
+    }
+  } else {
+    for (let i = data.length - 1; i > 0; i--) {
+      const fullName = `${data[i][4] || ""} ${data[i][5] || ""} ${data[i][6] || ""}`.trim().toLowerCase();
+      if (fullName.includes(input)) return buildResult(data[i]);
+    }
+  }
+  return null;
+}
+
+// ─── ดึงข้อมูลงานทั้งหมด (Admin/Staff) ─────────────────────────────────────
+function getAllData() {
+  try {
+    const sheet = SpreadsheetApp.openById(CONFIG.SHEET1_ID).getSheetByName(CONFIG.SHEET1_NAME);
+    if (!sheet) return [];
+    const data = sheet.getDataRange().getValues();
+    const result = [];
+
+    for (let i = 1; i < data.length; i++) {
+      if (!data[i][0] || isNaN(data[i][0])) continue;
+      
+      // จัดการสถานะ #N/A หรือว่าง
+      let st = String(data[i][1] || "").trim();
+      if (st === "" || st === "#N/A" || st === "#REF!") st = "รอดำเนินการ";
+
+      // ดึง Timestamp สำหรับฟิลเตอร์ช่วงวันที่
+      let ts = new Date(data[i][3]).getTime();
+      if(isNaN(ts)) ts = 0;
+
+      result.push({
+        idNum: parseInt(data[i][0], 10), // สำหรับเรียงลำดับ
+        id: String(data[i][0]).trim(),
+        status: st,
+        timestamp: ts,
+        prefix: String(data[i][4] || "").trim(),
+        name: String(data[i][5] || "").trim(),
+        lastname: String(data[i][6] || "").trim(),
+        fullName: `${data[i][4] || ""} ${data[i][5] || ""} ${data[i][6] || ""}`.trim(),
+        group: String(data[i][7] || "").trim(),
+        department: String(data[i][8] || "").trim(),
+        jobType: String(data[i][15] || "").trim(),
+        orderDate: formatDate(data[i][16]),
+        detail: String(data[i][17] || "").trim(),
+        fileUrl: String(data[i][18] || "").trim(),
+        needDate: formatDate(data[i][19]),
+        phone: String(data[i][20] || "").trim(),
+        owner: String(data[i][21] || "-").trim(),
+        note: String(data[i][22] || "").trim()
+      });
+    }
+    
+    // บังคับเรียงจาก ใหม่ไปเก่า เสมอ (Descending)
+    result.sort((a, b) => b.idNum - a.idNum);
+    
+    return result;
+  } catch(e) {
+    return [];
+  }
+}
+
+// ─── บันทึกฟอร์มขอรับบริการ ────────────────────────────
+function submitService(data) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sheet = SpreadsheetApp.openById(CONFIG.SHEET1_ID).getSheetByName(CONFIG.SHEET1_NAME);
+    const lastRow = sheet.getLastRow();
+    const colA = sheet.getRange(1, 1, lastRow || 1, 1).getValues();
+    let lastId = 0;
+    
+    for (let r = colA.length - 1; r >= 0; r--) {
+      if (colA[r][0] && !isNaN(colA[r][0])) {
+        lastId = Number(colA[r][0]);
+        break;
+      }
+    }
+    const newId = lastId + 1;
+
+    const row = new Array(24).fill("");
+    let fileUrl = "";
+    if (data.files && data.files.length > 0) {
+      const folder = DriveApp.getFolderById(CONFIG.FOLDER_ID);
+      const subFolder = folder.createFolder('#' + newId);
+      const fileUrls = data.files.map(f => {
+        const blob = Utilities.newBlob(Utilities.base64Decode(f.data), f.type, f.name);
+        const file = subFolder.createFile(blob);
+        file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+        return file.getUrl();
+      });
+      subFolder.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      row[18] = subFolder.getUrl();
+      fileUrl = fileUrls.join(', ');
+    } else if (data.file) {
+      const blob = Utilities.newBlob(Utilities.base64Decode(data.file.data), data.file.type, data.file.name);
+      const folder = DriveApp.getFolderById(CONFIG.FOLDER_ID);
+      const subFolder = folder.createFolder('#' + newId);
+      subFolder.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      const file = subFolder.createFile(blob);
+      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      row[18] = subFolder.getUrl();
+      fileUrl = file.getUrl();
+    }
+
+    row[0] = newId;                        // A
+    row[1] = "รอดำเนินการ";               // B
+    row[3] = new Date();                   // D
+    row[4] = data.prefix || "";            // E
+    row[5] = data.name || "";              // F
+    row[6] = data.lastname || "";          // G
+    row[7] = data.group || "";             // H
+    row[8] = data.department || "";        // I
+    row[15] = data.type || "";             // P
+    row[16] = data.orderDate || "";        // Q
+    row[17] = data.detail || "";           // R
+    if (!row[18]) row[18] = fileUrl;       // S
+    row[19] = data.needDate || "";         // T
+    row[20] = "'" + (data.phone || "");    // U
+    row[21] = "-";                         // V
+    row[22] = "";                          // W
+
+    sheet.appendRow(row);
+    sheet.autoResizeRows(sheet.getLastRow(), 1);
+    return { id: newId, fileUrl: fileUrl };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+// ─── อัปเดตงาน (Admin & Staff) ─────────────────────────
+function updateJob(payload) {
+  const ss1 = SpreadsheetApp.openById(CONFIG.SHEET1_ID);
+  const sheet1 = ss1.getSheetByName(CONFIG.SHEET1_NAME);
+  const data1 = sheet1.getDataRange().getValues();
+  
+  let rowIndex = -1;
+  for (let i = 1; i < data1.length; i++) {
+    if (String(data1[i][0]).trim() === String(payload.id).trim()) {
+      rowIndex = i + 1;
+      break;
+    }
+  }
+  if (rowIndex === -1) throw new Error("ไม่พบข้อมูลงานในระบบ");
+
+  if (payload.status) sheet1.getRange(rowIndex, 2).setValue(payload.status);
+  if (payload.owner) sheet1.getRange(rowIndex, 22).setValue(payload.owner);
+  if (payload.note !== undefined) sheet1.getRange(rowIndex, 23).setValue(payload.note);
+  sheet1.autoResizeRows(rowIndex, 1);
+
+  if (payload.status === "เสร็จสิ้น") {
+    const ss2 = SpreadsheetApp.openById(CONFIG.SHEET2_ID);
+    const sheet2 = ss2.getSheetByName(CONFIG.SHEET2_NAME);
+    const res = payload.resources || [{},{},{}];
+
+    const newRow = [
+      payload.id, new Date(), "เสร็จสิ้น", payload.doneDate || "",
+      res[0].name || "", res[0].qty || "", res[0].color || "", res[0].size || "",
+      res[1].name || "", res[1].qty || "", res[1].color || "", res[1].size || "",
+      res[2].name || "", res[2].qty || "", res[2].color || "", res[2].size || ""
+    ];
+
+    // เช็คว่ามี jobId นี้ใน sheet2 แล้วมั้ย
+    const data2 = sheet2.getDataRange().getValues();
+    let existRow = -1;
+    for (let i = 1; i < data2.length; i++) {
+      if (String(data2[i][0]).trim() === String(payload.id).trim()) {
+        existRow = i + 1;
+        break;
+      }
+    }
+
+    if (existRow !== -1) {
+      // update แถวเดิม
+      sheet2.getRange(existRow, 1, 1, newRow.length).setValues([newRow]);
+    } else {
+      // สร้างแถวใหม่
+      sheet2.appendRow(newRow);
+    }
+  }
+  return true;
+}
+
+// ─── ระบบ Login และ จัดการ User ───────────────────────
+function checkLogin(user, pass) {
+  const sheet = SpreadsheetApp.openById(CONFIG.SHEET1_ID).getSheetByName(CONFIG.USERS_NAME);
+  const data = sheet.getDataRange().getValues();
+  user = String(user).trim();
+  pass = String(pass).trim();
+
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][0]).trim() === user &&
+        String(data[i][1]).trim() === pass &&
+        String(data[i][4]).toLowerCase() === "true") {
+      // บันทึก login log
+      try {
+        const logSheet = SpreadsheetApp.openById(CONFIG.SHEET1_ID).getSheetByName(CONFIG.LOG_NAME);
+        if (logSheet) {
+          logSheet.appendRow([
+            new Date(),
+            data[i][0],
+            data[i][3],
+            data[i][2],
+            'Web'
+          ]);
+        }
+      } catch(e) {}
+      return { success: true, user: data[i][0], role: data[i][2], name: data[i][3] };
+    }
+  }
+  return { success: false };
+}
+
+function getUsers() {
+  const sheet = SpreadsheetApp.openById(CONFIG.SHEET1_ID).getSheetByName(CONFIG.USERS_NAME);
+  const data = sheet.getDataRange().getValues();
+  const result = [];
+  for (let i = 1; i < data.length; i++) {
+    result.push({
+      user: data[i][0],
+      role: data[i][2],
+      name: data[i][3],
+      active: data[i][4]
+    });
+  }
+  return result;
+}
+
+function addUser(user, pass, role, name) {
+  const sheet = SpreadsheetApp.openById(CONFIG.SHEET1_ID).getSheetByName(CONFIG.USERS_NAME);
+  const data = sheet.getDataRange().getValues();
+  user = String(user).trim();
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][0]).trim() === user) throw new Error("มี Username นี้ในระบบแล้ว");
+  }
+  sheet.appendRow([user, pass, role, name, true]);
+  return true;
+}
+
+function toggleUserStatus(user, currentActive) {
+  const sheet = SpreadsheetApp.openById(CONFIG.SHEET1_ID).getSheetByName(CONFIG.USERS_NAME);
+  const data = sheet.getDataRange().getValues();
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][0]).trim() === String(user).trim()) {
+      sheet.getRange(i + 1, 5).setValue(!currentActive);
+      return true;
+    }
+  }
+  throw new Error("ไม่พบ User");
+}
+
+function deleteUser(user) {
+  var sheet = SpreadsheetApp.openById(CONFIG.SHEET1_ID).getSheetByName(CONFIG.USERS_NAME);
+  var data = sheet.getDataRange().getValues();
+  user = String(user).trim();
+  
+  // หาบรรทัดที่เป็น user นั้นแล้วลบออก (ลูปถอยหลังกัน row ขยับ)
+  for (var i = data.length - 1; i >= 1; i--) {
+    if (String(data[i][0]).trim() === user) {
+      sheet.deleteRow(i + 1); // +1 เพราะ array เริ่มที่ 0 แต่ row ของ sheet เริ่มที่ 1
+      return true;
+    }
+  }
+  return false;
+}
+
+function getResources(owner, role) {
+  const ss1 = SpreadsheetApp.openById(CONFIG.SHEET1_ID);
+  const sheet1 = ss1.getSheetByName(CONFIG.SHEET1_NAME);
+  const jobs = sheet1.getDataRange().getValues();
+
+  // map jobId → owner
+  const ownerMap = {};
+  for (let i = 1; i < jobs.length; i++) {
+    ownerMap[String(jobs[i][0]).trim()] = String(jobs[i][21] || '').trim();
+  }
+
+  const ss2 = SpreadsheetApp.openById(CONFIG.SHEET2_ID);
+  const sheet2 = ss2.getSheetByName(CONFIG.SHEET2_NAME);
+  const rows = sheet2.getDataRange().getValues();
+
+  const result = [];
+  for (let i = 1; i < rows.length; i++) {
+    const r = rows[i];
+    const jobId = String(r[0]).trim();
+    const jobOwner = ownerMap[jobId] || '';
+
+    // staff เห็นเฉพาะงานตัวเอง, admin เห็นทั้งหมด
+    if (role !== 'admin' && jobOwner !== owner) continue;
+
+    for (let j = 0; j < 3; j++) {
+      const name = String(r[4 + j*4] || '').trim();
+      if (!name) continue;
+      result.push({
+        jobId,
+        jobOwner,
+        doneDate: r[3] ? formatDate(r[3]) : '',
+        name,
+        qty:   String(r[5 + j*4] || '').trim(),
+        color: String(r[6 + j*4] || '').trim(),
+        size:  String(r[7 + j*4] || '').trim(),
+      });
+    }
+  }
+  return result;
+}
+
+function changeUserProfile(body) {
+  const sheet = SpreadsheetApp.openById(CONFIG.SHEET1_ID).getSheetByName(CONFIG.USERS_NAME);
+  const data = sheet.getDataRange().getValues();
+  const user = String(body.user).trim();
+  const oldPw = String(body.oldPw).trim();
+  const newPw = body.newPw ? String(body.newPw).trim() : null;
+  const newUser = body.newUser ? String(body.newUser).trim() : null;
+
+  let rowIndex = -1;
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][0]).trim() === user) { rowIndex = i; break; }
+  }
+  if (rowIndex === -1) return { success: false, msg: 'ไม่พบบัญชีผู้ใช้' };
+  if (String(data[rowIndex][1]).trim() !== oldPw) return { success: false, msg: 'รหัสผ่านปัจจุบันไม่ถูกต้อง' };
+
+  if (newUser && newUser !== user) {
+    for (let i = 1; i < data.length; i++) {
+      if (i !== rowIndex && String(data[i][0]).trim() === newUser) {
+        return { success: false, msg: 'Username นี้มีคนใช้แล้ว' };
+      }
+    }
+    sheet.getRange(rowIndex + 1, 1).setValue(newUser);
+  }
+  if (newPw) sheet.getRange(rowIndex + 1, 2).setValue(newPw);
+
+  return { success: true };
+}
+
+
+// ─── จัดการรายการทรัพยากร (ResourceList sheet) ────────────────────────
+function getOrCreateResourceSheet() {
+  const ss = SpreadsheetApp.openById(CONFIG.SHEET2_ID);
+  let sheet = ss.getSheetByName('ResourceList');
+  if (!sheet) {
+    sheet = ss.insertSheet('ResourceList');
+    sheet.getRange(1, 1).setValue('name');
+    // seed ค่าเริ่มต้น
+    const defaults = [
+      'อิงค์เจ็ท A4','อิงค์เจ็ท A3','กระดาษ A4','กระดาษ A3','กระดาษ A5',
+      'กระดาษโฟโต้ A4','กระดาษโฟโต้','กระดาษการ์ดขาว 180 แกรม','กระดาษการ์ด',
+      'กระดาษโรเนียว A4','กระดาษโรเนียว','กระดาษ','สติ๊กเกอร์','กระดาษสติ๊กเกอร์ A4',
+      'พลาสติกเคลือบ A3','พลาสติกเคลือบ A4','พลาสติกเคลือบ A5','พลาสติกเคลือบ',
+      'อะคริลิค','ฟิวเจอร์บอร์ด','ใบประกาศ'
+    ];
+    defaults.forEach((n, i) => sheet.getRange(i + 2, 1).setValue(n));
+  }
+  return sheet;
+}
+
+function getResourceList() {
+  const sheet = getOrCreateResourceSheet();
+  const data = sheet.getDataRange().getValues();
+  return data.slice(1).map(r => String(r[0]).trim()).filter(Boolean);
+}
+
+function addResourceItem(name) {
+  name = String(name).trim();
+  if (!name) throw new Error('ชื่อว่าง');
+  const sheet = getOrCreateResourceSheet();
+  const data = sheet.getDataRange().getValues();
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][0]).trim() === name) throw new Error('มีรายการนี้แล้ว');
+  }
+  sheet.appendRow([name]);
+  return true;
+}
+
+function deleteResourceItem(name) {
+  name = String(name).trim();
+  const sheet = getOrCreateResourceSheet();
+  const data = sheet.getDataRange().getValues();
+  for (let i = data.length - 1; i >= 1; i--) {
+    if (String(data[i][0]).trim() === name) {
+      sheet.deleteRow(i + 1);
+      return true;
+    }
+  }
+  throw new Error('ไม่พบรายการ');
+}
+
+// ─── จัดการสถานะระบบ ────────────────────────────────────────────────────
+function getOrCreateSettingsSheet() {
+  const ss = SpreadsheetApp.openById(CONFIG.SHEET1_ID);
+  let sheet = ss.getSheetByName('Settings');
+  if (!sheet) {
+    sheet = ss.insertSheet('Settings');
+    sheet.getRange(1, 1).setValue('key');
+    sheet.getRange(1, 2).setValue('value');
+    sheet.getRange(2, 1).setValue('systemOpen');
+    sheet.getRange(2, 2).setValue('false');
+  }
+  return sheet;
+}
+
+function getSystemStatus() {
+  const sheet = getOrCreateSettingsSheet();
+  const data = sheet.getDataRange().getValues();
+  let isOpen = false;
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][0]).trim() === 'systemOpen') {
+      isOpen = String(data[i][1]).trim() === 'true';
+      break;
+    }
+  }
+
+  // เช็ควันหยุดราชการไทย
+  let holiday = false;
+  let holidayName = '';
+  try {
+    const cal = CalendarApp.getCalendarById('th.th#holiday@group.v.calendar.google.com');
+    if (cal) {
+      const events = cal.getEventsForDay(new Date());
+      if (events.length > 0) {
+        holiday = true;
+        holidayName = events[0].getTitle();
+      }
+    }
+  } catch(e) {}
+
+  return { open: isOpen, holiday: holiday, holidayName: holidayName };
+}
+
+function setSystemStatus(open) {
+  const sheet = getOrCreateSettingsSheet();
+  const data = sheet.getDataRange().getValues();
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][0]).trim() === 'systemOpen') {
+      sheet.getRange(i + 1, 2).setValue(open ? 'true' : 'false');
+      return { open: open };
+    }
+  }
+  sheet.appendRow(['systemOpen', open ? 'true' : 'false']);
+  return { open: open };
+}
+
+function onFormSubmit(e) {
+  const sheet = SpreadsheetApp.openById(CONFIG.SHEET1_ID).getSheetByName(CONFIG.SHEET1_NAME);
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return;
+
+  // เติม ID ให้แถวที่ว่าง
+  const colA = sheet.getRange(1, 1, lastRow, 1).getValues();
+  let maxId = 0;
+  for (let i = 1; i < colA.length; i++) {
+    const val = Number(colA[i][0]);
+    if (!isNaN(val) && val > maxId) maxId = val;
+  }
+  for (let i = 1; i < colA.length; i++) {
+    if (!colA[i][0] || isNaN(Number(colA[i][0]))) {
+      maxId++;
+      sheet.getRange(i + 1, 1).setValue(maxId);
+    }
+  }
+
+  // ย้ายแถวที่ Google Form แทรกบนสุด (แถว 2) ไปท้ายสุด
+  const currentLastRow = sheet.getLastRow();
+  sheet.moveRows(sheet.getRange(2, 1), currentLastRow + 1);
+}
+
+function onEdit(e) {
+  try {
+    const sheet = e.range.getSheet();
+    sheet.autoResizeRows(e.range.getRow(), 1);
+  } catch(err) {}
+}
+
+function getAdminData() {
+  const ss = SpreadsheetApp.openById(CONFIG.SHEET1_ID);
+  const sheet = ss.getSheetByName(CONFIG.SHEET1_NAME);
+  const data = sheet.getDataRange().getValues();
+  // ตัดหัวตารางออกแล้วส่งข้อมูลไป
+  return data.slice(1); 
+}
+// ─── ทดสอบดึงชื่อวันหยุดราชการวันนี้ ───────────────────────────────────
+function testHoliday() {
+  const cal = CalendarApp.getCalendarById('th.th#holiday@group.v.calendar.google.com');
+  const today = new Date();
+  const events = cal.getEventsForDay(today);
+  if (events.length > 0) {
+    Logger.log('วันหยุด: ' + events[0].getTitle());
+  } else {
+    Logger.log('ไม่ใช่วันหยุดราชการ');
+  }
+}
