@@ -44,9 +44,17 @@ export const config = {
   lineNotify: {
     // MOPH's internal LINE notify gateway (not the old public LINE Notify
     // service) — client-key/secret-key identify the preconfigured OA/group
-    // this broadcasts to, no per-recipient "to" field needed.
+    // this broadcasts to, no per-recipient "to" field needed. Two separate
+    // credential pairs point at two separate LINE destinations: one for new
+    // incoming service requests, one for job-assignment notices.
     url: () => process.env.LINE_NOTIFY_URL || "https://morpromt2f.moph.go.th/api/notify/send",
-    clientKey: () => required("LINE_NOTIFY_CLIENT_KEY"),
-    secretKey: () => required("LINE_NOTIFY_SECRET_KEY"),
+    newJob: {
+      clientKey: () => required("LINE_NOTIFY_CLIENT_KEY"),
+      secretKey: () => required("LINE_NOTIFY_SECRET_KEY"),
+    },
+    jobAssigned: {
+      clientKey: () => required("LINE_NOTIFY_ASSIGN_CLIENT_KEY"),
+      secretKey: () => required("LINE_NOTIFY_ASSIGN_SECRET_KEY"),
+    },
   },
 };

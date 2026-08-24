@@ -6,14 +6,19 @@ interface LineMessage {
   [key: string]: unknown;
 }
 
-/** Sends one or more LINE messages via the MOPH notify gateway. */
-export async function sendLineNotify(messages: LineMessage[]): Promise<void> {
+interface LineCredentials {
+  clientKey: string;
+  secretKey: string;
+}
+
+/** Sends one or more LINE messages via the MOPH notify gateway, using the given destination's credentials. */
+async function sendLineNotify(messages: LineMessage[], creds: LineCredentials): Promise<void> {
   const res = await fetch(config.lineNotify.url(), {
     method: "POST",
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      "client-key": config.lineNotify.clientKey(),
-      "secret-key": config.lineNotify.secretKey(),
+      "client-key": creds.clientKey,
+      "secret-key": creds.secretKey,
     },
     body: JSON.stringify({ messages }),
   });
@@ -54,9 +59,12 @@ function infoRow(label: string, value: string): FlexBox {
 // Bueng Kan Hospital's own logo asset, and this app has no public URL of
 // its own yet (still running locally) for LINE's servers to fetch a
 // replacement from — add one once deployed.
-function buildJobFlexMessage(jobId: number, payload: SubmitServicePayload): LineMessage {
-  const fullName = `${payload.prefix} ${payload.name} ${payload.lastname}`.trim();
-
+function buildFlexBubbleMessage(opts: {
+  altText: string;
+  headline: string;
+  bodyText: string;
+  rows: [string, string][];
+}): LineMessage {
   const bubble = {
     type: "bubble",
     size: "mega",
@@ -91,7 +99,7 @@ function buildJobFlexMessage(jobId: number, payload: SubmitServicePayload): Line
           contents: [
             {
               type: "text",
-              text: `มีคำขอรับบริการใหม่ #${jobId}`,
+              text: opts.headline,
               weight: "bold",
               size: "lg",
               align: "center",
@@ -107,7 +115,7 @@ function buildJobFlexMessage(jobId: number, payload: SubmitServicePayload): Line
           contents: [
             {
               type: "text",
-              text: "งานเวชนิทัศน์และโสตทัศนศึกษา ได้รับคำขอรับบริการใหม่ กรุณาตรวจสอบและดำเนินการ",
+              text: opts.bodyText,
               align: "center",
               gravity: "center",
               size: "15px",
@@ -148,27 +156,57 @@ function buildJobFlexMessage(jobId: number, payload: SubmitServicePayload): Line
           layout: "vertical",
           margin: "lg",
           spacing: "sm",
-          contents: [
-            infoRow("ผู้ขอ", fullName),
-            infoRow("หน่วยงาน", payload.department),
-            infoRow("ประเภทงาน", payload.type),
-            infoRow("รายละเอียด", payload.detail),
-            infoRow("ต้องการภายใน", payload.needDate),
-            infoRow("เบอร์ติดต่อ", payload.phone),
-          ],
+          contents: opts.rows.map(([label, value]) => infoRow(label, value)),
         },
       ],
     },
   };
 
-  return {
-    type: "flex",
-    altText: `มีคำขอรับบริการใหม่ #${jobId}: ${fullName}`,
-    contents: bubble,
-  };
+  return { type: "flex", altText: opts.altText, contents: bubble };
 }
 
-/** Notifies the LINE group about a newly submitted service request. Best-effort — callers should not let a failure here fail the submission. */
+/** Notifies the "new request" LINE destination about a newly submitted service request. Best-effort — callers should not let a failure here fail the submission. */
 export async function notifyNewJob(jobId: number, payload: SubmitServicePayload): Promise<void> {
-  await sendLineNotify([buildJobFlexMessage(jobId, payload)]);
+  const fullName = `${payload.prefix} ${payload.name} ${payload.lastname}`.trim();
+  const message = buildFlexBubbleMessage({
+    altText: `มีคำขอรับบริการใหม่ #${jobId}: ${fullName}`,
+    headline: `มีคำขอรับบริการใหม่ #${jobId}`,
+    bodyText: "งานเวชนิทัศน์และโสตทัศนศึกษา ได้รับคำขอรับบริการใหม่ กรุณาตรวจสอบและดำเนินการ",
+    rows: [
+      ["ผู้ขอ", fullName],
+      ["หน่วยงาน", payload.department],
+      ["ประเภทงาน", payload.type],
+      ["รายละเอียด", payload.detail],
+      ["ต้องการภายใน", payload.needDate],
+      ["เบอร์ติดต่อ", payload.phone],
+    ],
+  });
+  await sendLineNotify([message], {
+    clientKey: config.lineNotify.newJob.clientKey(),
+    secretKey: config.lineNotify.newJob.secretKey(),
+  });
+}
+
+/** Notifies the separate "job assigned" LINE destination when a job's owner/assignee changes. Best-effort. */
+export async function notifyJobAssigned(
+  jobId: string,
+  ownerNames: string,
+  job: { fullName: string; department: string; jobType: string; needDate: string }
+): Promise<void> {
+  const message = buildFlexBubbleMessage({
+    altText: `งาน #${jobId} ได้รับมอบหมายให้ ${ownerNames}`,
+    headline: `งานได้รับมอบหมาย #${jobId}`,
+    bodyText: `งาน #${jobId} ถูกมอบหมายให้ ${ownerNames} แล้ว กรุณาตรวจสอบและดำเนินการ`,
+    rows: [
+      ["ผู้รับผิดชอบ", ownerNames],
+      ["ผู้ขอ", job.fullName],
+      ["หน่วยงาน", job.department],
+      ["ประเภทงาน", job.jobType],
+      ["ต้องการภายใน", job.needDate],
+    ],
+  });
+  await sendLineNotify([message], {
+    clientKey: config.lineNotify.jobAssigned.clientKey(),
+    secretKey: config.lineNotify.jobAssigned.secretKey(),
+  });
 }

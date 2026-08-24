@@ -10,16 +10,23 @@ import "flatpickr/dist/flatpickr.min.css";
 export function DatePickerInput({
   id,
   placeholder,
+  defaultValue,
   onChange,
   style,
 }: {
   id?: string;
   placeholder: string;
+  /** Initial date, formatted "d/m/Y" (matching dateFormat below) — e.g. to prefill from a previously-saved value. */
+  defaultValue?: string;
   onChange: (value: string) => void;
   style?: React.CSSProperties;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const onChangeRef = useRef(onChange);
+  // Captured once, not reactive — this is meant for one-time initial prefill
+  // (e.g. re-opening a completed job's saved done-date), consistent with how
+  // callers key={}-remount this component when the "record" it edits changes.
+  const defaultValueRef = useRef(defaultValue);
 
   useEffect(() => {
     onChangeRef.current = onChange;
@@ -34,6 +41,7 @@ export function DatePickerInput({
       dateFormat: "d/m/Y",
       disableMobile: true,
       clickOpens: false,
+      defaultDate: defaultValueRef.current || undefined,
       onChange: (_dates, dateStr) => onChangeRef.current(dateStr),
     });
 

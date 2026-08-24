@@ -595,6 +595,27 @@ body.dark #notifModal > div > div:first-child {
   box-shadow: 0 12px 48px rgba(100,130,220,.1), 0 2px 8px rgba(0,0,0,.03), inset 0 1.5px 0 rgba(255,255,255,1), inset 0 0 0 0.5px rgba(255,255,255,.5) !important;
 }
 
+/* Fallback for browsers/environments where backdrop-filter is unsupported or
+   disabled (common on locked-down desktops, VDI without GPU passthrough,
+   older browser builds) — without it, the ~42%-opacity glass background
+   above renders as a near-invisible tint over the animated gradient
+   background, making modal text unreadable. This raises the background to
+   solidly opaque instead whenever blur isn't actually going to apply.
+   #notifModal's content box is styled inline (not via this stylesheet), so
+   it needs !important here to win over those inline styles too. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  #editModal > div, #changePwModal > div,
+  #viewResModal > div, #resItemModal > div,
+  #notifModal > div {
+    background: rgba(255,255,255,.97) !important;
+  }
+  body.dark #editModal > div, body.dark #changePwModal > div,
+  body.dark #viewResModal > div, body.dark #resItemModal > div,
+  body.dark #notifModal > div {
+    background: rgba(14,22,44,.97) !important;
+  }
+}
+
 /* ─────────────────────────────────────────────
    JOB CARDS
    ───────────────────────────────────────────── */

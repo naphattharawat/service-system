@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal } from "@/components/Modal";
 import { DatePickerInput } from "@/components/DatePickerInput";
 import { OwnerTagPicker } from "@/components/OwnerTagPicker";
@@ -36,8 +36,45 @@ export function EditJobModal({
   const [note, setNote] = useState(job?.note ?? "");
   const [ownerCsv, setOwnerCsv] = useState(job?.owner && job.owner !== "-" ? job.owner : "");
   const [doneDate, setDoneDate] = useState("");
+  const [doneDatePrefill, setDoneDatePrefill] = useState("");
   const [resources, setResources] = useState<ResourceLineItem[]>(EMPTY_RESOURCES);
   const [saving, setSaving] = useState(false);
+  // Gates rendering the resources section for an already-completed job until
+  // its previously-saved lines have loaded — the done-date field is a
+  // flatpickr input that only reads its initial value once at mount, so it
+  // must not mount before we know what to prefill it with.
+  const [resourcesLoading, setResourcesLoading] = useState(
+    () => !!job && normalizeStatus(job.status) === "เสร็จสิ้น"
+  );
+
+  // Re-opening an already-completed job: load its previously-saved resource
+  // lines/done-date instead of starting the form blank, so they're editable
+  // rather than just visible-once at close time.
+  useEffect(() => {
+    if (!job || normalizeStatus(job.status) !== "เสร็จสิ้น") return;
+    let cancelled = false;
+    api
+      .getResources()
+      .then((data) => {
+        if (cancelled) return;
+        const items = data.filter((r) => String(r.jobId) === String(job.id));
+        if (items.length === 0) return;
+        setResources((prev) =>
+          prev.map((r, i) => (items[i] ? { name: items[i].name, qty: items[i].qty, color: items[i].color, size: items[i].size } : r))
+        );
+        if (items[0].doneDate) {
+          setDoneDate(items[0].doneDate);
+          setDoneDatePrefill(items[0].doneDate);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setResourcesLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [job]);
 
   function setResourceField(i: number, field: keyof ResourceLineItem, value: string) {
     setResources((prev) => prev.map((r, idx) => (idx === i ? { ...r, [field]: value } : r)));
@@ -96,10 +133,14 @@ export function EditJobModal({
         <option value="ยกเลิก">ยกเลิก</option>
       </select>
 
-      {status === "เสร็จสิ้น" && (
+      {status === "เสร็จสิ้น" && resourcesLoading && (
+        <div style={{ marginTop: 14, fontSize: 13, color: "var(--t3)" }}>กำลังโหลดข้อมูลทรัพยากร...</div>
+      )}
+
+      {status === "เสร็จสิ้น" && !resourcesLoading && (
         <div>
           <span className="section-label" style={{ marginTop: 14, display: "block" }}>วันที่เสร็จสิ้น</span>
-          <DatePickerInput placeholder="เลือกวันที่" onChange={setDoneDate} style={{ marginTop: 4 }} />
+          <DatePickerInput placeholder="เลือกวันที่" defaultValue={doneDatePrefill} onChange={setDoneDate} style={{ marginTop: 4 }} />
           <span className="section-label" style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 5 }}>
             <span className="material-symbols-rounded" style={{ fontSize: 13, margin: 0, color: "var(--p)" }}>inventory_2</span> ทรัพยากรที่ใช้
           </span>

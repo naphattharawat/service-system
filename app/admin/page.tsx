@@ -10,7 +10,6 @@ import { Pagination } from "./_components/Pagination";
 import { AdminDonutChart } from "./_components/AdminDonutChart";
 import { JobCard } from "./_components/JobCard";
 import { EditJobModal } from "./_components/EditJobModal";
-import { ViewResourcesModal } from "./_components/ViewResourcesModal";
 import { statusColor, cleanStatusLabel } from "@/lib/status-colors";
 import { api } from "@/lib/api-client";
 import type { Job } from "@/types";
@@ -37,7 +36,6 @@ export default function AdminJobsPage() {
   const [searchId, setSearchId] = useState("");
   const [searchedJob, setSearchedJob] = useState<Job | null | undefined>(undefined);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
-  const [viewingJob, setViewingJob] = useState<Job | null>(null);
 
   const activeStaffNames = users.filter((u) => u.active).map((u) => u.name);
 
@@ -87,8 +85,7 @@ export default function AdminJobsPage() {
   }
 
   function openManage(job: Job) {
-    if (job.status.includes("เสร็จ")) setViewingJob(job);
-    else setEditingJob(job);
+    setEditingJob(job);
   }
 
   function doSearchId() {
@@ -182,11 +179,6 @@ export default function AdminJobsPage() {
         resourceList={resourceList}
         onClose={() => setEditingJob(null)}
         onSaved={refreshJobs}
-      />
-      <ViewResourcesModal
-        key={viewingJob ? `view-${viewingJob.id}` : "view-none"}
-        job={viewingJob}
-        onClose={() => setViewingJob(null)}
       />
     </PullToRefresh>
   );

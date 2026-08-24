@@ -1,7 +1,7 @@
 import { config } from "./config";
 import { appendRow, getSheetValues, updateCell, updateRow } from "./sheets";
 import { createFolder, fileUrl, folderUrl, shareAnyoneWithLinkView, uploadFile } from "./drive";
-import { notifyNewJob } from "./line-notify";
+import { notifyJobAssigned, notifyNewJob } from "./line-notify";
 import { submitLock } from "./submit-lock";
 import { dateCellToTimestamp, formatDateCell, nowAsSheetsDateTime } from "./date-utils";
 import { NotFoundError } from "./errors";
@@ -199,10 +199,30 @@ export async function updateJobRecord(payload: UpdateJobPayload): Promise<true> 
     }
   }
   if (rowIndex === -1) throw new NotFoundError("ไม่พบข้อมูลงานในระบบ");
+  const existingRow = rows[rowIndex - 1];
+  const previousOwner = String(existingRow[COL.OWNER] ?? "").trim();
 
   if (payload.status) await updateCell(sheetId, tab, rowIndex, COL_1.STATUS, payload.status);
   if (payload.owner) await updateCell(sheetId, tab, rowIndex, COL_1.OWNER, payload.owner);
   if (payload.note !== undefined) await updateCell(sheetId, tab, rowIndex, COL_1.NOTE, payload.note);
+
+  // Notify the separate "job assigned" LINE destination only on an actual
+  // ownership change (not every save — EditJobModal always resends the
+  // current owner value even when it hasn't changed). Best-effort, same as
+  // notifyNewJob: never let a notify failure fail the actual update.
+  const newOwner = payload.owner ? payload.owner.trim() : previousOwner;
+  if (payload.owner && newOwner !== previousOwner && newOwner !== "" && newOwner !== "-") {
+    try {
+      await notifyJobAssigned(String(payload.id), newOwner, {
+        fullName: fullName(existingRow),
+        department: String(existingRow[COL.DEPARTMENT] ?? ""),
+        jobType: String(existingRow[COL.JOB_TYPE] ?? ""),
+        needDate: formatDateCell(existingRow[COL.NEED_DATE]),
+      });
+    } catch (err) {
+      console.error("LINE assign-notify failed for job", payload.id, err);
+    }
+  }
 
   if (payload.status === "เสร็จสิ้น") {
     const sheet2Id = config.sheet2.id();
