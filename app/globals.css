@@ -585,35 +585,19 @@ body.dark #notifModal > div > div:first-child {
   border-bottom-color: rgba(255,255,255,.08) !important;
 }
 
-/* light mode modal glass */
+/* light mode modal glass — background is solidly opaque on its own (blur is
+   a nice-to-have enhancement, not load-bearing): backdrop-filter silently
+   no-ops on locked-down desktops/VDI without GPU passthrough even though the
+   browser reports the property as supported, so @supports can't detect that
+   case. A low-opacity panel there would be unreadable; a near-opaque one
+   looks right either way. */
 #editModal > div, #changePwModal > div,
 #viewResModal > div, #resItemModal > div {
-  background: rgba(255,255,255,.42) !important;
+  background: rgba(255,255,255,.94) !important;
   backdrop-filter: blur(60px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(60px) saturate(180%) !important;
   border: 1px solid rgba(255,255,255,.92) !important;
   box-shadow: 0 12px 48px rgba(100,130,220,.1), 0 2px 8px rgba(0,0,0,.03), inset 0 1.5px 0 rgba(255,255,255,1), inset 0 0 0 0.5px rgba(255,255,255,.5) !important;
-}
-
-/* Fallback for browsers/environments where backdrop-filter is unsupported or
-   disabled (common on locked-down desktops, VDI without GPU passthrough,
-   older browser builds) — without it, the ~42%-opacity glass background
-   above renders as a near-invisible tint over the animated gradient
-   background, making modal text unreadable. This raises the background to
-   solidly opaque instead whenever blur isn't actually going to apply.
-   #notifModal's content box is styled inline (not via this stylesheet), so
-   it needs !important here to win over those inline styles too. */
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  #editModal > div, #changePwModal > div,
-  #viewResModal > div, #resItemModal > div,
-  #notifModal > div {
-    background: rgba(255,255,255,.97) !important;
-  }
-  body.dark #editModal > div, body.dark #changePwModal > div,
-  body.dark #viewResModal > div, body.dark #resItemModal > div,
-  body.dark #notifModal > div {
-    background: rgba(14,22,44,.97) !important;
-  }
 }
 
 /* ─────────────────────────────────────────────
