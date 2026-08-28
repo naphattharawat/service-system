@@ -1,0 +1,70 @@
+<svg width="900" height="1450" viewBox="0 0 900 1450" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">LINE assignment card mockup</title>
+  <desc id="desc">Mockup for job assignment LINE notification showing full names in the details and compact names in the title area.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f4f7ff"/>
+      <stop offset="100%" stop-color="#eef3ff"/>
+    </linearGradient>
+    <linearGradient id="headerGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fdfdff"/>
+      <stop offset="100%" stop-color="#dfeaff"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="14" flood-color="#3b4d7b" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <rect width="900" height="1450" fill="url(#bg)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="80" y="90" width="740" height="1250" rx="34" fill="#ffffff"/>
+
+    <rect x="80" y="90" width="740" height="210" rx="34" fill="url(#headerGrad)"/>
+    <rect x="80" y="90" width="740" height="210" rx="34" fill="none" stroke="#dfe8ff" stroke-width="2"/>
+
+    <circle cx="140" cy="182" r="52" fill="#b8ccff" opacity="0.55"/>
+    <circle cx="205" cy="150" r="32" fill="#dfeaff" opacity="0.7"/>
+    <path d="M90 258 Q360 98 670 258 L670 300 L90 300 Z" fill="#bfd2ff" opacity="0.75"/>
+    <path d="M0 300 L900 300 L900 260 Q600 180 450 230 Q260 270 0 200 Z" fill="#d6e2ff" opacity="0.65"/>
+
+    <g>
+      <rect x="120" y="355" width="660" height="92" rx="18" fill="#dce7ff"/>
+      <text x="450" y="415" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#2d2d2d">งาน #1234</text>
+    </g>
+
+    <g>
+      <text x="450" y="510" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="23" fill="#3a3d46">งาน #1234 ถูกมอบหมายให้</text>
+      <text x="450" y="548" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="23" fill="#3a3d46">สมชาย ใจดี, พรชัย สมหวัง, กฤษฎา พูลผล</text>
+    </g>
+
+    <g>
+      <text x="450" y="610" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#111827">โรงพยาบาล</text>
+      <text x="450" y="650" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700" fill="#111827">สมชาย, พรชัย, กฤษฎา</text>
+    </g>
+
+    <line x1="120" y1="700" x2="780" y2="700" stroke="#ebedf4" stroke-width="3"/>
+
+    <g font-family="Arial, Helvetica, sans-serif" font-size="24" fill="#5a6477">
+      <text x="150" y="770">ผู้รับผิดชอบ</text>
+      <text x="480" y="770" font-weight="700" fill="#18243c">สมชาย ใจดี, พรชัย สมหวัง, กฤษฎา พูลผล</text>
+
+      <text x="150" y="835">ผู้ขอ</text>
+      <text x="480" y="835" font-weight="700" fill="#18243c">นภัสสร ใจดี</text>
+
+      <text x="150" y="900">หน่วยงาน</text>
+      <text x="480" y="900" font-weight="700" fill="#18243c">เวชนิทัศน์ฯ</text>
+
+      <text x="150" y="965">ประเภทงาน</text>
+      <text x="480" y="965" font-weight="700" fill="#18243c">ซ่อมเครื่องเสียง</text>
+
+      <text x="150" y="1030">ต้องการภายใน</text>
+      <text x="480" y="1030" font-weight="700" fill="#18243c">25 ส.ค. 2569</text>
+    </g>
+  </g>
+
+  <g>
+    <rect x="110" y="1200" width="680" height="70" rx="18" fill="#eef2ff"/>
+    <text x="450" y="1244" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#4f5f93">ภาพ mockup แสดงการ์ด LINE แทนการส่งจริง</text>
+  </g>
+</svg>

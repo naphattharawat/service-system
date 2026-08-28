@@ -31,6 +31,29 @@ async function sendLineNotify(messages: LineMessage[], creds: LineCredentials): 
 
 type FlexBox = Record<string, unknown>;
 
+function splitOwnerNames(ownerNames: string): string[] {
+  return ownerNames
+    .split(",")
+    .map((name) => name.trim())
+    .filter(Boolean);
+}
+
+function formatOwnerTitle(ownerNames: string): string {
+  const names = splitOwnerNames(ownerNames);
+
+  if (names.length === 0) return "";
+  if (names.length === 1) return names[0];
+
+  return names
+    .map((name) => name.split(/\s+/).filter(Boolean)[0] ?? name)
+    .join(", ");
+}
+
+function formatOwnerFull(ownerNames: string): string {
+  const names = splitOwnerNames(ownerNames);
+  return names.join(", ");
+}
+
 // One label/value line inside the details section, e.g. "หน่วยงาน: เวชนิทัศน์ฯ".
 function infoRow(label: string, value: string): FlexBox {
   return {
@@ -64,6 +87,8 @@ function buildFlexBubbleMessage(opts: {
   headline: string;
   bodyText: string;
   rows: [string, string][];
+  titleLine?: string;
+  hospitalName?: string;
 }): LineMessage {
   const bubble = {
     type: "bubble",
@@ -74,12 +99,42 @@ function buildFlexBubbleMessage(opts: {
       paddingAll: "0px",
       contents: [
         {
-          type: "image",
-          url: "https://cdns.yellow-idea.com/moph/20250602/moph-flex-header-1.png",
-          size: "full",
-          aspectMode: "cover",
-          aspectRatio: "3120:885",
+          type: "box",
+          layout: "horizontal",
+          background: { type: "linearGradient", angle: "100deg", startColor: "#2148B0", endColor: "#3C6FE0" },
+          paddingAll: "16px",
+          alignItems: "center",
+          spacing: "md",
+          contents: [
+            {
+              type: "box",
+              layout: "vertical",
+              width: "36px",
+              height: "36px",
+              cornerRadius: "18px",
+              backgroundColor: "#FFFFFF",
+              justifyContent: "center",
+              alignItems: "center",
+              contents: [
+                {
+                  type: "image",
+                  url: "https://m.cpa.go.th/service-system/logo.png",
+                  size: "26px",
+                  aspectMode: "cover",
+                },
+              ],
+            },
+            {
+              type: "box",
+              layout: "vertical",
+              contents: [
+                { type: "text", text: "โรงพยาบาลเจ้าพระยาอภัยภูเบศร", size: "13px", color: "#FFFFFF", weight: "bold" },
+                { type: "text", text: "งานเวชนิทัศน์และโสตทัศนศึกษา", size: "10px", color: "#DCE7FF" },
+              ],
+            },
+          ],
         },
+        { type: "box", layout: "vertical", height: "6px", backgroundColor: "#FFC24B", contents: [] },
       ],
     },
     body: {
@@ -124,32 +179,44 @@ function buildFlexBubbleMessage(opts: {
             },
           ],
         },
-        {
-          type: "box",
-          layout: "vertical",
-          margin: "sm",
-          contents: [
-            {
-              type: "text",
-              text: "โรงพยาบาล",
-              weight: "bold",
-              size: "18px",
-              align: "center",
-              scaling: true,
-              adjustMode: "shrink-to-fit",
-            },
-            {
-              type: "text",
-              text: "เจ้าพระยาอภัยภูเบศร",
-              weight: "bold",
-              size: "18px",
-              align: "center",
-              margin: "none",
-              scaling: true,
-              adjustMode: "shrink-to-fit",
-            },
-          ],
-        },
+        ...(opts.hospitalName || opts.titleLine
+          ? [
+              {
+                type: "box",
+                layout: "vertical",
+                margin: "sm",
+                contents: [
+                  ...(opts.hospitalName
+                    ? [
+                        {
+                          type: "text",
+                          text: opts.hospitalName,
+                          weight: "bold",
+                          size: "18px",
+                          align: "center",
+                          scaling: true,
+                          adjustMode: "shrink-to-fit",
+                        },
+                      ]
+                    : []),
+                  ...(opts.titleLine
+                    ? [
+                        {
+                          type: "text",
+                          text: opts.titleLine,
+                          weight: "bold",
+                          size: "18px",
+                          align: "center",
+                          margin: opts.hospitalName ? "none" : "0px",
+                          scaling: true,
+                          adjustMode: "shrink-to-fit",
+                        },
+                      ]
+                    : []),
+                ],
+              },
+            ]
+          : []),
         { type: "separator", margin: "18px" },
         {
           type: "box",
@@ -172,6 +239,7 @@ export async function notifyNewJob(jobId: number, payload: SubmitServicePayload)
     altText: `มีคำขอรับบริการใหม่ #${jobId}: ${fullName}`,
     headline: `มีคำขอรับบริการใหม่ #${jobId}`,
     bodyText: "งานเวชนิทัศน์และโสตทัศนศึกษา ได้รับคำขอรับบริการใหม่ กรุณาตรวจสอบและดำเนินการ",
+    hospitalName: payload.type,
     rows: [
       ["ผู้ขอ", fullName],
       ["หน่วยงาน", payload.department],
@@ -193,12 +261,15 @@ export async function notifyJobAssigned(
   ownerNames: string,
   job: { fullName: string; department: string; jobType: string; needDate: string }
 ): Promise<void> {
+  const titleOwnerNames = formatOwnerTitle(ownerNames);
+  const fullOwnerNames = formatOwnerFull(ownerNames);
   const message = buildFlexBubbleMessage({
-    altText: `งาน #${jobId} ได้รับมอบหมายให้ ${ownerNames}`,
-    headline: `งานได้รับมอบหมาย #${jobId}`,
-    bodyText: `งาน #${jobId} ถูกมอบหมายให้ ${ownerNames} แล้ว กรุณาตรวจสอบและดำเนินการ`,
+    altText: `งาน #${jobId} ได้รับมอบหมายให้ ${fullOwnerNames}`,
+    headline: `#${jobId}`,
+    bodyText: `งาน #${jobId} ถูกมอบหมายให้`,
+    titleLine: titleOwnerNames,
     rows: [
-      ["ผู้รับผิดชอบ", ownerNames],
+      ["ผู้รับผิดชอบ", fullOwnerNames],
       ["ผู้ขอ", job.fullName],
       ["หน่วยงาน", job.department],
       ["ประเภทงาน", job.jobType],

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Kanit } from "next/font/google";
+import localFont from "next/font/local";
 import { DarkModeInit } from "@/components/DarkModeInit";
 import { OrbBackground } from "@/components/OrbBackground";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
@@ -11,6 +12,17 @@ const kanit = Kanit({
   weight: ["300", "400", "500", "600"],
   style: ["normal", "italic"],
   variable: "--font-kanit",
+  display: "swap",
+});
+
+// Self-hosted instead of loaded from fonts.gstatic.com at runtime — some
+// networks (including this hospital's) allowlist fonts.googleapis.com but
+// block fonts.gstatic.com, which silently breaks every icon in the app.
+// Run `node scripts/fetch-material-symbols.mjs` to (re-)download the font
+// file into app/fonts/ from a machine with normal internet access.
+const materialSymbols = localFont({
+  src: "./fonts/material-symbols-rounded.woff2",
+  variable: "--font-material-symbols",
   display: "swap",
 });
 
@@ -46,17 +58,9 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="th" className={kanit.variable}>
+    <html lang="th" className={`${kanit.variable} ${materialSymbols.variable}`}>
       <body suppressHydrationWarning>
         <DarkModeInit />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        {/* App Router root layout is the correct single place for this — the
-            no-page-custom-font rule's advice is Pages-Router-specific. */}
-        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,300,0,0&display=swap"
-        />
         <OrbBackground />
         <ServiceWorkerRegister />
         {children}
