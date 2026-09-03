@@ -33,7 +33,12 @@ const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri)
 const authUrl = oauth2Client.generateAuthUrl({
   access_type: "offline",
   prompt: "consent", // force a refresh_token even if this account authorized before
-  scope: ["https://www.googleapis.com/auth/drive"],
+  // drive.file (not the full "drive" scope) — this app only ever creates
+  // folders/files and shares what it just created (see lib/drive.ts), and
+  // unlike "drive" it isn't a Google "restricted" scope, so it can reach
+  // "In production" by self-publish instead of requiring Google's full
+  // brand/domain verification review.
+  scope: ["https://www.googleapis.com/auth/drive.file"],
 });
 
 const server = createServer(async (req, res) => {

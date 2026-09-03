@@ -34,7 +34,7 @@ export function OwnerTagPicker({
           <span
             key={name}
             style={{
-              padding: "4px 10px", borderRadius: 99, fontSize: 12, background: "rgba(124,158,248,.15)",
+              padding: "4px 10px", borderRadius: 99, fontSize: 13, background: "rgba(124,158,248,.15)",
               color: "var(--p)", border: "0.5px solid rgba(124,158,248,.3)", display: "inline-flex",
               alignItems: "center", gap: 5,
             }}

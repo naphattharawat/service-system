@@ -626,6 +626,16 @@ body.dark #notifModal > div > div:first-child {
   box-shadow: 0 12px 48px rgba(100,130,220,.1), 0 2px 8px rgba(0,0,0,.03), inset 0 1.5px 0 rgba(255,255,255,1), inset 0 0 0 0.5px rgba(255,255,255,.5) !important;
 }
 
+/* Larger text inside the job-assignment popup ("จัดการงาน" -> #editModal) for
+   readability — scoped by ID (rather than raising the shared .section-label/
+   input/select/textarea/.btn rules everywhere) so other pages and modals keep
+   their sizes. The ID selector's specificity also beats the max-width:600px
+   "elderly text" media query's !important rules, so this applies at every
+   viewport width. */
+#editModal .section-label { font-size: 15px !important; }
+#editModal input, #editModal select, #editModal textarea { font-size: 16px !important; }
+#editModal .btn { font-size: 15px !important; }
+
 /* ─────────────────────────────────────────────
    JOB CARDS
    ───────────────────────────────────────────── */

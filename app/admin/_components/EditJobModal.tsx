@@ -107,8 +107,8 @@ export function EditJobModal({
 
   return (
     <Modal id="editModal" open={!!job} onClose={onClose}>
-      <h3 style={{ margin: "0 0 16px", fontSize: 17, fontWeight: 600, color: "var(--t1)", display: "flex", alignItems: "center", gap: 7 }}>
-        <span className="material-symbols-rounded" style={{ color: "var(--p)", margin: 0, fontSize: 17 }}>folder_open</span>
+      <h3 style={{ margin: "0 0 16px", fontSize: 19, fontWeight: 600, color: "var(--t1)", display: "flex", alignItems: "center", gap: 7 }}>
+        <span className="material-symbols-rounded" style={{ color: "var(--p)", margin: 0, fontSize: 19 }}>folder_open</span>
         งาน <span style={{ color: "var(--p)" }}>#{job?.id}</span>
         <button
           onClick={onClose}
@@ -134,7 +134,7 @@ export function EditJobModal({
       </select>
 
       {status === "เสร็จสิ้น" && resourcesLoading && (
-        <div style={{ marginTop: 14, fontSize: 13, color: "var(--t3)" }}>กำลังโหลดข้อมูลทรัพยากร...</div>
+        <div style={{ marginTop: 14, fontSize: 14, color: "var(--t3)" }}>กำลังโหลดข้อมูลทรัพยากร...</div>
       )}
 
       {status === "เสร็จสิ้น" && !resourcesLoading && (
@@ -147,7 +147,7 @@ export function EditJobModal({
           <div>
             {[0, 1, 2].map((i) => (
               <div key={i} className="res-group">
-                <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--t3)", marginBottom: 8 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--t3)", marginBottom: 8 }}>
                   ชิ้นที่ {i + 1}
                 </div>
                 <select
